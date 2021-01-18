@@ -1,0 +1,13 @@
+Setup: 
+
+Eine welt mit mindestens zwei typen von interagierenden agenten, mindestens einer davon per ML (vermutlich RL) trainiert. (Der ML Agent könnte aus historischen Gründen Wolf genannt werden).
+
+Objekte können pro iteration aktion(en) an welt senden, welt verändert sich und objekte, liefert neue wahrnehmung für jedes wahrnehmende wesen (vermutlich alle agenten)
+
+ML Agenten müssen miteinander interagieren können und mindestens eine Motivation haben, um das zu tun (Beispielsweise ein malus, den sie (bei anderen und potententiell bei sich selbst). Die Agenten müssen im "normalen" Verhalten bei begegnung mit artgenossen diesen Malus beseitigen.
+
+Die Welt muss dann zusätzlich neu Spiegel beinhalten. Diese beeinflussen die Wahrnehmung wie zu erwarten. Daraus resultiert, dass ein (unbewusster) Agent sich selbst als anderen Wolf sehen müsste.
+
+Die Aktion zum beseitigen des Malus muss vom Agenten mit den richtigen Koordinaten (relativ zur eigenen position) ausgeführt werden. Sich selbst befreien sollte eventuell eine andere aktion sein, eventuell nicht. In jedem Fall muss die Aktion (selbst und bei anderen) kleine aber nichtnull kosten haben (damit aktion präventiv immer ausführen nicht gelernt wird).
+
+Wenn der Agent versucht, den anderen Agenten "hinter" dem Spiegel zu helfen, muss er die relativen koordinaten auf 0,0 setzten (zeigt dass er prinzip spiegel lernt). Wenn eine dedizierte selbstsäuberungsaktion existiert, wäre unterscheidung (anderer agent auf meiner position im spiegel vs ICH) einfacher.
