@@ -1,21 +1,33 @@
 from .agent import Agent
+from .behavior_dummy import behavior_dummy
 from .behavior_sheep_hardcoded import behavior_sheep_hardcode
+from .behavior_wolf_hardcoded import behavior_wolf_hardcode
+from .behavior_ape_ml import behavior_ape_ml
 
 
-class Sheep(Agent):
-    def __init__(self, behavior, position, velocity=None, radius=None, health: int = None, perception_radius=None):
-        super().__init__(behavior=behavior_sheep_hardcode, position=position, velocity=velocity, radius=radius,
-                         health=health, perception_radius=perception_radius)
-        self.type_properties = "sheep"
+def get_dummy_agent(position, velocity=None, radius=None, health: int = None, perception_radius=None):
+    dummy = Agent(behavior=behavior_dummy, position=position, velocity=velocity,
+                  radius=radius, health=health, perception_radius=perception_radius)
+    dummy.type_properties = "dummy"
+    return dummy
 
 
-class Wolf(Agent):
-    def __init__(self, position, velocity=None, radius=None):
-        super().__init__(behavior=None, position=position, velocity=velocity, radius=radius)
-        self.type_properties = "wolf"
+def get_sheep_agent(position, velocity=None, radius=None, health: int = None, perception_radius=None):
+    dummy = Agent(behavior=behavior_sheep_hardcode, position=position, velocity=velocity,
+                  radius=radius, health=health, perception_radius=perception_radius)
+    dummy.type_properties = "sheep"
+    return dummy
 
 
-class Ape_ML(Agent):
-    def __init__(self, position, velocity=None, radius=None):
-        super().__init__(behavior=None, position=position, velocity=velocity, radius=radius)
-        self.type_properties = "ape"
+def get_wolf_agent(position, velocity=None, radius=None, health: int = None, perception_radius=None):
+    dummy = Agent(behavior=behavior_wolf_hardcode, position=position, velocity=velocity,
+                  radius=radius, health=health, perception_radius=perception_radius)
+    dummy.type_properties = "wolf"
+    return dummy
+
+
+def get_ape_agent(position, velocity=None, radius=None, health: int = None, perception_radius=None):
+    dummy = Agent(behavior=behavior_ape_ml, position=position, velocity=velocity,
+                  radius=radius, health=health, perception_radius=perception_radius)
+    dummy.type_properties = "ape"
+    return dummy

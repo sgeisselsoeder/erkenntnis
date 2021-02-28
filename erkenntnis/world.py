@@ -1,6 +1,6 @@
 import numpy as np
 from .thing import Thing
-from .agent import Agent, get_random_agent
+from .agent import Agent
 from .world_perception import perception_at_position
 from .world_creation import *
 

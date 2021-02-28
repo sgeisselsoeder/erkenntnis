@@ -9,6 +9,8 @@ class Thing:
         _default_friction = 0.01
 
         self.position = position
+        if self.position is None:
+            self.position = np.array([np.random.rand(), np.random.rand(), 0.0])
 
         self.velocity = velocity
         if self.velocity is None:

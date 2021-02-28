@@ -10,13 +10,7 @@ def get_action_accelerate(direction, strength=1.0):
 
 class Behavior:
     def think(self, perception):
-        action = get_action_accelerate(direction=np.array([np.random.random(), np.random.random(), 0.0]))
-        return action
-
-
-def get_random_agent():
-    random_behavior = Behavior()
-    return Agent(behavior=random_behavior, position=np.array([np.random.random(), np.random.random(), 0.0]))
+        return None
 
 
 class Agent(Thing):
