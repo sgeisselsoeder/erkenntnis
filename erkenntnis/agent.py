@@ -28,6 +28,12 @@ class Agent(Thing):
         super().__init__(position=position, velocity=velocity)
 
     # below are possibly allowed actions
+    def action_talk(self, agent, message):
+        pass
+
+    def action_notify(self, agent, direction):
+        # alternatively also target agent
+        pass
 
     def action_accelerate(self, direction, strength):
         return None
