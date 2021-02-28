@@ -20,12 +20,22 @@ def get_random_agent():
 
 
 class Agent(Thing):
-    behavior = None
-    perception_radius = 10
+    def __init__(self, behavior, position, velocity=None, radius=None, health: int = None, perception_radius=None):
+        super().__init__(position=position, velocity=velocity, radius=radius)
 
-    def __init__(self, behavior, position, velocity=np.array([0.0, 0.0, 0.0])):
+        _default_health = 100
+        _default_perception_radius = 10
+
         self.behavior = behavior
-        super().__init__(position=position, velocity=velocity)
+
+        self.health = _default_health
+        if health is not None:
+            self.health = health
+        self.perception_radius = _default_perception_radius
+        if perception_radius is not None:
+            self.perception_radius = perception_radius
+
+        self.type_properties = "agent"     # could be equivalent to encoding of size of sheep, fur of wolf, number of limbs, ...
 
     # below are possibly allowed actions
     def action_talk(self, agent, message):

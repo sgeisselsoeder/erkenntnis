@@ -2,7 +2,7 @@ import numpy as np
 from .thing import Thing
 from .agent import Agent, get_random_agent
 from .world_perception import perception_at_position
-# from .world_actions import perform_action
+from .world_creation import *
 
 
 class World:
@@ -11,11 +11,11 @@ class World:
         self.agents = list()
         self.things = list()
 
-    def add_agent(self):
-        self.agents.append(get_random_agent())
+    def add_agent(self, agent):
+        self.agents.append(agent)
 
-    def add_thing(self):
-        self.things.append(Thing(position=[np.random.random(), np.random.random(), 0.0]))
+    def add_thing(self, thing):
+        self.things.append(thing)
 
     def perception_at_position(self, position, radius):
         all_things = self.things + self.agents

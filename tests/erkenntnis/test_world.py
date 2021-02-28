@@ -3,11 +3,11 @@ from erkenntnis.world import World
 
 def test_world():
     my_world = World()
-    my_world.add_thing()
-    my_world.add_thing()
+    my_world.add_random_thing()
+    my_world.add_random_thing()
 
-    my_world.add_agent()
-    my_world.add_agent()
+    my_world.add_random_agent()
+    my_world.add_random_agent()
 
     my_world.print()
 
