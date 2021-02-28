@@ -1,20 +1,21 @@
 import numpy as np
-from .thing import thing
-from .agent import agent
+from .thing import Thing
+from .agent import Agent, get_random_agent
 from .world_perception import perception_at_position
 # from .world_actions import perform_action
 
 
-class world:
-    time = 0
-    agents = list()
-    things = list()
+class World:
+    def __init__(self):
+        self.time = 0
+        self.agents = list()
+        self.things = list()
 
     def add_agent(self):
-        self.agents.append(agent(position=[np.random(), np.random(), 0.0]))
+        self.agents.append(get_random_agent())
 
     def add_thing(self):
-        self.things.append(thing(position=[np.random(), np.random(), 0.0]))
+        self.things.append(Thing(position=[np.random.random(), np.random.random(), 0.0]))
 
     def perception_at_position(self, position, radius):
         all_things = self.things + self.agents
@@ -52,6 +53,9 @@ class world:
         # TODO for fairer simulation, either random order or according to agent initiative, ... ?
         for agent in self.agents:
             self.process_agent(agent, time_delta=time_delta)
+
+        for current_thing in self.things:
+            current_thing.move(dt=time_delta)
 
     def print(self):
         print("Time is ", self.time)
