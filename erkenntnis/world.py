@@ -22,7 +22,17 @@ class world:
         return perception, raw_perception
 
     def perform_action(self, agent, action, surroundings, time_delta):
-        pass
+        if action["type"] == "accelerate":
+            direction = action["direction"]
+            agent.accelerate(direction, dt=time_delta)
+
+        elif action["type"] == "interact":
+            pass
+
+        else:
+            raise("Unrecognized action " + str(action["type"]) + " for agent of type " + str(agent.type_properties))
+
+        agent.move(dt=time_delta)
 
     def process_agent(self, agent, time_delta=0.01):
         position = agent.position
