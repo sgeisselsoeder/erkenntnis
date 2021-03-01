@@ -19,7 +19,7 @@ class Behavior_dummy(Behavior):
 
     def think(self, perception):
         action = action_accelerate(direction=np.array([2.0 * np.random.random() - 1.0,
-                                                           2.0 * np.random.random() - 1.0,
-                                                           0.0]))        
+                                                       2.0 * np.random.random() - 1.0,
+                                                       0.0]))
         self._remember(perception=perception, action=action)
         return action

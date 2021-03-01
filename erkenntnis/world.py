@@ -4,6 +4,7 @@ from .agent import Agent
 from .world_perception import perception_at_position
 from .world_creation import *
 from .world_map import get_map, print_map
+from .world_actions import perform_action
 
 
 class World:
@@ -23,19 +24,6 @@ class World:
         perception, raw_perception = perception_at_position(all_things=all_things, position=position, radius=radius)
         return perception, raw_perception
 
-    def perform_new_action(self, agent: Agent, action, surroundings, time_delta):
-        # some actions don't affect other objects (agents, things). The agent can 
-        if action["type"] == "accelerate":
-            agent.accelerate(action["direction"], dt=time_delta)
-
-        elif action["type"] == "interact":
-            pass
-
-        else:
-            raise("Unrecognized action " + str(action["type"]) + " for agent of type " + str(agent.type_properties))
-
-        
-
     def process_agent(self, agent: Agent, time_delta=0.01):
         perception, raw_perception = self.perception_at_position(position=agent.position, radius=agent.perception_radius)
         action = agent.think(perception=perception)
@@ -46,11 +34,10 @@ class World:
         # pro for later:    - feels more realistic,
         #                   - potentially possible to resolve conflicting actions if they are all known at the same time
         # current solution: immediate action: easier to resolve conflicts, "unrealistic" order should not be relevant for current goal
-        self.perform_new_action(agent=agent, action=action, surroundings=raw_perception, time_delta=time_delta)
+        perform_action(world=self, agent=agent, action=action, surroundings=raw_perception, time_delta=time_delta)
 
-        # every object can also move according to it's already gained momentum
+        # every object also moves according to it's previous momentum
         agent.move(dt=time_delta)
-        return 0
 
     def run(self, time_delta=0.01):
         # print("Time ", self.time)

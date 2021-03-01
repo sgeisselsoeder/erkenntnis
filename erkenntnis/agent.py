@@ -29,15 +29,15 @@ class Agent(Thing):
         if perception_radius is not None:
             self.perception_radius = perception_radius
 
-        # option to store received messages from other agents. should be emptied by the world upon perceive() or by themselves at the beginning of think
+        # option to store received messages from other agents.
+        # should be emptied by the world upon perceive() or by themselves at the beginning of think
         self.messages = list()
 
-        self.type_properties = "agent"     # could be equivalent to encoding of size of sheep, fur of wolf, number of limbs, ...
-
+        # could be equivalent to encoding of size of sheep, fur of wolf, number of limbs, ...
+        self.type_properties = "agent"
 
     def think(self, perception):
         return self.behavior.think(perception)
-
 
     # # below are possibly allowed actions
     # def action_talk(self, agent, message):
