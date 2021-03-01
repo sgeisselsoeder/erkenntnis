@@ -1,4 +1,3 @@
-import numpy as np
 from .thing import Thing
 from .agent import Agent
 from .world_perception import perception_at_position
@@ -13,51 +12,68 @@ class World:
         self.agents = list()
         self.things = list()
 
-    def add_agent(self, agent):
+    def add_agent(self, agent: Agent):
         self.agents.append(agent)
 
-    def add_thing(self, thing):
+    def add_thing(self, thing: Thing):
         self.things.append(thing)
 
-    def perception_at_position(self, position, radius):
-        all_things = self.things + self.agents
-        perception, raw_perception = perception_at_position(all_things=all_things, position=position, radius=radius)
-        return perception, raw_perception
-
     def process_agent(self, agent: Agent, time_delta=0.01):
-        perception, raw_perception = self.perception_at_position(position=agent.position, radius=agent.perception_radius)
-        action = agent.think(perception=perception)
-        # NOTE: unclear if it's better to execute the action for each agent immediatelly or to store them and execute all actions at once.
-        # pro for immediatelly: - easiest to code
-        #                       - other agents will be able to react to the first agent (maybe mitigating the drawback of acting later),
-        #                       - no conflicting actions possible (but unrealistic first come (in array), first serve)
-        # pro for later:    - feels more realistic,
-        #                   - potentially possible to resolve conflicting actions if they are all known at the same time
-        # current solution: immediate action: easier to resolve conflicts, "unrealistic" order should not be relevant for current goal
-        perform_action(world=self, agent=agent, action=action, surroundings=raw_perception, time_delta=time_delta)
+        perception, raw_perception = perception_at_position(all_things=self.things + self.agents,
+                                                            position=agent.position,
+                                                            radius=agent.perception_radius)
+        agent.perception_radius = agent.default_perception_radius
 
-        # every object also moves according to it's previous momentum
-        agent.move(dt=time_delta)
+        if agent.action_cooldown <= 0:
+            action = agent.think(perception=perception)
+            # NOTE: unclear if it's better to execute the action for each agent immediatelly
+            # or to store them and execute all actions at once.
+            #
+            # pro for immediatelly: - easiest to code
+            #                       - other agents will be able to react to the first agent (maybe mitigating the drawback of acting later),
+            #                       - no conflicting actions possible (but unrealistic first come (in array), first serve)
+            # pro for later:    - feels more realistic,
+            #                   - potentially possible to resolve conflicting actions if they are all known at the same time
+            #
+            # current solution: immediate action: easier to resolve conflicts, "unrealistic" order should not be relevant for current goal
+            if action is not None:
+                perform_action(world=self, agent=agent, action=action, surroundings=raw_perception, time_delta=time_delta)
+        else:
+            agent.action_cooldown = agent.action_cooldown - 1
+
+    def remove_dead(self):
+        things_to_remove = list()
+        for current_thing in self.things + self.agents:
+            if current_thing.health <= 0:
+                things_to_remove.append(current_thing)
+
+        for thing in things_to_remove:
+            try:
+                self.agents.remove(thing)
+                print("DEBUG: removed agent")
+            except ValueError:
+                try:
+                    self.things.remove(thing)
+                    print("DEBUG: removed thing")
+                except ValueError:
+                    raise "Unable to find " + str(thing) + " with health " + str(thing.health) + " in world."
 
     def run(self, time_delta=0.01):
-        # print("Time ", self.time)
         # TODO for fairer simulation, either random order or according to agent initiative, ... ?
         for agent in self.agents:
             self.process_agent(agent, time_delta=time_delta)
 
-        for current_thing in self.things:
+        for current_thing in self.things + self.agents:
             current_thing.move(dt=time_delta)
+
+        self.remove_dead()
 
         self.time = self.time + time_delta
 
     def print(self):
         print("Time is ", self.time)
-        for this_thing in self.things:
-            print(this_thing)
-        for this_thing in self.agents:
+        for this_thing in self.things + self.agents:
             print(this_thing)
 
-    def map(self, size: int = 40):
-        all_things = self.things + self.agents
-        map = get_map(all_things, size=size)
-        print_map(map)
+    def map(self, resolution: int = 40):
+        print_map(get_map(self.things + self.agents, size=resolution))
