@@ -15,6 +15,7 @@ def _setup_world():
 
 def test_world_create():
     my_world = _setup_world()
+    assert(my_world is not None)
 
 
 def test_world_output():
