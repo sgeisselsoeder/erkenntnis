@@ -10,7 +10,9 @@ class Thing:
 
         self.position = position
         if self.position is None:
-            self.position = np.array([np.random.rand(), np.random.rand(), 0.0])
+            self.position = np.array([2.0 * np.random.rand() - 1.0,
+                                      2.0 * np.random.rand() - 1.0,
+                                      0.0])
 
         self.velocity = velocity
         if self.velocity is None:
@@ -25,10 +27,12 @@ class Thing:
         self.malus = False
 
         # any object is supposed to have properties unique to it's group and properties unique to itself
-        self.type_properties = "thing"     # could be equivalent to encoding of size of sheep, fur of wolf, number of limbs, ...
+        # could be equivalent to encoding of size of sheep, fur of wolf, number of limbs, ...
+        self.type_properties = "thing"
 
         # agents may perceive the unique properties of others, but not themselves (or maybe a subset)
-        self.unique_properties = uuid.uuid1()       # could be equivalent to encoding of individual specific fur color, name, eye color, ...
+        # could be equivalent to encoding of individual specific fur color, name, eye color, ...
+        self.unique_properties = uuid.uuid1()
 
     def move(self, dt):
         self.position = self.position + dt * self.velocity

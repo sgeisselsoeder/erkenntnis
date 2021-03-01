@@ -81,5 +81,5 @@ def print_map(map):
             encoded_type = map[i, j]
             type_name = type_decoding[encoded_type]
             print_symbol = _type_encoding_print[type_name]
-            line = line + print_symbol
+            line = line + print_symbol + " "
         print(line)
