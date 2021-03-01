@@ -37,3 +37,6 @@ class Thing:
 
     def accelerate(self, direction, dt):
         self.velocity = self.velocity + dt * direction
+
+    def __str__(self):
+        return str(self.type_properties) + " at " + str(self.position)
