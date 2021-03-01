@@ -15,7 +15,13 @@ def _setup_world():
 
 def test_world_create():
     my_world = _setup_world()
+
+
+def test_world_output():
+    my_world = _setup_world()
     my_world.print()
+    my_world.map()
+    my_world.map(100)
 
 
 def test_world_run():
