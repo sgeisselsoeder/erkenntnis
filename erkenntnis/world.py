@@ -3,6 +3,7 @@ from .thing import Thing
 from .agent import Agent
 from .world_perception import perception_at_position
 from .world_creation import *
+from .world_map import get_map, print_map
 
 
 class World:
@@ -50,7 +51,7 @@ class World:
         return 0
 
     def run(self, time_delta=0.01):
-        print("Time ", self.time)
+        # print("Time ", self.time)
         # TODO for fairer simulation, either random order or according to agent initiative, ... ?
         for agent in self.agents:
             self.process_agent(agent, time_delta=time_delta)
@@ -66,3 +67,8 @@ class World:
             print(this_thing)
         for this_thing in self.agents:
             print(this_thing)
+
+    def map(self, size: int = 40):
+        all_things = self.things + self.agents
+        map = get_map(all_things, size=size)
+        print_map(map)

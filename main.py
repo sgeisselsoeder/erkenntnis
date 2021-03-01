@@ -11,8 +11,10 @@ my_world.add_agent(get_wolf_agent(position=None))
 my_world.add_agent(get_ape_agent(position=None))
 
 my_world.print()
+my_world.map()
 
 for i in range(100):
     my_world.run(time_delta=0.1)
 
 my_world.print()
+my_world.map()
