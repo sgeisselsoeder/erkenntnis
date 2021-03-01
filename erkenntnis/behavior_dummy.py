@@ -1,4 +1,5 @@
-from .agent import Behavior, action_accelerate
+from .agent import Behavior
+from .world_actions import *
 from .utils import random_position
 
 

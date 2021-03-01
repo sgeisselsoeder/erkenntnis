@@ -2,12 +2,6 @@ import numpy as np
 from .thing import Thing
 
 
-def action_accelerate(direction, strength=1.0):
-    return {"type": "accelerate",
-            "direction": direction,
-            "strength": strength}
-
-
 class Behavior:
     def think(self, perception):
         return None

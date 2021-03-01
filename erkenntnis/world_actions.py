@@ -1,17 +1,51 @@
 from .agent import Agent
 from .thing import Thing
 
-_allowed_actions = {"dummy": ["accelerate", "focus"]}
+
+def action_accelerate(direction, strength=1.0):
+    return {"type": "accelerate",
+            "direction": direction,
+            "strength": strength}
 
 
-# def action_talk(self, agent, message):
+def action_focus():
+    return {"type": "focus"}
 
-# def action_notify(self, agent, direction):
-#     # alternatively also target agent
 
-# def action_interact(self, direction):
+def action_remove_malus():
+    return {"type": "remove_malus"}
 
-# def action_attack(self, direction):
+
+def action_inform_malus(direction):
+    return {"type": "inform_malus",
+            "direction": direction}
+
+
+def action_communicate(direction, message: str = "lol"):
+    return {"type": "communicate",
+            "direction": direction,
+            "message": message}
+
+
+def action_attack(direction, strength=1.0):
+    return {"type": "attack",
+            "direction": direction,
+            "strength": strength}
+
+
+def action_push(direction, strength=1.0):
+    return {"type": "push",
+            "direction": direction,
+            "strength": strength}
+
+
+def action_pull(direction, strength=1.0):
+    return {"type": "pull",
+            "direction": direction,
+            "strength": strength}
+
+
+# _allowed_actions = {"dummy": ["accelerate", "focus"]}
 
 
 def perform_action(world, agent: Agent, action, surroundings, time_delta):
@@ -24,8 +58,9 @@ def perform_action(world, agent: Agent, action, surroundings, time_delta):
     elif action["type"] == "remove_malus":
         agent.malus = False
         # removes the malus, but prevents actions for some time
-        agent.action_cooldown = 50
-
+        agent.action_cooldown = 20
+    elif action["type"] == "communicate":
+        target = action[""]
 
     elif action["type"] == "interact":
         pass
