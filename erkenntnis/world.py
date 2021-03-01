@@ -1,9 +1,13 @@
+import numpy as np
+import copy
+import uuid
 from .thing import Thing
 from .agent import Agent
 from .world_perception import perception_at_position
 from .world_creation import *
 from .world_map import get_map, print_map
 from .world_actions import perform_action
+from .utils import random_position
 
 
 class World:
@@ -41,7 +45,7 @@ class World:
         else:
             agent.action_cooldown = agent.action_cooldown - 1
 
-    def remove_dead(self):
+    def _remove_dead(self):
         things_to_remove = list()
         for current_thing in self.things + self.agents:
             if current_thing.health <= 0:
@@ -58,6 +62,15 @@ class World:
                 except ValueError:
                     raise "Unable to find " + str(thing) + " with health " + str(thing.health) + " in world."
 
+    def _spawn_kids(self):
+        for agent in self.agents:
+            if agent.health >= 200:
+                agent.health = 110
+                new_agent = copy.deepcopy(agent)
+                new_agent.position[0] = random_position()
+                new_agent.unique_properties = uuid.uuid1()
+                self.agents.append(new_agent)
+
     def run(self, time_delta=0.01):
         # TODO for fairer simulation, either random order or according to agent initiative, ... ?
         for agent in self.agents:
@@ -66,7 +79,13 @@ class World:
         for current_thing in self.things + self.agents:
             current_thing.move(dt=time_delta)
 
-        self.remove_dead()
+            malus_effect_probability = 0.05
+            if current_thing.malus:
+                if np.random.random() <= malus_effect_probability:
+                    current_thing.health = current_thing.health - 49
+
+        self._remove_dead()
+        self._spawn_kids()
 
         self.time = self.time + time_delta
 

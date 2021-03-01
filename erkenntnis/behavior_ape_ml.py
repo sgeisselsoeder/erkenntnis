@@ -1,5 +1,5 @@
-import numpy as np
 from .agent import Behavior, action_accelerate
+from .utils import random_position
 
 
 class Behavior_ape_ml(Behavior):
@@ -18,8 +18,6 @@ class Behavior_ape_ml(Behavior):
         self.last_actions = self.last_actions[-self.memory_length:]
 
     def think(self, perception):
-        action = action_accelerate(direction=np.array([2.0 * np.random.random() - 1.0,
-                                                           2.0 * np.random.random() - 1.0,
-                                                           0.0]))        
+        action = action_accelerate(direction=random_position())
         self._remember(perception=perception, action=action)
         return action

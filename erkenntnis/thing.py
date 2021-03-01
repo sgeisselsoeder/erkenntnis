@@ -1,5 +1,6 @@
 import numpy as np
 import uuid
+from .utils import random_position
 
 
 class Thing:
@@ -10,9 +11,7 @@ class Thing:
 
         self.position = position
         if self.position is None:
-            self.position = np.array([2.0 * np.random.rand() - 1.0,
-                                      2.0 * np.random.rand() - 1.0,
-                                      0.0])
+            self.position = random_position()
 
         self.velocity = velocity
         if self.velocity is None:
@@ -26,8 +25,7 @@ class Thing:
 
         self.malus = False
 
-        _default_health = 100
-        self.health = _default_health
+        self.health = 100
         if health is not None:
             self.health = health
 

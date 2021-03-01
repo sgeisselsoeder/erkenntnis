@@ -1,5 +1,5 @@
-import numpy as np
 from .agent import Behavior, action_accelerate
+from .utils import random_position
 
 
 class Behavior_wolf_hardcode(Behavior):
@@ -9,9 +9,7 @@ class Behavior_wolf_hardcode(Behavior):
     def think(self, perception):
         self.last_perceptions.append(perception)
 
-        action = action_accelerate(direction=np.array([2.0 * np.random.random() - 1.0,
-                                                       2.0 * np.random.random() - 1.0,
-                                                       0.0]))
+        action = action_accelerate(direction=random_position())
         self.last_actions.append(action)
 
         return action
