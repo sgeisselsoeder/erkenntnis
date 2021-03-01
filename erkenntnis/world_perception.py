@@ -1,5 +1,5 @@
 import numpy as np
-import copy
+# import copy
 
 
 def obstruct_perception(position, perception):

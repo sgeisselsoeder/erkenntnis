@@ -15,19 +15,15 @@ class Behavior:
 
 class Agent(Thing):
     def __init__(self, behavior, position, velocity=None, radius=None, health: int = None, perception_radius=None):
-        super().__init__(position=position, velocity=velocity, radius=radius)
-
-        _default_health = 100
-        _default_perception_radius = 10
+        super().__init__(position=position, velocity=velocity, radius=radius, health=health)
 
         self.behavior = behavior
+        self.action_cooldown = 0
 
-        self.health = _default_health
-        if health is not None:
-            self.health = health
-        self.perception_radius = _default_perception_radius
+        self.default_perception_radius = 5
         if perception_radius is not None:
-            self.perception_radius = perception_radius
+            self.default_perception_radius = perception_radius
+        self.perception_radius = self.default_perception_radius
 
         # option to store received messages from other agents.
         # should be emptied by the world upon perceive() or by themselves at the beginning of think
@@ -38,30 +34,3 @@ class Agent(Thing):
 
     def think(self, perception):
         return self.behavior.think(perception)
-
-    # # below are possibly allowed actions
-    # def action_talk(self, agent, message):
-    #     pass
-
-    # def action_notify(self, agent, direction):
-    #     # alternatively also target agent
-    #     pass
-
-    # def action_accelerate(self, direction, strength):
-    #     return None
-
-    # def action_interact(self, direction):
-    #     return None
-
-    # def action_attack(self, direction):
-    #     return None
-
-    # def action_benefit(self, direction):
-    #     return None
-
-    # def action_benefit_self(self):
-    #     return None
-
-    # def action_focus(self, direction):
-    #     # gain in depth perception
-    #     return None

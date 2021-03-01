@@ -3,7 +3,7 @@ import uuid
 
 
 class Thing:
-    def __init__(self, position, velocity=None, radius=None, friction=None):
+    def __init__(self, position, velocity=None, radius=None, friction=None, health=None):
         _default_velocity = np.array([0.0, 0.0, 0.0])
         _default_radius = 1.0
         _default_friction = 0.01
@@ -25,6 +25,11 @@ class Thing:
             self.friction = _default_friction
 
         self.malus = False
+
+        _default_health = 100
+        self.health = _default_health
+        if health is not None:
+            self.health = health
 
         # any object is supposed to have properties unique to it's group and properties unique to itself
         # could be equivalent to encoding of size of sheep, fur of wolf, number of limbs, ...

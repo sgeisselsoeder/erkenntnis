@@ -9,7 +9,9 @@ class Behavior_wolf_hardcode(Behavior):
     def think(self, perception):
         self.last_perceptions.append(perception)
 
-        action = action_accelerate(direction=np.array([np.random.random(), np.random.random(), 0.0]))
+        action = action_accelerate(direction=np.array([2.0 * np.random.random() - 1.0,
+                                                       2.0 * np.random.random() - 1.0,
+                                                       0.0]))
         self.last_actions.append(action)
 
         return action
