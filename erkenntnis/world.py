@@ -22,7 +22,7 @@ class World:
         perception, raw_perception = perception_at_position(all_things=all_things, position=position, radius=radius)
         return perception, raw_perception
 
-    def perform_action(self, agent, action, surroundings, time_delta):
+    def perform_action(self, agent: Agent, action, surroundings, time_delta):
         if action["type"] == "accelerate":
             direction = action["direction"]
             agent.accelerate(direction, dt=time_delta)
@@ -35,10 +35,10 @@ class World:
 
         agent.move(dt=time_delta)
 
-    def process_agent(self, agent, time_delta=0.01):
-        position = agent.position
-        perception, raw_perception = self.perception_at_position(position=position, radius=agent.perception_radius)
-        action = agent.behavior.think(perception=perception)
+    def process_agent(self, agent: Agent, time_delta=0.01):
+        perception, raw_perception = self.perception_at_position(position=agent.position, radius=agent.perception_radius)
+        strategy = agent.behavior
+        action = strategy.think(perception=perception)
         # NOTE: unclear if it's better to execute the action for each agent immediatelly or to store them and execute all actions at once.
         # pro for immediatelly: - easiest to code
         #                       - other agents will be able to react to the first agent (maybe mitigating the drawback of acting later),
@@ -50,12 +50,15 @@ class World:
         return 0
 
     def run(self, time_delta=0.01):
+        print("Time ", self.time)
         # TODO for fairer simulation, either random order or according to agent initiative, ... ?
         for agent in self.agents:
             self.process_agent(agent, time_delta=time_delta)
 
         for current_thing in self.things:
             current_thing.move(dt=time_delta)
+
+        self.time = self.time + time_delta
 
     def print(self):
         print("Time is ", self.time)

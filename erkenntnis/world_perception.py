@@ -3,7 +3,7 @@ import copy
 
 
 def obstruct_perception(position, perception):
-    print("TODO: the perception ob objects needs to change if obstruction/mirroring happens")
+    # print("TODO: the perception of objects needs to change if obstruction/mirroring happens")
     return perception
 
 
