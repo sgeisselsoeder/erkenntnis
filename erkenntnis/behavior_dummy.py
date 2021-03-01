@@ -12,7 +12,6 @@ class Behavior_dummy(Behavior):
         self.last_actions.append(action)
         self._forget_old()
 
-
     def _forget_old(self, memory_length: int = 10):
         self.last_perceptions = self.last_perceptions[-memory_length:]
         self.last_actions = self.last_actions[-memory_length:]
