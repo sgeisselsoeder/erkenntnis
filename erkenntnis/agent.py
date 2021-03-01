@@ -2,7 +2,7 @@ import numpy as np
 from .thing import Thing
 
 
-def get_action_accelerate(direction, strength=1.0):
+def action_accelerate(direction, strength=1.0):
     return {"type": "accelerate",
             "direction": direction,
             "strength": strength}
@@ -29,31 +29,39 @@ class Agent(Thing):
         if perception_radius is not None:
             self.perception_radius = perception_radius
 
+        # option to store received messages from other agents. should be emptied by the world upon perceive() or by themselves at the beginning of think
+        self.messages = list()
+
         self.type_properties = "agent"     # could be equivalent to encoding of size of sheep, fur of wolf, number of limbs, ...
 
-    # below are possibly allowed actions
-    def action_talk(self, agent, message):
-        pass
 
-    def action_notify(self, agent, direction):
-        # alternatively also target agent
-        pass
+    def think(self, perception):
+        return self.behavior.think(perception)
 
-    def action_accelerate(self, direction, strength):
-        return None
 
-    def action_interact(self, direction):
-        return None
+    # # below are possibly allowed actions
+    # def action_talk(self, agent, message):
+    #     pass
 
-    def action_attack(self, direction):
-        return None
+    # def action_notify(self, agent, direction):
+    #     # alternatively also target agent
+    #     pass
 
-    def action_benefit(self, direction):
-        return None
+    # def action_accelerate(self, direction, strength):
+    #     return None
 
-    def action_benefit_self(self):
-        return None
+    # def action_interact(self, direction):
+    #     return None
 
-    def action_focus(self, direction):
-        # gain in depth perception
-        return None
+    # def action_attack(self, direction):
+    #     return None
+
+    # def action_benefit(self, direction):
+    #     return None
+
+    # def action_benefit_self(self):
+    #     return None
+
+    # def action_focus(self, direction):
+    #     # gain in depth perception
+    #     return None

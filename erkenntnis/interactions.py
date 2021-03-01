@@ -2,8 +2,33 @@ import numpy as np
 from .thing import Thing
 from .agent import Agent
 from .world_perception import perception_at_position
-from .world_creation import *
-from .world_map import get_map, print_map
+
+# below are possibly allowed actions
+def action_talk(self, agent, message):
+    pass
+
+def action_notify(self, agent, direction):
+    # alternatively also target agent
+    pass
+
+def action_accelerate(self, direction, strength):
+    return None
+
+def action_interact(self, direction):
+    return None
+
+def action_attack(self, direction):
+    return None
+
+def action_benefit(self, direction):
+    return None
+
+def action_benefit_self(self):
+    return None
+
+def action_focus(self, direction):
+    # gain in depth perception
+    return None
 
 
 class World:

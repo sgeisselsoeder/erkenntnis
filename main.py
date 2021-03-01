@@ -14,7 +14,7 @@ my_world.print()
 my_world.map(size=40)
 
 for i in range(100):
-    my_world.run(time_delta=0.1)
+    my_world.run(time_delta=0.05)
 
 my_world.print()
 my_world.map(size=40)
