@@ -79,15 +79,16 @@ class World:
         for current_thing in self.things + self.agents:
             current_thing.move(dt=time_delta)
 
+        for current_agent in self.agents:
             malus_effect_probability = 0.01
-            if current_thing.malus:
+            if current_agent.malus:
                 if np.random.random() <= malus_effect_probability:
-                    # current_thing.health = current_thing.health - 49
-                    current_thing.health = -1
+                    # current_agent.health = current_agent.health - 49
+                    current_agent.health = -1
 
             new_malus_probability = 0.01
             if np.random.random() <= new_malus_probability:
-                current_thing.malus = True
+                current_agent.malus = True
 
         self._remove_dead()
         self._spawn_kids()
