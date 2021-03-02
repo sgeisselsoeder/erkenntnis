@@ -48,6 +48,19 @@ _type_encoding_print = {"nothing": ".",
                         "ape": "A"
                         }
 
+_type_encoding_print_agents = {"nothing": " ",
+                               "unknown": "-",
+                               "thing": "*",
+                               "agent": "+",
+                               "stone": "O",
+                               "grass": ".",
+                               "mirror": "M",
+                               "dummy": "D",
+                               "sheep": "S",
+                               "wolf": "W",
+                               "ape": "A"
+                               }
+
 
 def encode_type(type_properties: str):
     try:
@@ -80,6 +93,7 @@ def print_map(map):
         for j in range(map_shape[1]):
             encoded_type = map[i, j]
             type_name = type_decoding[encoded_type]
-            print_symbol = _type_encoding_print[type_name]
+            # print_symbol = _type_encoding_print[type_name]
+            print_symbol = _type_encoding_print_agents[type_name]
             line = line + print_symbol + " "
         print(line)
