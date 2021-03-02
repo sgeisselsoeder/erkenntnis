@@ -157,14 +157,14 @@ def _agent_eat(agent, action, surroundings):
 
 
 def perform_action(world, agent: Agent, action, surroundings, time_delta):
-    # some actions don't affect other objects (agents, things). The agent can
     if action["type"] == "accelerate":
-        normalized_direction =
-        agent.accelerate(action["direction"], dt=time_delta)
+        normalized_direction = normalize_vector_3d(action.direction)
+        strength = np.min(np.abs(action.strength), 1.0)
+        agent.accelerate(normalized_direction, dt=time_delta, strength=strength)
 
     elif action["type"] == "focus":
         agent.perception_radius = 2.0 * agent.perception_radius
-        # this buff will be reset after the next perception by the world
+        # this buff will automatically be reset after the next perception by the world
 
     elif action["type"] == "remove_malus":
         agent.malus = False

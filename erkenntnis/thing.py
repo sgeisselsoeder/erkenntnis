@@ -1,6 +1,6 @@
 import numpy as np
 import uuid
-from .utils import random_position
+from .utils import random_position, normalize_vector_3d
 
 
 class Thing:
@@ -42,8 +42,10 @@ class Thing:
         # friction
         self.velocity = self.velocity - self.velocity * dt * self.friction
 
-    def accelerate(self, direction, dt):
-        self.velocity = self.velocity + dt * direction
+    def accelerate(self, direction, dt, strength: float = 1.0):
+        normalized_direction = normalize_vector_3d(direction)
+        real_strength = np.min(np.abs(strength), 1.0)
+        self.velocity = self.velocity + dt * normalized_direction * real_strength
 
     def __str__(self):
         return str(self.type_properties) + " at " + str(self.position)
