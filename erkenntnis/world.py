@@ -67,7 +67,7 @@ class World:
             if agent.health >= 200:
                 agent.health = 110
                 new_agent = copy.deepcopy(agent)
-                new_agent.position[0] = random_position()
+                new_agent.position = agent.position + random_position()
                 new_agent.unique_properties = uuid.uuid1()
                 self.agents.append(new_agent)
 

@@ -1,9 +1,11 @@
 import numpy as np
 
 
-def _find_used_dimensions(all_things, default_dim=1.0):
-    minpos = np.array([-1.0 * default_dim, -1.0 * default_dim, -1.0 * default_dim])
-    maxpos = np.array([default_dim, default_dim, default_dim])
+def _find_used_dimensions(all_things):
+    # initialize with reasonable? default size
+    maxpos = np.array([1.0, 1.0, 1.0])
+    minpos = np.array([-1.0, -1.0, 0.0])
+
     for thing in all_things:
         minpos = np.minimum(minpos, thing.position)
         maxpos = np.maximum(maxpos, thing.position)
@@ -16,9 +18,18 @@ def get_index(position, minpos, maxpos, size):
     index = (position - minpos) / spacing
     index = index.astype(int)
 
-    for value in index:
+    for value in index[:2]:
         assert value < size
-        assert value >= 0
+        try:
+            assert value >= 0
+        except Exception:
+            print("DEBUG world map")
+            print(position)
+            print(minpos)
+            print(maxpos)
+            print(size)
+            print(value)
+            assert value >= 0
     return index
 
 

@@ -1,13 +1,15 @@
 import numpy as np
 import uuid
-from .utils import random_position, normalize_vector_3d
+
+from .utils import random_position, normalize_vector_3d, vector_length
 
 
 class Thing:
-    def __init__(self, position, velocity=None, radius=None, friction=None, health=None):
+    def __init__(self, position, velocity=None, radius=None, friction=None, health=None, max_speed: float = 3.0):
         _default_velocity = np.array([0.0, 0.0, 0.0])
         _default_radius = 1.0
-        _default_friction = 0.01
+        _default_friction = 0.1
+        self.max_speed = max_speed
 
         self.position = position
         if self.position is None:
@@ -38,6 +40,11 @@ class Thing:
         self.unique_properties = uuid.uuid1()
 
     def move(self, dt):
+        # maximal movement speed
+        speed = vector_length(self.velocity)
+        if speed > self.max_speed:
+            self.velocity = self.velocity / speed * self.max_speed
+
         self.position = self.position + dt * self.velocity
         # friction
         self.velocity = self.velocity - self.velocity * dt * self.friction

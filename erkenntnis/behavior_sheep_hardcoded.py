@@ -5,9 +5,10 @@ from .utils import random_position, vector_length
 
 
 class Behavior_sheep_hardcode(Behavior_simple_memory):
-    def __init__(self):
+    def __init__(self, action_distance: float):
         super().__init__(memory_length=100)
         self.current_target_direction = None
+        self.action_distance = action_distance
 
     def think(self, perception, messages):
         action = None
@@ -26,7 +27,7 @@ class Behavior_sheep_hardcode(Behavior_simple_memory):
         elif "grass" in split_perception:
             nearest_grass = split_perception["grass"][0]
             direction_to_nearest = nearest_grass.position
-            eating_distance = 0.5
+            eating_distance = self.action_distance
             current_distance = vector_length(direction_to_nearest)
             if current_distance < eating_distance:
                 action = action_eat(direction=direction_to_nearest)

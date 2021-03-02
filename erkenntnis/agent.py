@@ -4,14 +4,14 @@ from .behavior_agent import Behavior
 
 class Agent(Thing):
     def __init__(self, behavior: Behavior, position, velocity=None, radius=None,
-                 health: int = None, strength: int = 10, perception_radius=None):
-        super().__init__(position=position, velocity=velocity, radius=radius, health=health)
+                 health: int = None, strength: int = 10, perception_radius=None, max_speed: float = 3.0):
+        super().__init__(position=position, velocity=velocity, radius=radius, health=health, max_speed=max_speed)
 
         self.behavior = behavior
         self.action_cooldown = 0
         self.strength = strength
 
-        self.default_perception_radius = 5
+        self.default_perception_radius = 10
         if perception_radius is not None:
             self.default_perception_radius = perception_radius
         self.perception_radius = self.default_perception_radius
