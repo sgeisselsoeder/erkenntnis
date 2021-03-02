@@ -1,24 +1,41 @@
-from .agent import Behavior
+from .behavior_simple_memory import Behavior_simple_memory
 from .world_actions import *
-from .utils import random_position
+from .analyze_perception import split_perception_by_type
+from .utils import random_position, vector_length
 
 
-class Behavior_sheep_hardcode(Behavior):
+class Behavior_sheep_hardcode(Behavior_simple_memory):
     def __init__(self):
-        self.last_perceptions = list()
-        self.last_actions = list()
-        self.memory_length = 100
+        super().__init__(memory_length=100)
+        self.current_target_direction = None
 
-    def _remember(self, perception, action):
-        self.last_perceptions.append(perception)
-        self.last_actions.append(action)
-        self._forget_old()
+    def think(self, perception, messages):
+        action_cause = None
+        split_perception = split_perception_by_type(perception=perception)
 
-    def _forget_old(self):
-        self.last_perceptions = self.last_perceptions[-self.memory_length:]
-        self.last_actions = self.last_actions[-self.memory_length:]
+        if "wolf" in split_perception:
+            nearest_wolf = split_perception["wolf"][0]
+            direction_to_nearest = nearest_wolf.position
+            action = action_accelerate(direction=-1.0 * direction_to_nearest)
+            action_cause = nearest_wolf.unique_properties
 
-    def think(self, perception):
-        action = action_accelerate(direction=random_position())
-        self._remember(perception=perception, action=action)
+        # TODO: maybe inform other sheep about malus?
+        # elif "sheep" in split_perception:
+
+        elif "grass" in split_perception:
+            nearest_grass = split_perception["grass"][0]
+            direction_to_nearest = nearest_grass.position
+            eating_distance = 0.5
+            if vector_length(direction_to_nearest) < eating_distance:
+                action = action_eat(direction=direction_to_nearest)
+            else:
+                action = action_accelerate(direction=direction_to_nearest)
+            action_cause = nearest_grass.unique_properties
+
+        else:
+            # we might want to keep a direction, but random for now
+            self.current_target_direction = random_position()
+            action = action_accelerate(direction=self.current_target_direction)
+
+        self._remember(perception=perception, messages=messages, action=action, action_cause=action_cause)
         return action

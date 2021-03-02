@@ -24,4 +24,6 @@ class Agent(Thing):
         self.type_properties = "agent"
 
     def think(self, perception):
-        return self.behavior.think(perception)
+        action = self.behavior.think(perception=perception, messages=self.messages)
+        self.messages.clear()
+        return action
