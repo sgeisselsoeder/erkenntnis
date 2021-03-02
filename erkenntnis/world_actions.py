@@ -67,6 +67,8 @@ def _agent_agent_comunication(agent, action, surroundings):
 
 
 def _agent_push_agent(agent, action, surroundings):
+    # moves a thing away from the agent, but also accelerates the agent in the opposite direction
+    # stronger push at higher agent velocity
     _numeric_location_accuracy = 0.001
     _maximal_action_range = 1.0
     if np.max(action.direction) > _maximal_action_range:
@@ -74,32 +76,54 @@ def _agent_push_agent(agent, action, surroundings):
 
     strength = np.min(np.abs(action.strength), 0.5)
     normalized_direction = action.direction / np.sum(action.direction)
+    transfered_momentum = strength * (np.sqrt(np.sum(agent.velocity)) + 1.0)
 
     target_position = agent.position + action.direction
     for thing in surroundings:
         if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
             # determine how much of the momentum should go to the other agent
-            transferred_momentum = strength * (np.sqrt(np.sum(agent.velocity)) + 1.0)
-            thing.accelerate(direction=normalized_direction, dt=transferred_momentum)
-            agent.velocity = agent.velocity * (1.0 - strength)
+            thing.accelerate(direction=normalized_direction, dt=transfered_momentum)
+            agent.accelerate(direction=-1.0 * normalized_direction, dt=transfered_momentum)
 
 
 def _agent_pull_agent(agent, action, surroundings):
+    # moves a thing towards the agent, but also accelerates the agent in the opposite direction
+    # pull is not affected by agent velocity
     _numeric_location_accuracy = 0.001
-    _maximal_action_range = 1.0
+    _maximal_action_range = 0.5
     if np.max(action.direction) > _maximal_action_range:
         return
 
     strength = np.min(np.abs(action.strength), 0.5)
-    normalized_direction = action.direction / np.sum(action.direction)
+    normalized_direction = -1.0 * action.direction / np.sum(action.direction)
+    transferred_momentum = strength
 
     target_position = agent.position + action.direction
     for thing in surroundings:
         if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
             # determine how much of the momentum should go to the other agent
-            transferred_momentum = strength * 1.0
             thing.accelerate(direction=normalized_direction, dt=transferred_momentum)
-            agent.velocity = agent.velocity * (1.0 - strength)
+            agent.accelerate(direction=-1.0 * normalized_direction, dt=transferred_momentum)
+
+
+def _agent_pull_agent(agent, action, surroundings):
+    # moves a thing towards the agent, but also accelerates the agent in the opposite direction
+    # pull is not affected by agent velocity
+    _numeric_location_accuracy = 0.001
+    _maximal_action_range = 0.5
+    if np.max(action.direction) > _maximal_action_range:
+        return
+
+    strength = np.min(np.abs(action.strength), 0.5)
+    normalized_direction = -1.0 * action.direction / np.sum(action.direction)
+    transferred_momentum = strength
+
+    target_position = agent.position + action.direction
+    for thing in surroundings:
+        if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
+            # determine how much of the momentum should go to the other agent
+            thing.accelerate(direction=normalized_direction, dt=transferred_momentum)
+            agent.accelerate(direction=-1.0 * normalized_direction, dt=transferred_momentum)
 
 
 def perform_action(world, agent: Agent, action, surroundings, time_delta):
