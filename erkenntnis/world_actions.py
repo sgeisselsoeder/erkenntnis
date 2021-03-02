@@ -55,7 +55,7 @@ def action_pull(direction, strength=1.0):
 # _allowed_actions = {"dummy": ["accelerate", "focus"]}
 
 
-def _agent_com(agent, action, surroundings):
+def _agent_agent_comunication(agent, action, surroundings):
     _numeric_location_accuracy = 0.001
     target_position = agent.position + action["direction"]
     for thing in surroundings:
@@ -66,19 +66,65 @@ def _agent_com(agent, action, surroundings):
                                        "message": action["message"]})
 
 
+def _agent_push_agent(agent, action, surroundings):
+    _numeric_location_accuracy = 0.001
+    _maximal_action_range = 1.0
+    if np.max(action.direction) > _maximal_action_range:
+        return
+
+    strength = np.min(np.abs(action.strength), 0.5)
+    normalized_direction = action.direction / np.sum(action.direction)
+
+    target_position = agent.position + action.direction
+    for thing in surroundings:
+        if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
+            # determine how much of the momentum should go to the other agent
+            transferred_momentum = strength * (np.sqrt(np.sum(agent.velocity)) + 1.0)
+            thing.accelerate(direction=normalized_direction, dt=transferred_momentum)
+            agent.velocity = agent.velocity * (1.0 - strength)
+
+
+def _agent_pull_agent(agent, action, surroundings):
+    _numeric_location_accuracy = 0.001
+    _maximal_action_range = 1.0
+    if np.max(action.direction) > _maximal_action_range:
+        return
+
+    strength = np.min(np.abs(action.strength), 0.5)
+    normalized_direction = action.direction / np.sum(action.direction)
+
+    target_position = agent.position + action.direction
+    for thing in surroundings:
+        if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
+            # determine how much of the momentum should go to the other agent
+            transferred_momentum = strength * 1.0
+            thing.accelerate(direction=normalized_direction, dt=transferred_momentum)
+            agent.velocity = agent.velocity * (1.0 - strength)
+
+
 def perform_action(world, agent: Agent, action, surroundings, time_delta):
     # some actions don't affect other objects (agents, things). The agent can
     if action["type"] == "accelerate":
         agent.accelerate(action["direction"], dt=time_delta)
+
     elif action["type"] == "focus":
         agent.perception_radius = 2.0 * agent.perception_radius
         # this buff will be reset after the next perception by the world
+
     elif action["type"] == "remove_malus":
         agent.malus = False
         # removes the malus, but prevents actions for some time
         agent.action_cooldown = 20
+
     elif action["type"] == "communicate":       # this also covers inform_malus
-        _agent_com(agent=agent, action=action, surroundings=surroundings)
+        _agent_agent_comunication(agent=agent, action=action, surroundings=surroundings)
+
+    elif action.type == "push":
+        _agent_push_agent(agent=agent, action=action, surroundings=surroundings)
+
+    elif action.type == "pull":
+        _agent_pull_agent(agent=agent, action=action, surroundings=surroundings)
+
     else:
         raise("Unrecognized action " + str(action["type"]) + " for agent of type " +
               str(type(agent)) + " " + str(agent.type_properties))
