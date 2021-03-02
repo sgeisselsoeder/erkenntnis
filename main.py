@@ -15,7 +15,6 @@ my_world.map(resolution=40)
 for i in range(100):
     my_world.run(time_delta=0.1)
     print(my_world.time)
-    my_world.print()
     my_world.map(resolution=40)
 
 my_world.print()
