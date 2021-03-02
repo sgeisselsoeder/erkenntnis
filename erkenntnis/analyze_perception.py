@@ -7,7 +7,6 @@ def split_perception_by_type(perception):
     split_perception = {}
     # split by type
     for thing in perception:
-        thing = Thing(thing)
         thing_type = thing.type_properties
         if thing_type not in split_perception:
             split_perception[thing_type] = list()
@@ -16,6 +15,6 @@ def split_perception_by_type(perception):
 
     # sort by distance
     for thing_type in split_perception:
-        split_perception[thing_type].sort(key=lambda x: vector_length(x["position"]))
+        split_perception[thing_type].sort(key=lambda x: vector_length(x.position))
 
     return split_perception

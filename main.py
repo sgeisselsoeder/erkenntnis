@@ -12,8 +12,9 @@ my_world.add_agent(get_sheep_agent(position=None))
 my_world.print()
 my_world.map(resolution=40)
 
-for i in range(100):
-    my_world.run(time_delta=0.1)
+for i in range(5):
+    my_world.run(time_delta=1.0)
+    my_world.map(resolution=40)
 
 my_world.print()
 my_world.map(resolution=40)

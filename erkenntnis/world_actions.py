@@ -174,17 +174,17 @@ def perform_action(world, agent: Agent, action, surroundings, time_delta):
     elif action["type"] == "communicate":       # this also covers inform_malus
         _agent_agent_comunication(agent=agent, action=action, surroundings=surroundings)
 
-    elif action.type == "push":
+    elif action["type"] == "push":
         _agent_push_agent(agent=agent, action=action, surroundings=surroundings)
 
-    elif action.type == "pull":
+    elif action["type"] == "pull":
         _agent_pull_agent(agent=agent, action=action, surroundings=surroundings)
 
-    elif action.type == "attack":
+    elif action["type"] == "attack":
         _agent_attack(agent=agent, action=action, surroundings=surroundings)
         # agent.action_cooldown = 5
 
-    elif action.type == "eat":
+    elif action["type"] == "eat":
         _agent_eat(agent=agent, action=action, surroundings=surroundings)
         # agent.action_cooldown = 3
 

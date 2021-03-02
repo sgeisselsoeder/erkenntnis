@@ -14,7 +14,7 @@ def perception_at_position(all_things, position, radius):
         dist = np.linalg.norm(position - this_thing.position)
         if dist < radius:
             perceived_thing = copy.deepcopy(this_thing)
-            perceived_thing["position"] = position - perceived_thing["position"]
+            perceived_thing.position = position - perceived_thing.position
             raw_perception.append(perceived_thing)
     perception = obstruct_perception(position=position, perception=raw_perception)
     return perception, raw_perception

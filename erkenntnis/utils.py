@@ -13,4 +13,4 @@ def normalize_vector_3d(v: np.array):
 
 
 def vector_length(v: np.array):
-    return float(v / normalize_vector_3d(v))
+    return np.linalg.norm(v)
