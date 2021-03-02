@@ -1,6 +1,7 @@
 import numpy as np
 from .agent import Agent
 from .thing import Thing
+from .utils import normalize_vector_3d, vector_length
 
 
 def action_accelerate(direction, strength=1.0):
@@ -52,6 +53,18 @@ def action_pull(direction, strength=1.0):
             "strength": strength}
 
 
+def action_attack(direction, strength=1.0):
+    return {"type": "attack",
+            "direction": direction,
+            "strength": strength}
+
+
+def action_eat(direction, strength=1.0):
+    return {"type": "eat",
+            "direction": direction,
+            "strength": strength}
+
+
 # _allowed_actions = {"dummy": ["accelerate", "focus"]}
 
 
@@ -74,16 +87,17 @@ def _agent_push_agent(agent, action, surroundings):
     if np.max(action.direction) > _maximal_action_range:
         return
 
-    strength = np.min(np.abs(action.strength), 0.5)
-    normalized_direction = action.direction / np.sum(action.direction)
-    transfered_momentum = strength * (np.sqrt(np.sum(agent.velocity)) + 1.0)
+    normalized_direction = normalize_vector_3d(action.direction)
+
+    strength = np.min(np.abs(action.strength), 1.0) * 0.5
+    total_strength = strength * (vector_length(agent.velocity) + 1.0)
 
     target_position = agent.position + action.direction
     for thing in surroundings:
         if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
             # determine how much of the momentum should go to the other agent
-            thing.accelerate(direction=normalized_direction, dt=transfered_momentum)
-            agent.accelerate(direction=-1.0 * normalized_direction, dt=transfered_momentum)
+            thing.accelerate(direction=normalized_direction, dt=total_strength)
+            agent.accelerate(direction=-1.0 * normalized_direction, dt=total_strength)
 
 
 def _agent_pull_agent(agent, action, surroundings):
@@ -94,41 +108,58 @@ def _agent_pull_agent(agent, action, surroundings):
     if np.max(action.direction) > _maximal_action_range:
         return
 
-    strength = np.min(np.abs(action.strength), 0.5)
-    normalized_direction = -1.0 * action.direction / np.sum(action.direction)
-    transferred_momentum = strength
+    normalized_direction = normalize_vector_3d(action.direction)
+
+    strength = np.min(np.abs(action.strength), 1.0) * 0.25
+    total_strength = strength
 
     target_position = agent.position + action.direction
     for thing in surroundings:
         if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
             # determine how much of the momentum should go to the other agent
-            thing.accelerate(direction=normalized_direction, dt=transferred_momentum)
-            agent.accelerate(direction=-1.0 * normalized_direction, dt=transferred_momentum)
+            thing.accelerate(direction=-1.0 * normalized_direction, dt=total_strength)
+            agent.accelerate(direction=normalized_direction, dt=total_strength)
 
 
-def _agent_pull_agent(agent, action, surroundings):
-    # moves a thing towards the agent, but also accelerates the agent in the opposite direction
-    # pull is not affected by agent velocity
+def _agent_attack(agent, action, surroundings):
+    # damages a thing. more damage than eat, but also no health restoration possible
+    _numeric_location_accuracy = 0.001
+    _maximal_action_range = 1.0
+    if np.max(action.direction) > _maximal_action_range:
+        return
+
+    strength = np.min(np.abs(action.strength), 1.0)
+    total_strength = strength * agent.strength
+
+    target_position = agent.position + action.direction
+    for thing in surroundings:
+        if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
+            # determine how much of the momentum should go to the other agent
+            thing.health -= total_strength
+
+
+def _agent_eat(agent, action, surroundings):
+    # eats a thing to restore health. Less damage possible than with attack
     _numeric_location_accuracy = 0.001
     _maximal_action_range = 0.5
     if np.max(action.direction) > _maximal_action_range:
         return
 
-    strength = np.min(np.abs(action.strength), 0.5)
-    normalized_direction = -1.0 * action.direction / np.sum(action.direction)
-    transferred_momentum = strength
+    strength = np.min(np.abs(action.strength), 1.0)
+    total_strength = 0.5 * strength * agent.strength
 
     target_position = agent.position + action.direction
     for thing in surroundings:
         if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
             # determine how much of the momentum should go to the other agent
-            thing.accelerate(direction=normalized_direction, dt=transferred_momentum)
-            agent.accelerate(direction=-1.0 * normalized_direction, dt=transferred_momentum)
+            thing.health -= total_strength
+            agent.health += total_strength * 0.5
 
 
 def perform_action(world, agent: Agent, action, surroundings, time_delta):
     # some actions don't affect other objects (agents, things). The agent can
     if action["type"] == "accelerate":
+        normalized_direction =
         agent.accelerate(action["direction"], dt=time_delta)
 
     elif action["type"] == "focus":
@@ -148,6 +179,14 @@ def perform_action(world, agent: Agent, action, surroundings, time_delta):
 
     elif action.type == "pull":
         _agent_pull_agent(agent=agent, action=action, surroundings=surroundings)
+
+    elif action.type == "attack":
+        _agent_attack(agent=agent, action=action, surroundings=surroundings)
+        # agent.action_cooldown = 5
+
+    elif action.type == "eat":
+        _agent_eat(agent=agent, action=action, surroundings=surroundings)
+        # agent.action_cooldown = 3
 
     else:
         raise("Unrecognized action " + str(action["type"]) + " for agent of type " +

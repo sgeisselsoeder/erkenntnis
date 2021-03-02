@@ -8,11 +8,12 @@ class Behavior:
 
 
 class Agent(Thing):
-    def __init__(self, behavior, position, velocity=None, radius=None, health: int = None, perception_radius=None):
+    def __init__(self, behavior, position, velocity=None, radius=None, health: int = None, strength: int = 10, perception_radius=None):
         super().__init__(position=position, velocity=velocity, radius=radius, health=health)
 
         self.behavior = behavior
         self.action_cooldown = 0
+        self.strength = strength
 
         self.default_perception_radius = 5
         if perception_radius is not None:
