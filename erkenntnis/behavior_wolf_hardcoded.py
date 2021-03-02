@@ -28,7 +28,8 @@ class Behavior_wolf_hardcode(Behavior_simple_memory):
             direction_to_nearest = nearest_sheep.position
 
             eating_distance = 0.5
-            if vector_length(direction_to_nearest) < eating_distance:
+            current_distance = vector_length(direction_to_nearest)
+            if current_distance < eating_distance:
                 action = action_eat(direction=direction_to_nearest)
             else:
                 action = action_accelerate(direction=direction_to_nearest)

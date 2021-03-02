@@ -10,6 +10,7 @@ class Behavior_sheep_hardcode(Behavior_simple_memory):
         self.current_target_direction = None
 
     def think(self, perception, messages):
+        action = None
         action_cause = None
         split_perception = split_perception_by_type(perception=perception)
 
@@ -26,7 +27,8 @@ class Behavior_sheep_hardcode(Behavior_simple_memory):
             nearest_grass = split_perception["grass"][0]
             direction_to_nearest = nearest_grass.position
             eating_distance = 0.5
-            if vector_length(direction_to_nearest) < eating_distance:
+            current_distance = vector_length(direction_to_nearest)
+            if current_distance < eating_distance:
                 action = action_eat(direction=direction_to_nearest)
             else:
                 action = action_accelerate(direction=direction_to_nearest)
