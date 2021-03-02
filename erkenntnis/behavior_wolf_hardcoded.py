@@ -43,7 +43,7 @@ class Behavior_wolf_hardcode(Behavior_simple_memory):
                     break
             if action is None:
                 nearest_wolf = split_perception["wolf"][0]
-                action = action_accelerate(direction=Agent(nearest_wolf).velocity)
+                action = action_accelerate(direction=nearest_wolf.velocity)
                 action_cause = nearest_wolf.unique_properties
 
         else:
