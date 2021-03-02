@@ -1,14 +1,10 @@
-import numpy as np
 from .thing import Thing
-
-
-class Behavior:
-    def think(self, perception):
-        return None
+from .behavior_agent import Behavior
 
 
 class Agent(Thing):
-    def __init__(self, behavior, position, velocity=None, radius=None, health: int = None, strength: int = 10, perception_radius=None):
+    def __init__(self, behavior: Behavior, position, velocity=None, radius=None,
+                 health: int = None, strength: int = 10, perception_radius=None):
         super().__init__(position=position, velocity=velocity, radius=radius, health=health)
 
         self.behavior = behavior

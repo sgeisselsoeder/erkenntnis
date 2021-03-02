@@ -44,7 +44,7 @@ class Thing:
 
     def accelerate(self, direction, dt, strength: float = 1.0):
         normalized_direction = normalize_vector_3d(direction)
-        real_strength = np.min(np.abs(strength), 1.0)
+        real_strength = np.minimum(np.fabs(strength), 1.0)
         self.velocity = self.velocity + dt * normalized_direction * real_strength
 
     def __str__(self):

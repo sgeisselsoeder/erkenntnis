@@ -84,15 +84,15 @@ def _agent_push_agent(agent, action, surroundings):
     # stronger push at higher agent velocity
     _numeric_location_accuracy = 0.001
     _maximal_action_range = 1.0
-    if np.max(action.direction) > _maximal_action_range:
+    if np.max(action["direction"]) > _maximal_action_range:
         return
 
-    normalized_direction = normalize_vector_3d(action.direction)
+    normalized_direction = normalize_vector_3d(action["direction"])
 
-    strength = np.min(np.abs(action.strength), 1.0) * 0.5
+    strength = np.minimum(np.fabs(action["strength"]), 1.0) * 0.5
     total_strength = strength * (vector_length(agent.velocity) + 1.0)
 
-    target_position = agent.position + action.direction
+    target_position = agent.position + action["direction"]
     for thing in surroundings:
         if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
             # determine how much of the momentum should go to the other agent
@@ -105,15 +105,15 @@ def _agent_pull_agent(agent, action, surroundings):
     # pull is not affected by agent velocity
     _numeric_location_accuracy = 0.001
     _maximal_action_range = 0.5
-    if np.max(action.direction) > _maximal_action_range:
+    if np.max(action["direction"]) > _maximal_action_range:
         return
 
-    normalized_direction = normalize_vector_3d(action.direction)
+    normalized_direction = normalize_vector_3d(action["direction"])
 
-    strength = np.min(np.abs(action.strength), 1.0) * 0.25
+    strength = np.minimum(np.fabs(action["strength"]), 1.0) * 0.25
     total_strength = strength
 
-    target_position = agent.position + action.direction
+    target_position = agent.position + action["direction"]
     for thing in surroundings:
         if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
             # determine how much of the momentum should go to the other agent
@@ -125,13 +125,13 @@ def _agent_attack(agent, action, surroundings):
     # damages a thing. more damage than eat, but also no health restoration possible
     _numeric_location_accuracy = 0.001
     _maximal_action_range = 1.0
-    if np.max(action.direction) > _maximal_action_range:
+    if np.max(action["direction"]) > _maximal_action_range:
         return
 
-    strength = np.min(np.abs(action.strength), 1.0)
+    strength = np.minimum(np.fabs(action["strength"]), 1.0)
     total_strength = strength * agent.strength
 
-    target_position = agent.position + action.direction
+    target_position = agent.position + action["direction"]
     for thing in surroundings:
         if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
             # determine how much of the momentum should go to the other agent
@@ -142,13 +142,13 @@ def _agent_eat(agent, action, surroundings):
     # eats a thing to restore health. Less damage possible than with attack
     _numeric_location_accuracy = 0.001
     _maximal_action_range = 0.5
-    if np.max(action.direction) > _maximal_action_range:
+    if np.max(action["direction"]) > _maximal_action_range:
         return
 
-    strength = np.min(np.abs(action.strength), 1.0)
+    strength = np.minimum(np.fabs(action["strength"]), 1.0)
     total_strength = 0.5 * strength * agent.strength
 
-    target_position = agent.position + action.direction
+    target_position = agent.position + action["direction"]
     for thing in surroundings:
         if np.sum(np.abs(target_position - thing.position)) < _numeric_location_accuracy:
             # determine how much of the momentum should go to the other agent
@@ -158,8 +158,8 @@ def _agent_eat(agent, action, surroundings):
 
 def perform_action(world, agent: Agent, action, surroundings, time_delta):
     if action["type"] == "accelerate":
-        normalized_direction = normalize_vector_3d(action.direction)
-        strength = np.min(np.abs(action.strength), 1.0)
+        normalized_direction = normalize_vector_3d(action["direction"])
+        strength = np.minimum(np.fabs(action["strength"]), 1.0)
         agent.accelerate(normalized_direction, dt=time_delta, strength=strength)
 
     elif action["type"] == "focus":
