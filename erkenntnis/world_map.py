@@ -81,7 +81,26 @@ def encode_type(type_properties: str):
         raise("Unknown thing of type" + str(type_properties))
 
 
-def get_map(all_things, size: int = 20):
+def _thing_in_boundaries(thing, boundaries):
+    temp = thing.position > boundaries
+    temp2 = thing.position < -boundaries
+    return not (np.any(temp) or np.any(temp2))
+
+
+def get_map_fixed_boundaries(all_things, size: int = 20, fixed_boundary: float = None):
+    minpos = np.array([-fixed_boundary, -fixed_boundary, -fixed_boundary])
+    maxpos = np.array([fixed_boundary, fixed_boundary, fixed_boundary])
+
+    map = np.zeros((size, size), dtype=int)
+    for thing in all_things:
+        if _thing_in_boundaries(thing=thing, boundaries=fixed_boundary):
+            index = get_index(position=thing.position, minpos=minpos, maxpos=maxpos, size=size)
+            encoding = encode_type(thing.type_properties)
+            map[index[0], index[1]] = encoding
+    return map
+
+
+def get_map_dynamic_boundaries(all_things, size: int = 20):
     minpos, maxpos = _find_used_dimensions(all_things=all_things)
 
     map = np.zeros((size, size), dtype=int)
@@ -92,11 +111,22 @@ def get_map(all_things, size: int = 20):
     return map
 
 
-def print_map(map):
-    # np.set_printoptions(threshold=np.inf)
-    # print(map)
+def get_map(all_things, size: int = 20, fixed_boundary: float = None):
+    if fixed_boundary:
+        return get_map_fixed_boundaries(all_things=all_things, size=size, fixed_boundary=fixed_boundary)
+    else:
+        return get_map_dynamic_boundaries(all_things=all_things, size=size)
 
+
+def print_map(map, plotstyle: str = "sparse"):
     type_decoding = {value: key for key, value in _type_encoding.items()}
+    if plotstyle == "sparse":
+        print_encoding = _type_encoding_print_agents
+    elif plotstyle == "dense":
+        print_encoding = _type_encoding_print
+    else:
+        print("Unsupported map plotstyle ", plotstyle, " . Using dense.")
+        print_encoding = _type_encoding_print
 
     map_shape = map.shape
     for i in range(map_shape[0]):
@@ -104,7 +134,6 @@ def print_map(map):
         for j in range(map_shape[1]):
             encoded_type = map[i, j]
             type_name = type_decoding[encoded_type]
-            # print_symbol = _type_encoding_print[type_name]
-            print_symbol = _type_encoding_print_agents[type_name]
+            print_symbol = print_encoding[type_name]
             line = line + print_symbol + " "
         print(line)

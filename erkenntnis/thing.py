@@ -55,4 +55,6 @@ class Thing:
         self.velocity = self.velocity + dt * normalized_direction * real_strength
 
     def __str__(self):
-        return str(self.type_properties) + " at " + str(self.position)
+        description = str(self.type_properties) + " at " + str(self.position) + " health " + str(self.health)
+        description += " malus " + str(self.malus) + " velocity " + str(self.velocity)
+        return description
