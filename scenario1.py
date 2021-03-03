@@ -10,7 +10,7 @@ my_world.add(new_grass(), position=np.array([1.0, 0.0, 0.0]))
 
 my_world.add(new_sheep(), position=np.array([1.0, 8.0, 0.0]))
 
-my_world.add(new_wolf(velocity=np.array([3.0, 0.0, 0.0])), position=np.array([-18.0, -2.0, 0.0]))
+my_world.add(new_wolf(velocity=np.array([3.0, 0.0, 0.0])), position=np.array([-12.0, -2.0, 0.0]))
 
 my_world.print()
 my_world.map(resolution=80, fixed_boundary=initial_world_scale * 1.2, plotstyle="dense")
