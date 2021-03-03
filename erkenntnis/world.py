@@ -102,7 +102,7 @@ class World:
                 current_agent.malus = True
 
         self._remove_dead()
-        # self._spawn_kids()
+        self._spawn_kids()
 
         self.time = self.time + time_delta
 
