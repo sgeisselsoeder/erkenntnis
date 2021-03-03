@@ -20,7 +20,15 @@ for i in range(100):
     # print(my_world.time)
     # print(len(my_world.agents))
     my_world.map(resolution=80, fixed_boundary=initial_world_scale * 1.2, plotstyle="dense")
-    time.sleep(0.05)
+    # time.sleep(0.05)
 
 my_world.print()
 my_world.map(resolution=80, fixed_boundary=initial_world_scale * 1.2, plotstyle="dense")
+
+# filename = my_world.save()
+# del my_world
+
+# my_world2 = load_world(filename)
+# my_world2.print()
+# my_world2.run(time_delta=0.5)
+# my_world2.print()

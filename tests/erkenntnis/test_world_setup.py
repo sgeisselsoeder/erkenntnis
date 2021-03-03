@@ -14,6 +14,14 @@ def _setup_world():
     return my_world
 
 
+def _run_world():
+    my_world = _setup_world()
+    for i in range(10):
+        my_world.run(time_delta=0.1)
+
+    return my_world
+
+
 def test_world_create():
     my_world = _setup_world()
     assert(my_world is not None)
@@ -27,13 +35,7 @@ def test_world_output():
 
 
 def test_world_run():
-    my_world = _setup_world()
-    my_world.print()
-
-    for i in range(100):
-        my_world.run(time_delta=0.1)
-
-    my_world.print()
+    world = _run_world()
 
 
 def test_world_with_new_item():
@@ -42,7 +44,25 @@ def test_world_with_new_item():
     my_world.add(thing)
     my_world.print()
 
-    for i in range(100):
+    for i in range(10):
         my_world.run(time_delta=0.1)
 
     my_world.print()
+
+
+def test_world_save_and_load_and_run():
+    my_world = _run_world()
+    backup = copy.deepcopy(my_world)
+
+    filename = my_world.save()
+    del my_world
+
+    my_world2 = load_world(filename)
+    assert(my_world2.time == backup.time)
+    assert(len(my_world2.things) == len(backup.things))
+    assert(len(my_world2.agents) == len(backup.agents))
+    # TODO: implement thing comparison operator
+    # assert(my_world2.things == backup.things)
+    # assert(my_world2.agents == backup.agents)
+
+    my_world2.run(time_delta=0.5)
