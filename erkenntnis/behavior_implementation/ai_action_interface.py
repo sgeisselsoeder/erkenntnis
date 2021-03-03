@@ -24,11 +24,6 @@ def get_numeric_encoding_and_action_indices(available_actions: dict):
     return numeric_action_encoding, action_indices
 
 
-def numeric_encoding_to_action(action_encoding):
-    pass
-
-
-
 # def action_accelerate(direction, strength=1.0):
 #     return {"type": "accelerate",
 #             "direction": direction,
@@ -142,3 +137,78 @@ def action_to_numeric_encoding(action):
 
     else:
         raise("Unrecognized action " + str(action["type"]))
+
+    return encoding
+
+
+def numeric_encoding_to_action(encoding):
+    _, action_indices = get_numeric_encoding_and_action_indices(available_actions=available_actions)
+
+    max_action_value = 0.0
+    for action_name in action_indices:
+        current_action_index = action_indices[action_name]
+        activation_strength = encoding[current_action_index]
+        if activation_strength >= max_action_value:
+            max_action_value = activation_strength
+            selected_action = action_name
+            action_index = current_action_index
+    
+    action = {"type": selected_action}
+
+    if selected_action == "accelerate":
+        action["direction"][0] = encoding[action_index + 1]
+        action["direction"][1] = encoding[action_index + 2]
+        action["stength"] = encoding[action_index + 3]
+
+    elif selected_action == "focus":
+        pass
+
+    elif selected_action == "remove_malus":
+        pass
+
+    # elif selected_action == "inform_malus":
+    #     encoding[action_index + 1] = action["direction"][0]
+    #     encoding[action_index + 2] = action["direction"][1]
+
+    elif selected_action == "communicate":
+        action["direction"][0] = encoding[action_index + 1]
+        action["direction"][1] = encoding[action_index + 2]
+        if np.fabs(encoding[action_index + 3] - 1.0) < 0.01:
+            action["type"] = "inform_malus"
+            action["message"] = "malus"
+        else:
+            # action["message"] = "lol"
+            action["message"] = encoding[action_index + 3]
+
+    elif selected_action == "point":
+        action["agent_direction"][0] = encoding[action_index + 1]
+        action["agent_direction"][1] = encoding[action_index + 2]
+        action["pointing_direction"][0] = encoding[action_index + 3]
+        action["pointing_direction"][1] = encoding[action_index + 4]
+        # encoding[action_index + 5] = action["reason"]
+        action["reason"] = encoding[action_index + 5]
+
+    elif selected_action == "push":
+        action["direction"][0] = encoding[action_index + 1]
+        action["direction"][1] = encoding[action_index + 2]
+        action["stength"] = encoding[action_index + 3]
+
+    elif selected_action == "pull":
+        action["direction"][0] = encoding[action_index + 1]
+        action["direction"][1] = encoding[action_index + 2]
+        action["stength"] = encoding[action_index + 3]
+
+    elif selected_action == "attack":
+        action["direction"][0] = encoding[action_index + 1]
+        action["direction"][1] = encoding[action_index + 2]
+        action["stength"] = encoding[action_index + 3]
+
+    elif selected_action == "eat":
+        action["direction"][0] = encoding[action_index + 1]
+        action["direction"][1] = encoding[action_index + 2]
+        action["stength"] = encoding[action_index + 3]
+
+    else:
+        raise("Unrecognized action " + str(selected_action))
+
+    return action
