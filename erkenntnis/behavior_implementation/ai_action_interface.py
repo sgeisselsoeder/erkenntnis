@@ -11,6 +11,47 @@ from ..world_actions import available_actions
 #                     "attack": ["direction1", "direction2", "strength"],
 #                     "eat": ["direction1", "direction2", "strength"]}
 
+# 0 "accelerate": [
+# 1 "direction1", 
+# 2 "direction2", 
+# 3 "strength"],
+#                     
+# 4 "focus": None,
+#                     
+# 5 "remove_malus": None,
+#                     
+# 6 "communicate": [
+# 7 "direction1", 
+# 8 "direction2", 
+# 9 "message"],
+#                     
+# 10 "point": [
+# 11 "direction1", 
+# 12 "direction2", 
+# 13 "point_direction1", 
+# 14 "point_direction2", 
+# 15 "reason"],
+#                     
+# 16 "push": [
+# 17 "direction1", 
+# 18 "direction2", 
+# 19 "strength"],
+#                     
+# 20 "pull": [
+# 21 "direction1", 
+# 22 "direction2", 
+# 23 "strength"],
+#                     
+# 24 "attack": [
+# 25 "direction1", 
+# 26 "direction2", 
+# 27 "strength"],
+#                     
+# 28 "eat": [
+# 29 "direction1", 
+# 30 "direction2", 
+# 31 "strength"]}
+
 
 def get_numeric_encoding_and_action_indices(available_actions: dict):
     action_indices = {}
@@ -24,61 +65,6 @@ def get_numeric_encoding_and_action_indices(available_actions: dict):
     return numeric_action_encoding, action_indices
 
 
-# def action_accelerate(direction, strength=1.0):
-#     return {"type": "accelerate",
-#             "direction": direction,
-#             "strength": strength}
-
-
-# def action_focus():
-#     return {"type": "focus"}
-
-
-# def action_remove_malus():
-#     return {"type": "remove_malus"}
-
-
-# def action_inform_malus(direction):
-#     return action_communicate(direction=direction, message="malus")
-
-
-# def action_communicate(direction, message: str = "lol"):
-#     return {"type": "communicate",
-#             "direction": direction,
-#             "message": message}
-
-
-# def action_point_in_direction(agent_direction, pointing_direction, reason: str = "WorthyGoal"):
-#     return {"type": "point",
-#             "agent_direction": agent_direction,
-#             "pointing_direction": pointing_direction,
-#             "reason": reason}
-
-
-# def action_push(direction, strength=1.0):
-#     return {"type": "push",
-#             "direction": direction,
-#             "strength": strength}
-
-
-# def action_pull(direction, strength=1.0):
-#     return {"type": "pull",
-#             "direction": direction,
-#             "strength": strength}
-
-
-# def action_attack(direction, strength=1.0):
-#     return {"type": "attack",
-#             "direction": direction,
-#             "strength": strength}
-
-
-# def action_eat(direction, strength=1.0):
-#     return {"type": "eat",
-#             "direction": direction,
-#             "strength": strength}
-
-
 def action_to_numeric_encoding(action):
     encoding, action_indices = get_numeric_encoding_and_action_indices(available_actions=available_actions)
     action_index = action_indices[action["type"]]
@@ -87,7 +73,7 @@ def action_to_numeric_encoding(action):
     if action["type"] == "accelerate":
         encoding[action_index + 1] = action["direction"][0]
         encoding[action_index + 2] = action["direction"][1]
-        encoding[action_index + 3] = action["stength"]
+        encoding[action_index + 3] = action["strength"]
 
     elif action["type"] == "focus":
         pass
@@ -125,22 +111,22 @@ def action_to_numeric_encoding(action):
     elif action["type"] == "push":
         encoding[action_index + 1] = action["direction"][0]
         encoding[action_index + 2] = action["direction"][1]
-        encoding[action_index + 3] = action["stength"]
+        encoding[action_index + 3] = action["strength"]
 
     elif action["type"] == "pull":
         encoding[action_index + 1] = action["direction"][0]
         encoding[action_index + 2] = action["direction"][1]
-        encoding[action_index + 3] = action["stength"]
+        encoding[action_index + 3] = action["strength"]
 
     elif action["type"] == "attack":
         encoding[action_index + 1] = action["direction"][0]
         encoding[action_index + 2] = action["direction"][1]
-        encoding[action_index + 3] = action["stength"]
+        encoding[action_index + 3] = action["strength"]
 
     elif action["type"] == "eat":
         encoding[action_index + 1] = action["direction"][0]
         encoding[action_index + 2] = action["direction"][1]
-        encoding[action_index + 3] = action["stength"]
+        encoding[action_index + 3] = action["strength"]
 
     else:
         raise("Unrecognized action " + str(action["type"]))
@@ -163,9 +149,8 @@ def numeric_encoding_to_action(encoding):
     action = {"type": selected_action}
 
     if selected_action == "accelerate":
-        action["direction"][0] = encoding[action_index + 1]
-        action["direction"][1] = encoding[action_index + 2]
-        action["stength"] = encoding[action_index + 3]
+        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2]])
+        action["strength"] = encoding[action_index + 3]
 
     elif selected_action == "focus":
         pass
@@ -178,8 +163,7 @@ def numeric_encoding_to_action(encoding):
     #     encoding[action_index + 2] = action["direction"][1]
 
     elif selected_action == "communicate":
-        action["direction"][0] = encoding[action_index + 1]
-        action["direction"][1] = encoding[action_index + 2]
+        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2]])
         if np.fabs(encoding[action_index + 3] - 1.0) < 0.01:
             action["type"] = "inform_malus"
             action["message"] = "malus"
@@ -188,32 +172,26 @@ def numeric_encoding_to_action(encoding):
             action["message"] = encoding[action_index + 3]
 
     elif selected_action == "point":
-        action["agent_direction"][0] = encoding[action_index + 1]
-        action["agent_direction"][1] = encoding[action_index + 2]
-        action["pointing_direction"][0] = encoding[action_index + 3]
-        action["pointing_direction"][1] = encoding[action_index + 4]
+        action["agent_direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2]])
+        action["pointing_direction"] = np.array([encoding[action_index + 3], encoding[action_index + 4]])
         # encoding[action_index + 5] = action["reason"]
         action["reason"] = encoding[action_index + 5]
 
     elif selected_action == "push":
-        action["direction"][0] = encoding[action_index + 1]
-        action["direction"][1] = encoding[action_index + 2]
-        action["stength"] = encoding[action_index + 3]
+        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2]])
+        action["strength"] = encoding[action_index + 3]
 
     elif selected_action == "pull":
-        action["direction"][0] = encoding[action_index + 1]
-        action["direction"][1] = encoding[action_index + 2]
-        action["stength"] = encoding[action_index + 3]
+        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2]])
+        action["strength"] = encoding[action_index + 3]
 
     elif selected_action == "attack":
-        action["direction"][0] = encoding[action_index + 1]
-        action["direction"][1] = encoding[action_index + 2]
-        action["stength"] = encoding[action_index + 3]
+        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2]])
+        action["strength"] = encoding[action_index + 3]
 
     elif selected_action == "eat":
-        action["direction"][0] = encoding[action_index + 1]
-        action["direction"][1] = encoding[action_index + 2]
-        action["stength"] = encoding[action_index + 3]
+        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2]])
+        action["strength"] = encoding[action_index + 3]
 
     else:
         raise("Unrecognized action " + str(selected_action))
