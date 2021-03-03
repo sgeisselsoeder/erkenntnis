@@ -4,6 +4,18 @@ from .thing import Thing
 from .utils import normalize_vector_3d, vector_length
 
 
+available_actions = {"accelerate": ["direction1", "direction2", "strength"],
+                     "focus": None,
+                     "remove_malus": None,
+                     #  "inform_malus": ["direction1", "direction2"],
+                     "communicate": ["direction1", "direction2", "message"],
+                     "point": ["direction1", "direction2", "point_direction1", "point_direction2", "reason"],
+                     "push": ["direction1", "direction2", "strength"],
+                     "pull": ["direction1", "direction2", "strength"],
+                     "attack": ["direction1", "direction2", "strength"],
+                     "eat": ["direction1", "direction2", "strength"]}
+
+
 def action_accelerate(direction, strength=1.0):
     return {"type": "accelerate",
             "direction": direction,
@@ -28,17 +40,11 @@ def action_communicate(direction, message: str = "lol"):
             "message": message}
 
 
-def action_point_in_direction(agent_direction, pointing_direction, reason: str = "WorthyGoal"):
+def action_point_out(agent_direction, pointing_direction, reason: str = "WorthyGoal"):
     return {"type": "point",
             "agent_direction": agent_direction,
             "pointing_direction": pointing_direction,
             "reason": reason}
-
-
-def action_attack(direction, strength=1.0):
-    return {"type": "attack",
-            "direction": direction,
-            "strength": strength}
 
 
 def action_push(direction, strength=1.0):
@@ -174,6 +180,10 @@ def perform_action(world, agent: Agent, action, surroundings, time_delta):
 
     elif action["type"] == "communicate":       # this also covers inform_malus
         _agent_agent_comunication(agent=agent, action=action, surroundings=surroundings)
+
+    elif action["type"] == "point":
+        print("TODO: Pointing action is not implemented yet")
+        # TODO
 
     elif action["type"] == "push":
         _agent_push_agent(agent=agent, action=action, surroundings=surroundings)
