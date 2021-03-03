@@ -1,7 +1,7 @@
-from .behavior_simple_memory import Behavior_simple_memory
-from .world_actions import *
-from .analyze_perception import split_perception_by_type
-from .utils import random_position, vector_length
+from ..behavior_simple_memory import Behavior_simple_memory
+from ..world_actions import *
+from ..analyze_perception import split_perception_by_type
+from ..utils import random_position, vector_length
 
 
 class Behavior_sheep_hardcode(Behavior_simple_memory):

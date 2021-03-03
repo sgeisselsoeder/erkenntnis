@@ -1,9 +1,9 @@
 import numpy as np
 from .agent import Agent
-from .behavior_dummy import Behavior_dummy
-from .behavior_sheep_hardcoded import Behavior_sheep_hardcode
-from .behavior_wolf_hardcoded import Behavior_wolf_hardcode
-from .behavior_ape_ml import Behavior_ape_ml
+from .behavior_implementation.behavior_dummy import Behavior_dummy
+from .behavior_implementation.behavior_sheep_hardcoded import Behavior_sheep_hardcode
+from .behavior_implementation.behavior_wolf_hardcoded import Behavior_wolf_hardcode
+from .behavior_implementation.behavior_ape_ml import Behavior_ape_ml
 from .utils import random_position
 
 

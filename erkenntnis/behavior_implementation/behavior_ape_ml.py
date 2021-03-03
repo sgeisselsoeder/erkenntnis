@@ -1,6 +1,6 @@
-from .agent import Behavior
-from .world_actions import *
-from .utils import random_position
+from ..agent import Behavior
+from ..world_actions import *
+from ..utils import random_position
 
 
 class Behavior_ape_ml(Behavior):
