@@ -71,11 +71,11 @@ class World:
         for thing in things_to_remove:
             try:
                 self.agents.remove(thing)
-                print("DEBUG: removed agent")
+                # print("DEBUG: removed agent")
             except ValueError:
                 try:
                     self.things.remove(thing)
-                    print("DEBUG: removed thing")
+                    # print("DEBUG: removed thing")
                 except ValueError:
                     raise "Unable to find " + str(thing) + " with health " + str(thing.health) + " in world."
 
