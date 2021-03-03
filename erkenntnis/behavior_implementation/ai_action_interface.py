@@ -30,10 +30,6 @@ def action_to_numeric_encoding(action):
     elif action["type"] == "remove_malus":
         pass
 
-    # elif action["type"] == "inform_malus":
-    #     encoding[action_index + 1] = action["direction"][0]
-    #     encoding[action_index + 2] = action["direction"][1]
-
     elif action["type"] == "communicate":
         encoding[action_index + 1] = action["direction"][0]
         encoding[action_index + 2] = action["direction"][1]
@@ -105,10 +101,6 @@ def numeric_encoding_to_action(encoding):
 
     elif selected_action == "remove_malus":
         pass
-
-    # elif selected_action == "inform_malus":
-    #     encoding[action_index + 1] = action["direction"][0]
-    #     encoding[action_index + 2] = action["direction"][1]
 
     elif selected_action == "communicate":
         action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])

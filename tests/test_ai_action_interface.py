@@ -14,45 +14,45 @@ def test_available_actions_to_encoding():
                               "attack": ["direction1", "direction2", "strength"],
                               "eat": ["direction1", "direction2", "strength"]}
     # 0 "accelerate": [
-# 1 "direction1",
-# 2 "direction2",
-# 3 "strength"],
-#
-# 4 "focus": None,
-#
-# 5 "remove_malus": None,
-#
-# 6 "communicate": [
-# 7 "direction1",
-# 8 "direction2",
-# 9 "message"],
-#
-# 10 "point": [
-# 11 "direction1",
-# 12 "direction2",
-# 13 "point_direction1",
-# 14 "point_direction2",
-# 15 "reason"],
-#
-# 16 "push": [
-# 17 "direction1",
-# 18 "direction2",
-# 19 "strength"],
-#
-# 20 "pull": [
-# 21 "direction1",
-# 22 "direction2",
-# 23 "strength"],
-#
-# 24 "attack": [
-# 25 "direction1",
-# 26 "direction2",
-# 27 "strength"],
-#
-# 28 "eat": [
-# 29 "direction1",
-# 30 "direction2",
-# 31 "strength"]}
+    # 1 "direction1",
+    # 2 "direction2",
+    # 3 "strength"],
+    #
+    # 4 "focus": None,
+    #
+    # 5 "remove_malus": None,
+    #
+    # 6 "communicate": [
+    # 7 "direction1",
+    # 8 "direction2",
+    # 9 "message"],
+    #
+    # 10 "point": [
+    # 11 "direction1",
+    # 12 "direction2",
+    # 13 "point_direction1",
+    # 14 "point_direction2",
+    # 15 "reason"],
+    #
+    # 16 "push": [
+    # 17 "direction1",
+    # 18 "direction2",
+    # 19 "strength"],
+    #
+    # 20 "pull": [
+    # 21 "direction1",
+    # 22 "direction2",
+    # 23 "strength"],
+    #
+    # 24 "attack": [
+    # 25 "direction1",
+    # 26 "direction2",
+    # 27 "strength"],
+    #
+    # 28 "eat": [
+    # 29 "direction1",
+    # 30 "direction2",
+    # 31 "strength"]}
 
     encoding, _ = get_numeric_encoding_and_action_indices(available_actions=available_test_actions)
     assert(encoding.shape[0] == 32)
