@@ -2,7 +2,6 @@ import numpy as np
 import copy
 import uuid
 
-from numpy.lib.arraysetops import isin
 from .thing import Thing
 from .agent import Agent
 from .world_perception import perception_at_position

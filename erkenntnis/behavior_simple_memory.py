@@ -12,6 +12,7 @@ class Behavior_simple_memory(Behavior):
         self.memory_length = memory_length
 
     def _remember(self, perception, messages, action, action_cause=None):
+        # print(type(self), " ", action, " ", action_cause)
         self.last_perceptions.append(perception)
         self.last_actions.append(action)
         self.last_action_causes.append(action_cause)
