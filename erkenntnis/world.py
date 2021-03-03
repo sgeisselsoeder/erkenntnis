@@ -71,11 +71,9 @@ class World:
         for thing in things_to_remove:
             try:
                 self.agents.remove(thing)
-                # print("DEBUG: removed agent")
             except ValueError:
                 try:
                     self.things.remove(thing)
-                    # print("DEBUG: removed thing")
                 except ValueError:
                     raise "Unable to find " + str(thing) + " with health " + str(thing.health) + " in world."
 
@@ -88,14 +86,7 @@ class World:
                 new_agent.unique_properties = uuid.uuid1()
                 self.agents.append(new_agent)
 
-    def run(self, time_delta=0.01):
-        # TODO for fairer simulation, either random order or according to agent initiative, ... ?
-        for agent in self.agents:
-            self.process_agent(agent, time_delta=time_delta)
-
-        for current_thing in self.things + self.agents:
-            current_thing.move(dt=time_delta)
-
+    def _malus_effect(self):
         for current_agent in self.agents:
             malus_effect_probability = 0.01
             if current_agent.malus:
@@ -108,6 +99,15 @@ class World:
             if np.random.random() <= new_malus_probability:
                 current_agent.malus = True
 
+    def run(self, time_delta=0.01):
+        # TODO for fairer simulation, either random order or according to agent initiative, ... ?
+        for agent in self.agents:
+            self.process_agent(agent, time_delta=time_delta)
+
+        for current_thing in self.things + self.agents:
+            current_thing.move(dt=time_delta)
+
+        self._malus_effect()
         self._remove_dead()
         self._spawn_kids()
 

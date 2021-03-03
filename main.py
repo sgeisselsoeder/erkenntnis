@@ -26,8 +26,6 @@ time.sleep(15)
 
 for i in range(1000):
     my_world.run(time_delta=0.3)
-    # print(my_world.time)
-    # print(len(my_world.agents))
     my_world.map(resolution=80, fixed_boundary=initial_world_scale * 1.2)
 
 my_world.print()
