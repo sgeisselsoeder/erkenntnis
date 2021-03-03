@@ -2,7 +2,12 @@ import numpy as np
 import copy
 
 
-def obstruct_perception(position, perception):
+def obstruct_perception(position, raw_perception):
+    perception = list()
+    for thing in raw_perception:
+        perceived_thing = _copy_and_clean_percieved_thing(thing=thing)
+        perceived_thing.position = perceived_thing.position - position
+        perception.append(perceived_thing)
     # print("TODO: the perception of objects needs to change if obstruction/mirroring happens")
     return perception
 
@@ -27,8 +32,6 @@ def perception_at_position(all_things, position, radius):
     for this_thing in all_things:
         dist = np.linalg.norm(position - this_thing.position)
         if dist < radius and dist > _minimal_perception_range:
-            perceived_thing = _copy_and_clean_percieved_thing(thing=this_thing)
-            perceived_thing.position = perceived_thing.position - position
-            raw_perception.append(perceived_thing)
-    perception = obstruct_perception(position=position, perception=raw_perception)
+            raw_perception.append(this_thing)
+    perception = obstruct_perception(position=position, raw_perception=raw_perception)
     return perception, raw_perception
