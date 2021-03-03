@@ -1,6 +1,7 @@
 import numpy as np
 import copy
 import uuid
+import pickle
 
 from .thing import Thing
 from .agent import Agent
@@ -9,6 +10,12 @@ from .world_creation import *
 from .world_map import get_map, print_map
 from .world_actions import perform_action
 from .utils import random_position
+
+
+def load_world(filename: str):
+    with open(filename, 'rb') as input:
+        world = pickle.load(input)
+    return world
 
 
 class World:
@@ -113,3 +120,10 @@ class World:
 
     def map(self, resolution: int = 40, fixed_boundary: float = None, plotstyle: str = "sparse"):
         print_map(get_map(self.things + self.agents, size=resolution, fixed_boundary=fixed_boundary), plotstyle=plotstyle)
+
+    def save(self, filename: str = None):
+        if filename is None:
+            filename = "world_" + str(self.time) + "_a" + str(len(self.agents)) + "_t" + str(len(self.things)) + ".pkl"
+        with open(filename, 'wb') as output:
+            pickle.dump(self, output, pickle.HIGHEST_PROTOCOL)
+        return filename
