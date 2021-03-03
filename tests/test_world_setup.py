@@ -1,5 +1,5 @@
 from erkenntnis.world import *
-from tests.erkenntnis.test_thing_and_agent_creation import _get_new_thing_type
+from tests.test_thing_and_agent_creation import _get_new_thing_type
 
 
 def _setup_world():

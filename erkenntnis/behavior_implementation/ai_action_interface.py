@@ -4,7 +4,6 @@ from ..world_actions import available_actions
 # available_actions = {"accelerate": ["direction1", "direction2", "strength"],
 #                     "focus": None,
 #                     "remove_malus": None,
-#                     "inform_malus": ["direction1", "direction2"],
 #                     "communicate": ["direction1", "direction2", "message"],
 #                     "point": ["direction1", "direction2", "point_direction1", "point_direction2", "reason"],
 #                     "push": ["direction1", "direction2", "strength"],
@@ -19,7 +18,8 @@ def get_numeric_encoding_and_action_indices(available_actions: dict):
     for action_name in available_actions:
         action_indices[action_name] = parameter_count
         parameter_count += 1    # the action itself
-        parameter_count += len(available_actions[action_name]) + 1    # the parameters of this action + the action itself
+        if available_actions[action_name] is not None:
+            parameter_count += len(available_actions[action_name]) + 1    # the parameters of this action + the action itself
     numeric_action_encoding = np.zeros(parameter_count)
     return numeric_action_encoding, action_indices
 
@@ -105,7 +105,10 @@ def action_to_numeric_encoding(action):
         if action["message"] == "malus":
             encoding[action_index + 3] = 1.0
         else:
-            encoding[action_index + 3] = 0.2
+            try:
+                encoding[action_index + 3] = float(action["message"])
+            except Exception:
+                encoding[action_index + 3] = 0.2
 
     elif action["type"] == "point":
         encoding[action_index + 1] = action["agent_direction"][0]
@@ -113,7 +116,11 @@ def action_to_numeric_encoding(action):
         encoding[action_index + 3] = action["pointing_direction"][0]
         encoding[action_index + 4] = action["pointing_direction"][1]
         # encoding[action_index + 5] = action["reason"]
-        encoding[action_index + 5] = 1.0
+        try:
+            encoding[action_index + 5] = float(action["reason"])
+        except Exception:
+            encoding[action_index + 5] = 1.0
+        
 
     elif action["type"] == "push":
         encoding[action_index + 1] = action["direction"][0]
