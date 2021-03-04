@@ -1,4 +1,4 @@
-from ..brain_simple_memory import Brain_simple_memory
+from .brain_simple_memory import Brain_simple_memory
 from ..world_actions import *
 from ..analyze_perception import split_perception_by_type
 from ..utils import random_position, vector_length
@@ -12,7 +12,7 @@ class Brain_monkey_hardcode(Brain_simple_memory):
         self.action_distance = action_distance
         self.type_name = "monkey"
 
-    def _hunt(self, prey, strength = 1.0):
+    def _hunt(self, prey, strength=1.0):
         direction_to_nearest = prey.position
 
         eating_distance = self.action_distance
@@ -69,16 +69,15 @@ class Brain_monkey_hardcode(Brain_simple_memory):
         if action is None and self.type_name in split_perception:
             nearest = split_perception[self.type_name][0]
             peer_name = nearest.unique_properties
-            if not peer_name in self.last_causes:
+            if peer_name not in self.last_causes:
                 # say hello
                 action = action_communicate(direction=nearest.position)
                 # action = action_accelerate(direction=nearest.velocity)
             elif self.last_actions[-1]["type"] == "communication" and self.last_causes[-1] == peer_name:
                 # travel together
                 action = action_point_out(direction=nearest.position,
-                                            pointing_direction=0.5 * nearest.velocity -
-                                            0.5 * nearest.position,
-                                            reason=0.3)
+                                          pointing_direction=0.5 * nearest.velocity - 0.5 * nearest.position,
+                                          reason=0.3)
             else:
                 action = action_accelerate(direction=nearest.velocity)
 
@@ -90,7 +89,7 @@ class Brain_monkey_hardcode(Brain_simple_memory):
             if action is None and prey_category in split_perception:
                 nearest = split_perception[prey_category][0]
                 # TODO: this should be taken care of in world actions. a monkey eating grass is automatically 0.2 instead of 1.0 strength
-                action, cause = self._hunt(nearest, strength=0.2)
+                action, cause = self._hunt(nearest, strength=0.1)
                 break
 
         if action is None:
@@ -103,7 +102,5 @@ class Brain_monkey_hardcode(Brain_simple_memory):
                 action = action_focus()
 
         self._remember(perception=perception, messages=messages, action=action, cause=cause)
-
         encoded_action = action_to_numeric_encoding(action=action)
-        action = numeric_encoding_to_action(encoding=encoded_action)
-        return action, cause
+        return encoded_action, cause

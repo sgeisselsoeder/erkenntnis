@@ -20,7 +20,7 @@ def new_dummy_agent(position: np.ndarray = None, velocity=None, health: int = No
     if health is None:
         health = default_health
     agent = Agent(behavior=Brain_dummy(), position=position, velocity=velocity,
-                  radius=radius, default_health=health, perception_radius=perception_radius)
+                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed, strength=strength)
     agent.type_properties = "dummy"
     return agent
 
@@ -38,7 +38,7 @@ def new_sheep(position: np.ndarray = None, velocity=None, health: float = None):
     if health is None:
         health = default_health
     agent = Agent(behavior=Brain_sheep_hardcode(action_distance=max_speed), position=position, velocity=velocity,
-                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=1.5, strength=strength)
+                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed, strength=strength)
     agent.type_properties = "sheep"
     return agent
 
@@ -74,7 +74,7 @@ def new_monkey(position: np.ndarray = None, velocity=None, health: float = None)
     if health is None:
         health = default_health
     agent = Agent(behavior=Brain_monkey_hardcode(action_distance=max_speed), position=position, velocity=velocity,
-                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed)
+                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed, strength=strength)
     agent.type_properties = "monkey"
     return agent
 

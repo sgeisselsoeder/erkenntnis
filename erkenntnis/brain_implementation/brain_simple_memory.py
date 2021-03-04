@@ -1,6 +1,7 @@
 from .brain import Brain
-from .utils import random_position
-from .world_actions import action_accelerate
+from ..utils import random_position
+from ..world_actions import action_accelerate
+from .ai_action_interface import action_to_numeric_encoding
 
 
 class Brain_simple_memory(Brain):
@@ -28,4 +29,5 @@ class Brain_simple_memory(Brain):
     def think(self, perception, messages):
         action = action_accelerate(direction=random_position())
         self._remember(perception=perception, messages=messages, action=action, cause=None)
-        return action, None
+        encoded_action = action_to_numeric_encoding(action=action)
+        return encoded_action, None

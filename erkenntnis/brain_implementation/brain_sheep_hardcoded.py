@@ -1,7 +1,8 @@
-from ..brain_simple_memory import Brain_simple_memory
+from .brain_simple_memory import Brain_simple_memory
 from ..world_actions import *
 from ..analyze_perception import split_perception_by_type
 from ..utils import random_position, vector_length
+from .ai_action_interface import action_to_numeric_encoding
 
 
 class Brain_sheep_hardcode(Brain_simple_memory):
@@ -41,4 +42,5 @@ class Brain_sheep_hardcode(Brain_simple_memory):
             action = action_accelerate(direction=self.current_target_direction)
 
         self._remember(perception=perception, messages=messages, action=action, cause=cause)
-        return action, cause
+        encoded_action = action_to_numeric_encoding(action=action)
+        return encoded_action, cause

@@ -1,5 +1,6 @@
 from .thing import Thing
 from .brain import Brain
+from .brain_implementation.ai_action_interface import numeric_encoding_to_action
 
 
 class Agent(Thing):
@@ -27,7 +28,8 @@ class Agent(Thing):
         self.type_properties = "agent"
 
     def think(self, perception):
-        action, cause = self.behavior.think(perception=perception, messages=self.messages)
+        encoded_action, cause = self.behavior.think(perception=perception, messages=self.messages)
+        action = numeric_encoding_to_action(encoding=encoded_action)
         self.last_action = action
         self.last_cause = cause
         self.messages.clear()

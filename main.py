@@ -17,7 +17,8 @@ for i in range(20):
 for i in range(3):
     my_world.add(new_wolf(), position=random_position(scale=0.6*initial_world_scale))
 
-# my_world.add(new_ape(), position=None)
+for i in range(5):
+    my_world.add(new_monkey(), position=random_position(scale=0.7*initial_world_scale))
 
 my_world.print()
 my_world.map(resolution=80, fixed_boundary=initial_world_scale * 1.2)
