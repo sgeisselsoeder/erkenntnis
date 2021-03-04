@@ -1,9 +1,9 @@
 from .thing import Thing
-from .behavior_agent import Behavior
+from .brain import Brain
 
 
 class Agent(Thing):
-    def __init__(self, behavior: Behavior, position, velocity=None, radius=None, default_health: float = None,
+    def __init__(self, behavior: Brain, position, velocity=None, radius=None, default_health: float = None,
                  health: float = None, strength: float = 10.0, perception_radius=None, max_speed: float = 3.0):
         super().__init__(position=position, velocity=velocity, radius=radius, health=health, default_health=default_health,
                          max_speed=max_speed, strength=strength)

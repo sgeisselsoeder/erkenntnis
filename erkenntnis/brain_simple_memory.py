@@ -1,9 +1,9 @@
-from .behavior_agent import Behavior
+from .brain import Brain
 from .utils import random_position
 from .world_actions import action_accelerate
 
 
-class Behavior_simple_memory(Behavior):
+class Brain_simple_memory(Brain):
     def __init__(self, memory_length: int = 10):
         self.last_perceptions = list()
         self.last_actions = list()

@@ -1,4 +1,4 @@
-from erkenntnis.behavior_implementation.ai_action_interface import *
+from erkenntnis.brain_implementation.ai_action_interface import *
 from erkenntnis.world_actions import *
 from erkenntnis.utils import random_position
 
