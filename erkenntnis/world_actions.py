@@ -82,7 +82,7 @@ def action_eat(direction, strength=1.0):
 # _allowed_actions = {"dummy": ["accelerate", "focus"]}
 
 
-def _agent_agent_comunication(agent, action, surroundings):
+def _agent_agent_communication(agent, action, surroundings):
     _numeric_location_accuracy = 0.001
     target_position = agent.position + action["direction"]
     for thing in surroundings:
@@ -187,13 +187,13 @@ def perform_action(world, agent: Agent, action, surroundings, time_delta):
         agent.action_cooldown = 20
 
     elif action["type"] == "communicate":
-        _agent_agent_comunication(agent=agent, action=action, surroundings=surroundings)
+        _agent_agent_communication(agent=agent, action=action, surroundings=surroundings)
 
     elif action["type"] == "point":
         com_action = action_communicate(direction=action["agent_direction"],
                                         message={"pointing_direction": action["pointing_direction"],
                                                  "reason": action["reason"]})
-        _agent_agent_comunication(agent=agent, action=com_action, surroundings=surroundings)
+        _agent_agent_communication(agent=agent, action=com_action, surroundings=surroundings)
 
     elif action["type"] == "push":
         _agent_push_agent(agent=agent, action=action, surroundings=surroundings)
@@ -210,7 +210,7 @@ def perform_action(world, agent: Agent, action, surroundings, time_delta):
         # agent.action_cooldown = 3
 
     elif action["type"] == "inform_malus":
-        _agent_agent_comunication(agent=agent, action=action, surroundings=surroundings)
+        _agent_agent_communication(agent=agent, action=action, surroundings=surroundings)
 
     else:
         raise("Unrecognized action " + str(action["type"]) + " for agent of type " +

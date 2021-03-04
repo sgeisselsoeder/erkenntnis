@@ -46,7 +46,7 @@ class Behavior_monkey_hardcode(Behavior_simple_memory):
 
         if action is None and self.type_name in split_perception:
             for nearest in split_perception[self.type_name]:
-                if nearest.malus:
+                if nearest.malus != -1.0:
                     action = action_inform_malus(direction=nearest.position)
                     cause = nearest.unique_properties
                     break

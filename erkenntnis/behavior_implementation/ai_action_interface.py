@@ -108,6 +108,7 @@ def numeric_encoding_to_action(encoding):
 
     elif selected_action == "inform_malus":
         action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
+        action["message"] = "malus"
 
     elif selected_action == "point":
         action["agent_direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
