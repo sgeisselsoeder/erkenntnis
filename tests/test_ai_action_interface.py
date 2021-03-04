@@ -12,7 +12,8 @@ def test_available_actions_to_encoding():
                               "push": ["direction1", "direction2", "strength"],
                               "pull": ["direction1", "direction2", "strength"],
                               "attack": ["direction1", "direction2", "strength"],
-                              "eat": ["direction1", "direction2", "strength"]}
+                              "eat": ["direction1", "direction2", "strength"],
+                              "inform_malus": ["direction1", "direction2"]}
     # 0 "accelerate": [
     # 1 "direction1",
     # 2 "direction2",
@@ -52,10 +53,14 @@ def test_available_actions_to_encoding():
     # 28 "eat": [
     # 29 "direction1",
     # 30 "direction2",
-    # 31 "strength"]}
+    # 31 "strength"],
+    #
+    # 32 "inform_malus":
+    # 33 ["direction1",
+    # 34 "direction2"],}
 
     encoding, _ = get_numeric_encoding_and_action_indices(available_actions=available_test_actions)
-    assert(encoding.shape[0] == 32)
+    assert(encoding.shape[0] == 35)
 
 
 def test_action_encoding_action_conversions():
@@ -125,15 +130,6 @@ def test_action_encoding_conversions():
     assert(encoded[offset + 2] == action["direction"][1])
     assert(encoded[offset + 3] == action["strength"])
 
-    action = action_inform_malus(direction=random_position())
-    encoded = action_to_numeric_encoding(action)
-    offset = 6  # inform malus = communicate, --> 7 - 1
-    assert(encoded[offset + 0] == 1.0)
-    assert(encoded[offset + 1] == action["direction"][0])
-    assert(encoded[offset + 2] == action["direction"][1])
-    # assert(encoded[offset + 3] == action["message"])
-    assert(encoded[offset + 3] == 1.0)
-
     action = action_communicate(direction=random_position(), message="lol_test")
     encoded = action_to_numeric_encoding(action)
     offset = 6  # communicate, --> 7 - 1
@@ -141,7 +137,7 @@ def test_action_encoding_conversions():
     assert(encoded[offset + 1] == action["direction"][0])
     assert(encoded[offset + 2] == action["direction"][1])
     # assert(encoded[offset + 3] == action["message"])
-    assert(encoded[offset + 3] == 0.2)
+    assert(encoded[offset + 3] == 0.5)
 
     action = action_communicate(direction=random_position(), message=0.57)
     encoded = action_to_numeric_encoding(action)
@@ -150,3 +146,10 @@ def test_action_encoding_conversions():
     assert(encoded[offset + 1] == action["direction"][0])
     assert(encoded[offset + 2] == action["direction"][1])
     assert(encoded[offset + 3] == action["message"])
+
+    action = action_inform_malus(direction=random_position())
+    encoded = action_to_numeric_encoding(action)
+    offset = 32
+    assert(encoded[offset + 0] == 1.0)
+    assert(encoded[offset + 1] == action["direction"][0])
+    assert(encoded[offset + 2] == action["direction"][1])

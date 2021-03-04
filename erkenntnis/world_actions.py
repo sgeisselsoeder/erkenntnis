@@ -7,13 +7,13 @@ from .utils import normalize_vector_3d, vector_length
 available_actions = {"accelerate": ["direction1", "direction2", "strength"],
                      "focus": None,
                      "remove_malus": None,
-                     #  "inform_malus": ["direction1", "direction2"],
                      "communicate": ["direction1", "direction2", "message"],
                      "point": ["direction1", "direction2", "point_direction1", "point_direction2", "reason"],
                      "push": ["direction1", "direction2", "strength"],
                      "pull": ["direction1", "direction2", "strength"],
                      "attack": ["direction1", "direction2", "strength"],
-                     "eat": ["direction1", "direction2", "strength"]}
+                     "eat": ["direction1", "direction2", "strength"],
+                     "inform_malus": ["direction1", "direction2"]}
 
 
 def action_accelerate(direction, strength=1.0):
@@ -31,16 +31,19 @@ def action_remove_malus():
 
 
 def action_inform_malus(direction):
-    return action_communicate(direction=direction, message="malus")
+    return {"type": "inform_malus",
+            "direction": direction,
+            "message": "malus"}
+    # return action_communicate(direction=direction, message="malus")
 
 
-def action_communicate(direction, message: str = "lol"):
+def action_communicate(direction, message=0.5):
     return {"type": "communicate",
             "direction": direction,
             "message": message}
 
 
-def action_point_out(agent_direction, pointing_direction, reason: str = "WorthyGoal"):
+def action_point_out(agent_direction, pointing_direction, reason=0.5):
     return {"type": "point",
             "agent_direction": agent_direction,
             "pointing_direction": pointing_direction,
@@ -178,12 +181,14 @@ def perform_action(world, agent: Agent, action, surroundings, time_delta):
         # removes the malus, but prevents actions for some time
         agent.action_cooldown = 20
 
-    elif action["type"] == "communicate":       # this also covers inform_malus
+    elif action["type"] == "communicate":
         _agent_agent_comunication(agent=agent, action=action, surroundings=surroundings)
 
     elif action["type"] == "point":
-        print("TODO: Pointing action is not implemented yet")
-        # TODO
+        com_action = action_communicate(direction=action["agent_direction"],
+                                        message={"pointing_direction": action["pointing_direction"],
+                                                 "reason": action["reason"]})
+        _agent_agent_comunication(agent=agent, action=com_action, surroundings=surroundings)
 
     elif action["type"] == "push":
         _agent_push_agent(agent=agent, action=action, surroundings=surroundings)
@@ -198,6 +203,9 @@ def perform_action(world, agent: Agent, action, surroundings, time_delta):
     elif action["type"] == "eat":
         _agent_eat(agent=agent, action=action, surroundings=surroundings)
         # agent.action_cooldown = 3
+
+    elif action["type"] == "inform_malus":
+        _agent_agent_comunication(agent=agent, action=action, surroundings=surroundings)
 
     else:
         raise("Unrecognized action " + str(action["type"]) + " for agent of type " +

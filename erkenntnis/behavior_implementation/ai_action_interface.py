@@ -33,24 +33,24 @@ def action_to_numeric_encoding(action):
     elif action["type"] == "communicate":
         encoding[action_index + 1] = action["direction"][0]
         encoding[action_index + 2] = action["direction"][1]
-        if action["message"] == "malus":
-            encoding[action_index + 3] = 1.0
-        else:
-            try:
-                encoding[action_index + 3] = float(action["message"])
-            except Exception:
-                encoding[action_index + 3] = 0.2
+        try:
+            encoding[action_index + 3] = float(action["message"])
+        except Exception:
+            encoding[action_index + 3] = 0.5
+
+    elif action["type"] == "inform_malus":
+        encoding[action_index + 1] = action["direction"][0]
+        encoding[action_index + 2] = action["direction"][1]
 
     elif action["type"] == "point":
         encoding[action_index + 1] = action["agent_direction"][0]
         encoding[action_index + 2] = action["agent_direction"][1]
         encoding[action_index + 3] = action["pointing_direction"][0]
         encoding[action_index + 4] = action["pointing_direction"][1]
-        # encoding[action_index + 5] = action["reason"]
         try:
             encoding[action_index + 5] = float(action["reason"])
         except Exception:
-            encoding[action_index + 5] = 1.0
+            encoding[action_index + 5] = 0.5
 
     elif action["type"] == "push":
         encoding[action_index + 1] = action["direction"][0]
@@ -104,17 +104,14 @@ def numeric_encoding_to_action(encoding):
 
     elif selected_action == "communicate":
         action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
-        if np.fabs(encoding[action_index + 3] - 1.0) < 0.01:
-            action["type"] = "inform_malus"
-            action["message"] = "malus"
-        else:
-            # action["message"] = "lol"
-            action["message"] = encoding[action_index + 3]
+        action["message"] = encoding[action_index + 3]
+
+    elif selected_action == "inform_malus":
+        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
 
     elif selected_action == "point":
         action["agent_direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
         action["pointing_direction"] = np.array([encoding[action_index + 3], encoding[action_index + 4], 0.0])
-        # encoding[action_index + 5] = action["reason"]
         action["reason"] = encoding[action_index + 5]
 
     elif selected_action == "push":
