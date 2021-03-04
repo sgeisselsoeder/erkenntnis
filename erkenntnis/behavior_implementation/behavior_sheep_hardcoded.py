@@ -12,14 +12,14 @@ class Behavior_sheep_hardcode(Behavior_simple_memory):
 
     def think(self, perception, messages):
         action = None
-        action_cause = None
+        cause = None
         split_perception = split_perception_by_type(perception=perception)
 
         if "wolf" in split_perception:
             nearest_wolf = split_perception["wolf"][0]
             direction_to_nearest = nearest_wolf.position
             action = action_accelerate(direction=-1.0 * direction_to_nearest)
-            action_cause = nearest_wolf.unique_properties
+            cause = nearest_wolf.unique_properties
 
         # TODO: maybe inform other sheep about malus?
         # elif "sheep" in split_perception:
@@ -33,12 +33,12 @@ class Behavior_sheep_hardcode(Behavior_simple_memory):
                 action = action_eat(direction=direction_to_nearest)
             else:
                 action = action_accelerate(direction=direction_to_nearest)
-            action_cause = nearest_grass.unique_properties
+            cause = nearest_grass.unique_properties
 
         else:
             # we might want to keep a direction, but random for now
             self.current_target_direction = random_position()
             action = action_accelerate(direction=self.current_target_direction)
 
-        self._remember(perception=perception, messages=messages, action=action, action_cause=action_cause)
+        self._remember(perception=perception, messages=messages, action=action, cause=cause)
         return action

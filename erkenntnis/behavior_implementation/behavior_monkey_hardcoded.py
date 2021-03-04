@@ -4,7 +4,7 @@ from ..analyze_perception import split_perception_by_type
 from ..utils import random_position, vector_length
 
 
-class Behavior_wolf_hardcode(Behavior_simple_memory):
+class Behavior_monkey_hardcode(Behavior_simple_memory):
     def __init__(self, action_distance: float):
         super().__init__(memory_length=100)
         self.current_target_direction = None
@@ -41,7 +41,6 @@ class Behavior_wolf_hardcode(Behavior_simple_memory):
             if action is None and prey_category in split_perception:
                 nearest_sheep = split_perception[prey_category][0]
                 action, cause = self._hunt(nearest_sheep)
-                break
 
         if action is None and "wolf" in split_perception:
             for wolf in split_perception["wolf"]:
@@ -54,7 +53,7 @@ class Behavior_wolf_hardcode(Behavior_simple_memory):
                 action = action_accelerate(direction=nearest_wolf.velocity)
                 cause = nearest_wolf.unique_properties
 
-        if action is None:
+        else:
             # we might want to keep a direction, but random for now
             if np.random.random() < 0.9:
                 self.current_target_direction = random_position()

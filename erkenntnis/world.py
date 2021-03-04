@@ -84,8 +84,8 @@ class World:
 
     def _spawn_kids(self):
         for agent in self.agents:
-            if agent.health >= 200:
-                agent.health = 110
+            if agent.health >= 2.0 * agent.default_health:
+                agent.health = 0.5 * agent.health
                 new_agent = copy.deepcopy(agent)
                 new_agent.position = agent.position + random_position()
                 new_agent.unique_properties = uuid.uuid1()

@@ -12,7 +12,7 @@ def test_sheep_eats_gras():
     assert(len(my_world.things) == 0)
     assert(len(my_world.agents) == 1)
     assert(my_world.agents[0].type_properties == "sheep")
-    assert(my_world.agents[0].health > 100.0)
+    assert(my_world.agents[0].health > 80.0)
 
 
 def test_wolf_eats_sheep():
@@ -26,7 +26,7 @@ def test_wolf_eats_sheep():
     assert(len(my_world.things) == 0)
     assert(len(my_world.agents) == 1)
     assert(my_world.agents[0].type_properties == "wolf")
-    assert(my_world.agents[0].health >= 150.0)
+    assert(my_world.agents[0].health >= 140.0)
 
 
 def test_sheep_has_kid():
@@ -44,4 +44,4 @@ def test_sheep_has_kid():
 
     assert(len(my_world.things) < number_gras)
     assert(len(my_world.agents) > 1)
-    assert(my_world.agents[0].health >= 110.0)
+    assert(my_world.agents[0].health > 80.0)
