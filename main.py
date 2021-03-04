@@ -4,7 +4,7 @@ from erkenntnis.utils import random_position
 
 initial_world_scale = 100
 
-my_world = World(world_scale=initial_world_scale)
+my_world = World(world_scale=initial_world_scale, malus_propability=0.0)
 my_world.add(new_stone(position=None))
 # my_world.add(new_dummy_agent(position=None))
 

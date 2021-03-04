@@ -19,12 +19,13 @@ def load_world(filename: str):
 
 
 class World:
-    def __init__(self, world_scale: float = 100.0, agent_health_decline: float = 0.1):
+    def __init__(self, world_scale: float = 100.0, agent_health_decline: float = 0.1, malus_propability: float = 0.01):
         self.world_scale = world_scale
         self.time = 0
         self.agents = list()
         self.things = list()
         self.agent_health_decline = agent_health_decline
+        self.malus_propability = malus_propability
 
     def add_agent(self, agent: Agent):
         self.agents.append(agent)
@@ -100,9 +101,7 @@ class World:
                 current_agent.health = -1
 
             else:                           # malus free, but could randomly get it
-                new_malus_probability = 0.0
-                # new_malus_probability = 0.01
-                if np.random.random() <= new_malus_probability:
+                if np.random.random() <= self.malus_propability:
                     current_agent.malus = 30
 
     def run(self, time_delta=0.01):

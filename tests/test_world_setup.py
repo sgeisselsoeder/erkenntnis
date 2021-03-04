@@ -25,6 +25,8 @@ def _run_world():
 def test_world_create():
     my_world = _setup_world()
     assert(my_world is not None)
+    assert(len(my_world.things) == 3)
+    assert(len(my_world.agents) == 4)
 
 
 def test_world_output():
