@@ -1,5 +1,20 @@
-from ..world_actions import *
-from ..world_actions import available_actions
+import numpy as np
+
+available_actions = {"accelerate": ["direction1", "direction2", "strength"],
+                     "focus": None,
+                     "remove_malus": None,
+                     "communicate": ["direction1", "direction2", "message"],
+                     "point": ["direction1", "direction2", "point_direction1", "point_direction2", "reason"],
+                     "push": ["direction1", "direction2", "strength"],
+                     "pull": ["direction1", "direction2", "strength"],
+                     "attack": ["direction1", "direction2", "strength"],
+                     "eat": ["direction1", "direction2", "strength"],
+                     "inform_malus": ["direction1", "direction2"]}
+
+essential_actions = {"accelerate": ["direction1", "direction2", "strength"],
+                     "remove_malus": None,
+                     "eat": ["direction1", "direction2", "strength"],
+                     "inform_malus": ["direction1", "direction2"]}
 
 
 def get_numeric_encoding_and_action_indices(available_actions: dict):

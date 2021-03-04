@@ -1,5 +1,5 @@
 from .thing import Thing
-from .brain import Brain
+from .brain_implementation.brain import Brain
 from .brain_implementation.ai_action_interface import numeric_encoding_to_action
 
 

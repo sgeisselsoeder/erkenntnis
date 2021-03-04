@@ -1,24 +1,6 @@
 import numpy as np
 from .agent import Agent
-from .thing import Thing
 from .utils import normalize_vector_3d, vector_length
-
-
-available_actions = {"accelerate": ["direction1", "direction2", "strength"],
-                     "focus": None,
-                     "remove_malus": None,
-                     "communicate": ["direction1", "direction2", "message"],
-                     "point": ["direction1", "direction2", "point_direction1", "point_direction2", "reason"],
-                     "push": ["direction1", "direction2", "strength"],
-                     "pull": ["direction1", "direction2", "strength"],
-                     "attack": ["direction1", "direction2", "strength"],
-                     "eat": ["direction1", "direction2", "strength"],
-                     "inform_malus": ["direction1", "direction2"]}
-
-essential_actions = {"accelerate": ["direction1", "direction2", "strength"],
-                     "remove_malus": None,
-                     "eat": ["direction1", "direction2", "strength"],
-                     "inform_malus": ["direction1", "direction2"]}
 
 
 def action_accelerate(direction, strength=1.0):
