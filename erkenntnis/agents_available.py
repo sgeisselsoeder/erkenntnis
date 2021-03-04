@@ -34,10 +34,18 @@ def new_wolf(position: np.ndarray = None, velocity=None, radius=None, health: in
     return agent
 
 
-def new_ape(position: np.ndarray = None, velocity=None, radius=None, health: int = None, perception_radius=None, max_speed=2.5):
+def new_monkey(position: np.ndarray = None, velocity=None, radius=None, health: int = None, perception_radius=None, max_speed=2.5):
     if position is None:
         position = random_position()
     agent = Agent(behavior=Behavior_ape_ml(action_distance=max_speed), position=position, velocity=velocity,
                   radius=radius, health=health, perception_radius=perception_radius, max_speed=max_speed)
+    agent.type_properties = "monkey"
+    return agent
+
+
+def new_ape(position: np.ndarray = None, velocity=None, radius=None, health: int = None, perception_radius=None, max_speed=2.5):
+    agent = new_monkey(position=position, velocity=velocity, radius=radius, health=health, perception_radius=perception_radius,
+                       max_speed=max_speed)
+    agent.behavior = Behavior_ape_ml(action_distance=max_speed)
     agent.type_properties = "ape"
     return agent

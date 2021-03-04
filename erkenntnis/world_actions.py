@@ -15,6 +15,11 @@ available_actions = {"accelerate": ["direction1", "direction2", "strength"],
                      "eat": ["direction1", "direction2", "strength"],
                      "inform_malus": ["direction1", "direction2"]}
 
+essential_actions = {"accelerate": ["direction1", "direction2", "strength"],
+                     "remove_malus": None,
+                     "eat": ["direction1", "direction2", "strength"],
+                     "inform_malus": ["direction1", "direction2"]}
+
 
 def action_accelerate(direction, strength=1.0):
     return {"type": "accelerate",
@@ -177,7 +182,7 @@ def perform_action(world, agent: Agent, action, surroundings, time_delta):
         # this buff will automatically be reset after the next perception by the world
 
     elif action["type"] == "remove_malus":
-        agent.malus = False
+        agent.malus = -1
         # removes the malus, but prevents actions for some time
         agent.action_cooldown = 20
 

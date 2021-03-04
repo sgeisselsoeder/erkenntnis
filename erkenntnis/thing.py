@@ -25,7 +25,10 @@ class Thing:
         if self.friction is None:
             self.friction = _default_friction
 
-        self.malus = False
+        self.malus = -1
+        # self.malus == -1 : no malus
+        # self.malus > 0 : turns left
+        # self.malus == 0 : time to die
 
         self.health = 100
         if health is not None:

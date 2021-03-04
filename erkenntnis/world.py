@@ -62,6 +62,9 @@ class World:
         else:
             agent.action_cooldown = agent.action_cooldown - 1
 
+        # agents struggle to survive
+        agent.health -= 0.2
+
     def _remove_dead(self):
         things_to_remove = list()
         for current_thing in self.things + self.agents:
@@ -88,16 +91,18 @@ class World:
 
     def _malus_effect(self):
         for current_agent in self.agents:
-            malus_effect_probability = 0.01
-            if current_agent.malus:
-                if np.random.random() <= malus_effect_probability:
-                    # current_agent.health = current_agent.health - 49
-                    current_agent.health = -1
+            # check agent malus state
+            if current_agent.malus > 0:     # having malus, but time left
+                current_agent.malus -= 1
 
-            new_malus_probability = 0.0
-            # new_malus_probability = 0.01
-            if np.random.random() <= new_malus_probability:
-                current_agent.malus = True
+            elif current_agent.malus == 0:  # having malus, time to die
+                current_agent.health = -1
+
+            else:                           # malus free, but could randomly get it
+                new_malus_probability = 0.0
+                # new_malus_probability = 0.01
+                if np.random.random() <= new_malus_probability:
+                    current_agent.malus = 30
 
     def run(self, time_delta=0.01):
         # TODO for fairer simulation, either random order or according to agent initiative, ... ?
