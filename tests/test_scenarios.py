@@ -5,8 +5,8 @@ def test_sheep_eats_gras():
     my_world = World()
 
     my_world.add(new_grass(), position=np.array([1.0, 0.0, 0.0]))
-    my_world.add(new_sheep(), position=np.array([1.0, 8.0, 0.0]))
-    for i in range(100):
+    my_world.add(new_sheep(), position=np.array([1.0, 1.0, 0.0]))
+    for i in range(10):
         my_world.run(time_delta=0.1)
 
     assert(len(my_world.things) == 0)
@@ -32,7 +32,7 @@ def test_wolf_eats_sheep():
 def test_sheep_has_kid():
     initial_world_scale = 2
 
-    my_world = World(world_scale=initial_world_scale)
+    my_world = World(world_scale=initial_world_scale, agent_health_decline=0.0)
 
     number_gras = 25
     for i in range(number_gras):

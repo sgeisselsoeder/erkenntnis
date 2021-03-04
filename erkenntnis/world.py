@@ -19,11 +19,12 @@ def load_world(filename: str):
 
 
 class World:
-    def __init__(self, world_scale: float = 100.0):
+    def __init__(self, world_scale: float = 100.0, agent_health_decline: float = 0.1):
         self.world_scale = world_scale
         self.time = 0
         self.agents = list()
         self.things = list()
+        self.agent_health_decline = agent_health_decline
 
     def add_agent(self, agent: Agent):
         self.agents.append(agent)
@@ -63,7 +64,7 @@ class World:
             agent.action_cooldown = agent.action_cooldown - 1
 
         # agents struggle to survive
-        agent.health -= 0.2
+        agent.health -= self.agent_health_decline
 
     def _remove_dead(self):
         things_to_remove = list()
