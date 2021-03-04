@@ -28,4 +28,4 @@ class Behavior_simple_memory(Behavior):
     def think(self, perception, messages):
         action = action_accelerate(direction=random_position())
         self._remember(perception=perception, messages=messages, action=action, cause=None)
-        return action
+        return action, None

@@ -20,10 +20,15 @@ class Agent(Thing):
         # should be emptied by the world upon perceive() or by themselves at the beginning of think
         self.messages = list()
 
+        self.last_action = None
+        self.last_cause = None
+
         # could be equivalent to encoding of size of sheep, fur of wolf, number of limbs, ...
         self.type_properties = "agent"
 
     def think(self, perception):
-        action = self.behavior.think(perception=perception, messages=self.messages)
+        action, cause = self.behavior.think(perception=perception, messages=self.messages)
+        self.last_action = action
+        self.last_cause = cause
         self.messages.clear()
         return action

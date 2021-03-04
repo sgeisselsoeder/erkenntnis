@@ -41,4 +41,4 @@ class Behavior_sheep_hardcode(Behavior_simple_memory):
             action = action_accelerate(direction=self.current_target_direction)
 
         self._remember(perception=perception, messages=messages, action=action, cause=cause)
-        return action
+        return action, cause

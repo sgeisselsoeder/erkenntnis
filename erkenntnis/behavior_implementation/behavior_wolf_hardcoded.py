@@ -33,14 +33,14 @@ class Behavior_wolf_hardcode(Behavior_simple_memory):
 
         # TODO: react to other messages as well
 
-        # Without messages, we analze what we see
+        # Without messages, we analyze what we see
         split_perception = split_perception_by_type(perception=perception)
 
         # favored prey
         for prey_category in ["sheep", "monkey", "ape"]:
             if action is None and prey_category in split_perception:
-                nearest_sheep = split_perception[prey_category][0]
-                action, cause = self._hunt(nearest_sheep)
+                nearest_prey = split_perception[prey_category][0]
+                action, cause = self._hunt(nearest_prey)
                 break
 
         if action is None and "wolf" in split_perception:
@@ -63,4 +63,4 @@ class Behavior_wolf_hardcode(Behavior_simple_memory):
                 action = action_focus()
 
         self._remember(perception=perception, messages=messages, action=action, cause=cause)
-        return action
+        return action, cause
