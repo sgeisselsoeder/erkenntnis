@@ -53,7 +53,7 @@ _type_encoding_print = {"nothing": ".",
                         "agent": "+",
                         "stone": "O",
                         "grass": "G",
-                        "mirror": "M",
+                        "mirror": "~",
                         "dummy": "D",
                         "sheep": "S",
                         "wolf": "W",
@@ -67,7 +67,7 @@ _type_encoding_print_agents = {"nothing": " ",
                                "agent": "+",
                                "stone": "o",
                                "grass": ".",
-                               "mirror": "M",
+                               "mirror": "~",
                                "dummy": "D",
                                "sheep": "S",
                                "wolf": "W",
@@ -86,7 +86,7 @@ _type_encoding_print_agents = {"nothing": " ",
 #                         "sheep": " S ",
 #                         "wolf": " W ",
 #                         "ape": " A ",
-#                         "monkey": " A2 "
+#                         "monkey": " A2"
 #                         }
 
 # _type_encoding_print_agents = {"nothing": "   ",
@@ -100,7 +100,7 @@ _type_encoding_print_agents = {"nothing": " ",
 #                                "sheep": " S ",
 #                                "wolf": " W ",
 #                                "ape": " A ",
-#                                "monkey": " A2 "
+#                                "monkey": " A2"
 #                                }
 
 
@@ -167,5 +167,5 @@ def print_map(map, plotstyle: str = "sparse"):
             type_name = type_decoding[encoded_type]
             print_symbol = print_encoding[type_name]
             line = line + print_symbol
-            # line = line + " "
+            line = line + " "
         print(line)
