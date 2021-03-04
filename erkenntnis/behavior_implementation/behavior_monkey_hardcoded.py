@@ -12,13 +12,13 @@ class Behavior_monkey_hardcode(Behavior_simple_memory):
         self.action_distance = action_distance
         self.type_name = "monkey"
 
-    def _hunt(self, prey):
+    def _hunt(self, prey, strength = 1.0):
         direction_to_nearest = prey.position
 
         eating_distance = self.action_distance
         current_distance = vector_length(direction_to_nearest)
         if current_distance < eating_distance:
-            action = action_eat(direction=direction_to_nearest)
+            action = action_eat(direction=direction_to_nearest, strength=strength)
         else:
             action = action_accelerate(direction=direction_to_nearest)
         cause = prey.unique_properties
@@ -45,10 +45,10 @@ class Behavior_monkey_hardcode(Behavior_simple_memory):
         split_perception = split_perception_by_type(perception=perception)
 
         if action is None and self.type_name in split_perception:
-            for peer in split_perception[self.type_name]:
-                if peer.malus:
-                    action = action_inform_malus(direction=peer.position)
-                    cause = peer.unique_properties
+            for nearest in split_perception[self.type_name]:
+                if nearest.malus:
+                    action = action_inform_malus(direction=nearest.position)
+                    cause = nearest.unique_properties
                     break
 
         # flee enemies
@@ -61,36 +61,36 @@ class Behavior_monkey_hardcode(Behavior_simple_memory):
         # favored prey
         for prey_category in ["sheep"]:
             if action is None and prey_category in split_perception:
-                nearest_sheep = split_perception[prey_category][0]
-                action, cause = self._hunt(nearest_sheep)
+                nearest_prey = split_perception[prey_category][0]
+                action, cause = self._hunt(nearest_prey)
                 break
 
         # talk to peers
         if action is None and self.type_name in split_perception:
-            nearest_peer = split_perception[self.type_name][0]
-            peer_name = nearest_peer.unique_properties
+            nearest = split_perception[self.type_name][0]
+            peer_name = nearest.unique_properties
             if not peer_name in self.last_causes:
                 # say hello
-                action = action_communicate(direction=nearest_peer.position)
-                # action = action_accelerate(direction=nearest_peer.velocity)
+                action = action_communicate(direction=nearest.position)
+                # action = action_accelerate(direction=nearest.velocity)
             elif self.last_actions[-1]["type"] == "communication" and self.last_causes[-1] == peer_name:
                 # travel together
-                action = action_point_out(direction=nearest_peer.position,
-                                            pointing_direction=0.5 * nearest_peer.velocity -
-                                            0.5 * nearest_peer.position,
+                action = action_point_out(direction=nearest.position,
+                                            pointing_direction=0.5 * nearest.velocity -
+                                            0.5 * nearest.position,
                                             reason=0.3)
             else:
-                action = action_accelerate(direction=nearest_peer.velocity)
+                action = action_accelerate(direction=nearest.velocity)
 
             if action is not None:
-                cause = nearest_peer.unique_properties
+                cause = nearest.unique_properties
 
-
-        # backup prey
+        # backup food
         for prey_category in ["grass"]:
             if action is None and prey_category in split_perception:
-                nearest_sheep = split_perception[prey_category][0]
-                action, cause = self._hunt(nearest_sheep)
+                nearest = split_perception[prey_category][0]
+                # TODO: this should be taken care of in world actions. a monkey eating grass is automatically 0.2 instead of 1.0 strength
+                action, cause = self._hunt(nearest, strength=0.2)
                 break
 
         if action is None:
@@ -103,7 +103,7 @@ class Behavior_monkey_hardcode(Behavior_simple_memory):
                 action = action_focus()
 
         self._remember(perception=perception, messages=messages, action=action, cause=cause)
-        
+
         encoded_action = action_to_numeric_encoding(action=action)
         action = numeric_encoding_to_action(encoding=encoded_action)
         return action, cause
