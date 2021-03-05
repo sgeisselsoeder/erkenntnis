@@ -1,6 +1,7 @@
 from .thing import Thing
 from .brain_implementation.brain import Brain
 from .brain_implementation.ai_action_interface import numeric_encoding_to_action
+from .brain_implementation.ai_perception_interface import encode_perception
 
 
 class Agent(Thing):
@@ -31,6 +32,8 @@ class Agent(Thing):
         self.type_properties = "agent"
 
     def think(self, perception):
+        # if len(perception) > 0:
+        #     encoded_perception = encode_perception(perception[:1], expected_number_perceptions=self.max_number_perceived_things)
         encoded_action, cause = self.brain.think(perception=perception, messages=self.messages)
         action = numeric_encoding_to_action(encoding=encoded_action)
         self.last_action = action
