@@ -1,7 +1,8 @@
-from ..world_actions import *
-from ..world_actions import available_actions
-
-# TODO: encode perceptions
+import numpy as np
+from ..thing import Thing
+from ..agent import Agent
+from .ai_action_interface import action_to_numeric_encoding
+from ..world_map import _type_encoding
 
 # list of messages
 
@@ -9,150 +10,63 @@ properties_to_encode = {"health": 1,
                         "malus": 1,
                         "max_speed": 1,
                         "position": 2,
-                        # "up to 3 messages": 3*2,
                         "strength": 1,
                         "type_properties": 1,
                         "unique_properties": 1,
                         "velocity": 2,
                         "action_cooldown": 1,   # agent specifics
-                        "last_action": 35,       # depends on the number of actions, currently 35
-                        "last_cause": 1}
+                        # "last_action": 35,       # depends on the number of actions, currently 35
+                        "last_action": 17,       # depends on the number of actions, 17 for limited action set
+                        "last_cause": 1
+                        # "up to 3 messages": 3*2,
+                        }
 
 
-def _perceived_thing_to_encoding(thing):
-    encoding = np.zeros(())
+def _encoding_length(properties_to_encode: dict):
+    encoding_length = 0
+    for property in properties_to_encode:
+        encoding_length += properties_to_encode[property]
+    return encoding_length
 
 
-def get_numeric_encoding_and_action_indices(available_actions: dict):
-    action_indices = {}
-    parameter_count = 0
-    for action_name in available_actions:
-        action_indices[action_name] = parameter_count
-        parameter_count += 1    # the action itself
-        if available_actions[action_name] is not None:
-            parameter_count += len(available_actions[action_name])    # the parameters of this action
-    numeric_action_encoding = np.zeros(parameter_count)
-    return numeric_action_encoding, action_indices
+def _encode_type_properties(type):
+    type_encoding = _type_encoding[type]
+    return type_encoding
 
 
-def action_to_numeric_encoding(action):
-    encoding, action_indices = get_numeric_encoding_and_action_indices(available_actions=available_actions)
-    action_index = action_indices[action["type"]]
-    encoding[action_index] = 1.0    # mark the action to use
-
-    if action["type"] == "accelerate":
-        encoding[action_index + 1] = action["direction"][0]
-        encoding[action_index + 2] = action["direction"][1]
-        encoding[action_index + 3] = action["strength"]
-
-    elif action["type"] == "focus":
-        pass
-
-    elif action["type"] == "remove_malus":
-        pass
-
-    elif action["type"] == "communicate":
-        encoding[action_index + 1] = action["direction"][0]
-        encoding[action_index + 2] = action["direction"][1]
-        try:
-            encoding[action_index + 3] = float(action["message"])
-        except Exception:
-            encoding[action_index + 3] = 0.5
-
-    elif action["type"] == "inform_malus":
-        encoding[action_index + 1] = action["direction"][0]
-        encoding[action_index + 2] = action["direction"][1]
-
-    elif action["type"] == "point":
-        encoding[action_index + 1] = action["agent_direction"][0]
-        encoding[action_index + 2] = action["agent_direction"][1]
-        encoding[action_index + 3] = action["pointing_direction"][0]
-        encoding[action_index + 4] = action["pointing_direction"][1]
-        try:
-            encoding[action_index + 5] = float(action["reason"])
-        except Exception:
-            encoding[action_index + 5] = 0.5
-
-    elif action["type"] == "push":
-        encoding[action_index + 1] = action["direction"][0]
-        encoding[action_index + 2] = action["direction"][1]
-        encoding[action_index + 3] = action["strength"]
-
-    elif action["type"] == "pull":
-        encoding[action_index + 1] = action["direction"][0]
-        encoding[action_index + 2] = action["direction"][1]
-        encoding[action_index + 3] = action["strength"]
-
-    elif action["type"] == "attack":
-        encoding[action_index + 1] = action["direction"][0]
-        encoding[action_index + 2] = action["direction"][1]
-        encoding[action_index + 3] = action["strength"]
-
-    elif action["type"] == "eat":
-        encoding[action_index + 1] = action["direction"][0]
-        encoding[action_index + 2] = action["direction"][1]
-        encoding[action_index + 3] = action["strength"]
-
-    else:
-        raise("Unrecognized action " + str(action["type"]))
-
-    return encoding
+def _encode_unique_name(unique_properties):
+    # TODO we could just enum the things in a world?
+    return 1
 
 
-def numeric_encoding_to_action(encoding):
-    _, action_indices = get_numeric_encoding_and_action_indices(available_actions=available_actions)
+def _perceived_thing_to_encoding(thing: Thing):
+    encoding_length = _encoding_length(properties_to_encode=properties_to_encode)
+    encoding = np.zeros(encoding_length)
 
-    max_action_value = 0.0
-    for action_name in action_indices:
-        current_action_index = action_indices[action_name]
-        activation_strength = encoding[current_action_index]
-        if activation_strength >= max_action_value:
-            max_action_value = activation_strength
-            selected_action = action_name
-            action_index = current_action_index
+    encoding[0] = thing.health
+    encoding[1] = thing.malus
+    encoding[2] = thing.max_speed
+    encoding[3] = thing.position[0]
+    encoding[4] = thing.position[1]
+    encoding[5] = thing.strength
+    encoding[6] = _encode_type_properties(thing.type_properties)
+    encoding[7] = _encode_unique_name(thing.unique_properties)
+    encoding[8] = thing.velocity[0]
+    encoding[9] = thing.velocity[1]
 
-    action = {"type": selected_action}
+    if isinstance(thing, Agent):
+        encoding[10] = thing.action_cooldown
+        encoding[11] = _encode_unique_name(thing.last_cause)
+        last_encoded_action = action_to_numeric_encoding(thing.last_action)
+        encoding[12:12 + 17] = last_encoded_action[:]
 
-    if selected_action == "accelerate":
-        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
-        action["strength"] = encoding[action_index + 3]
 
-    elif selected_action == "focus":
-        pass
+def encode_perception(perception):
+    encodings = list()
+    for thing in perception:
+        encodings.append(_perceived_thing_to_encoding(thing))
 
-    elif selected_action == "remove_malus":
-        pass
+    # TODO: all in one numpy array
+    encoded_perception = encodings
 
-    elif selected_action == "communicate":
-        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
-        action["message"] = encoding[action_index + 3]
-
-    elif selected_action == "inform_malus":
-        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
-        action["message"] = "malus"
-
-    elif selected_action == "point":
-        action["agent_direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
-        action["pointing_direction"] = np.array([encoding[action_index + 3], encoding[action_index + 4], 0.0])
-        action["reason"] = encoding[action_index + 5]
-
-    elif selected_action == "push":
-        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
-        action["strength"] = encoding[action_index + 3]
-
-    elif selected_action == "pull":
-        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
-        action["strength"] = encoding[action_index + 3]
-
-    elif selected_action == "attack":
-        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
-        action["strength"] = encoding[action_index + 3]
-
-    elif selected_action == "eat":
-        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
-        action["strength"] = encoding[action_index + 3]
-
-    else:
-        raise("Unrecognized action " + str(selected_action))
-
-    return action
+    return encoded_perception
