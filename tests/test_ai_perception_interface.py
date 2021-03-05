@@ -1,6 +1,5 @@
 from erkenntnis.brain_implementation.ai_perception_interface import *
 from erkenntnis.brain_implementation.ai_perception_interface import _encoding_length, _encode_type_properties
-from erkenntnis.world import World
 from erkenntnis.agents_available import new_ape, new_monkey, new_sheep, new_wolf
 from erkenntnis.things_available import new_grass, new_stone
 from erkenntnis.world_actions import action_accelerate, action_remove_malus
