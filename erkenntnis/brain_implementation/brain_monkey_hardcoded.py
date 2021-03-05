@@ -72,12 +72,11 @@ class Brain_monkey_hardcode(Brain_simple_memory):
             if peer_name not in self.last_causes:
                 # say hello
                 action = action_communicate(direction=nearest.position)
-                # action = action_accelerate(direction=nearest.velocity)
-            elif self.last_actions[-1]["type"] == "communication" and self.last_causes[-1] == peer_name:
-                # travel together
-                action = action_point_out(direction=nearest.position,
-                                          pointing_direction=0.5 * nearest.velocity - 0.5 * nearest.position,
-                                          reason=0.3)
+            # elif self.last_actions[-1]["type"] == "communication" and self.last_causes[-1] == peer_name:
+            #     # travel together
+            #     action = action_point_out(direction=nearest.position,
+            #                               pointing_direction=0.5 * nearest.velocity - 0.5 * nearest.position,
+            #                               reason=0.3)
             else:
                 action = action_accelerate(direction=nearest.velocity)
 

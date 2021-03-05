@@ -1,20 +1,24 @@
 import numpy as np
 
-available_actions = {"accelerate": ["direction1", "direction2", "strength"],
-                     "focus": None,
-                     "remove_malus": None,
-                     "communicate": ["direction1", "direction2", "message"],
-                     "point": ["direction1", "direction2", "point_direction1", "point_direction2", "reason"],
-                     "push": ["direction1", "direction2", "strength"],
-                     "pull": ["direction1", "direction2", "strength"],
-                     "attack": ["direction1", "direction2", "strength"],
-                     "eat": ["direction1", "direction2", "strength"],
-                     "inform_malus": ["direction1", "direction2"]}
+_available_actions = {"accelerate": ["direction1", "direction2", "strength"],
+                      "focus": None,
+                      "remove_malus": None,
+                      "communicate": ["direction1", "direction2", "message"],
+                      "point": ["direction1", "direction2", "point_direction1", "point_direction2", "reason"],
+                      "push": ["direction1", "direction2", "strength"],
+                      "pull": ["direction1", "direction2", "strength"],
+                      "attack": ["direction1", "direction2", "strength"],
+                      "eat": ["direction1", "direction2", "strength"],
+                      "inform_malus": ["direction1", "direction2"]}
 
-essential_actions = {"accelerate": ["direction1", "direction2", "strength"],
-                     "remove_malus": None,
-                     "eat": ["direction1", "direction2", "strength"],
-                     "inform_malus": ["direction1", "direction2"]}
+_limited_actions = {"accelerate": ["direction1", "direction2", "strength"],
+                    "focus": None,
+                    "remove_malus": None,
+                    "communicate": ["direction1", "direction2", "message"],
+                    "eat": ["direction1", "direction2", "strength"],
+                    "inform_malus": ["direction1", "direction2"]}
+
+_available_actions = _limited_actions
 
 
 def get_numeric_encoding_and_action_indices(available_actions: dict):
@@ -29,8 +33,11 @@ def get_numeric_encoding_and_action_indices(available_actions: dict):
     return numeric_action_encoding, action_indices
 
 
-def action_to_numeric_encoding(action):
+def action_to_numeric_encoding(action, available_actions=_available_actions):
     encoding, action_indices = get_numeric_encoding_and_action_indices(available_actions=available_actions)
+    if action is None:
+        return encoding
+
     action_index = action_indices[action["type"]]
     encoding[action_index] = 1.0    # mark the action to use
 
@@ -93,17 +100,22 @@ def action_to_numeric_encoding(action):
     return encoding
 
 
-def numeric_encoding_to_action(encoding):
+def numeric_encoding_to_action(encoding, available_actions=_available_actions):
     _, action_indices = get_numeric_encoding_and_action_indices(available_actions=available_actions)
 
     max_action_value = 0.0
     for action_name in action_indices:
         current_action_index = action_indices[action_name]
         activation_strength = encoding[current_action_index]
-        if activation_strength >= max_action_value:
+        if activation_strength > max_action_value:
             max_action_value = activation_strength
             selected_action = action_name
             action_index = current_action_index
+
+    # None action should be encoded as entirely zeros
+    if max_action_value == 0.0:
+        action = None
+        return action
 
     action = {"type": selected_action}
 

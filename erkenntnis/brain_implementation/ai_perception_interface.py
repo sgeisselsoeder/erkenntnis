@@ -3,6 +3,25 @@ from ..world_actions import available_actions
 
 # TODO: encode perceptions
 
+# list of messages
+
+properties_to_encode = {"health": 1,
+                        "malus": 1,
+                        "max_speed": 1,
+                        "position": 2,
+                        # "up to 3 messages": 3*2,
+                        "strength": 1,
+                        "type_properties": 1,
+                        "unique_properties": 1,
+                        "velocity": 2,
+                        "action_cooldown": 1,   # agent specifics
+                        "last_action": 35,       # depends on the number of actions, currently 35
+                        "last_cause": 1}
+
+
+def _perceived_thing_to_encoding(thing):
+    encoding = np.zeros(())
+
 
 def get_numeric_encoding_and_action_indices(available_actions: dict):
     action_indices = {}
