@@ -14,7 +14,7 @@ def _find_used_dimensions(all_things):
 
 def get_index(position, minpos, maxpos, size):
     dimensions = maxpos - minpos
-    spacing = dimensions / np.float(size - 1)
+    spacing = dimensions / float(size - 1)
     index = (position - minpos) / spacing
     index = index.astype(int)
 
