@@ -43,7 +43,7 @@ class Thing:
 
         # agents may perceive the unique properties of others, but not themselves (or maybe a subset)
         # could be equivalent to encoding of individual specific fur color, name, eye color, ...
-        self.unique_properties = uuid.uuid1()
+        self.unique_properties = uuid.uuid1().int
 
     def move(self, dt):
         # maximal movement speed

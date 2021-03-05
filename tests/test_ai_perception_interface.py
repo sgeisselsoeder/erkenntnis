@@ -1,8 +1,8 @@
 from erkenntnis.brain_implementation.ai_perception_interface import *
-from erkenntnis.brain_implementation.ai_perception_interface import _encoding_length
+from erkenntnis.brain_implementation.ai_perception_interface import _encoding_length, _encode_type_properties
 from erkenntnis.world import World
-from erkenntnis.agents_available import *
-from erkenntnis.things_available import new_grass
+from erkenntnis.agents_available import new_ape, new_monkey, new_sheep, new_wolf
+from erkenntnis.things_available import new_grass, new_stone
 from erkenntnis.world_actions import action_accelerate, action_remove_malus
 from erkenntnis.utils import random_position
 
@@ -25,7 +25,7 @@ def test_sheep_encoding_no_action():
     assert(encoded_perception[3] == agent.position[0])
     assert(encoded_perception[4] == agent.position[1])
     assert(encoded_perception[5] == agent.strength)
-    # assert(encoded_perception[6] == agent.health)
+    assert(encoded_perception[6] == _encode_type_properties(agent.type_properties))
     # assert(encoded_perception[7] == agent.health)
     assert(encoded_perception[8] == agent.velocity[0])
     assert(encoded_perception[9] == agent.velocity[1])
@@ -46,6 +46,7 @@ def test_grass_encoding():
     assert(encoded_perception[3] == thing.position[0])
     assert(encoded_perception[4] == thing.position[1])
     assert(encoded_perception[5] == thing.strength)
+    assert(encoded_perception[6] == _encode_type_properties(thing.type_properties))
     assert(encoded_perception[8] == thing.velocity[0])
     assert(encoded_perception[9] == thing.velocity[1])
     assert(np.sum(encoded_perception[10:]) == 0.0)
@@ -64,6 +65,7 @@ def test_wolf_encoding_with_accel_action():
     assert(encoded_perception[3] == agent.position[0])
     assert(encoded_perception[4] == agent.position[1])
     assert(encoded_perception[5] == agent.strength)
+    assert(encoded_perception[6] == _encode_type_properties(agent.type_properties))
     assert(encoded_perception[8] == agent.velocity[0])
     assert(encoded_perception[9] == agent.velocity[1])
     assert(encoded_perception[10] == agent.action_cooldown)
@@ -72,7 +74,7 @@ def test_wolf_encoding_with_accel_action():
 
 
 def test_monkey_encoding_with_malus_action():
-    agent = new_monkey()
+    agent = new_ape()
     agent.last_action = action_remove_malus()
     perception = [agent]
     encoded_perception = encode_perception(perception=perception)
@@ -84,6 +86,7 @@ def test_monkey_encoding_with_malus_action():
     assert(encoded_perception[3] == agent.position[0])
     assert(encoded_perception[4] == agent.position[1])
     assert(encoded_perception[5] == agent.strength)
+    assert(encoded_perception[6] == _encode_type_properties(agent.type_properties))
     assert(encoded_perception[8] == agent.velocity[0])
     assert(encoded_perception[9] == agent.velocity[1])
     assert(encoded_perception[10] == agent.action_cooldown)
@@ -102,22 +105,55 @@ def test_monkey_encoding_padding():
     assert(encoded_perception[3] == agent.position[0])
     assert(encoded_perception[4] == agent.position[1])
     assert(encoded_perception[5] == agent.strength)
+    assert(encoded_perception[6] == _encode_type_properties(agent.type_properties))
     assert(encoded_perception[8] == agent.velocity[0])
     assert(encoded_perception[9] == agent.velocity[1])
     assert(encoded_perception[10] == agent.action_cooldown)
     assert(np.sum(encoded_perception[12:]) == 0.0)
 
 
-def test_encoding_in_scenario():
-    pass
-    # my_world = World(malus_propability=0.0)
+def test_empty_encoding():
+    perception = []
+    encoded_perception = encode_perception(perception=perception, expected_number_perceptions=2)
+    expected_length = _encoding_length(properties_to_encode=properties_to_encode)
+    assert(encoded_perception.shape[0] == 2 * expected_length)
+    assert(np.sum(encoded_perception) == 0.0)
 
-    # my_world.add(new_sheep(), position=np.array([1.0, 0.0, 0.0]))
-    # my_world.add(new_wolf(), position=np.array([2.0, 2.0, 0.0]))
-    # for i in range(100):
-    #     my_world.run(time_delta=0.1)
 
-    # assert(len(my_world.things) == 0)
-    # assert(len(my_world.agents) == 1)
-    # assert(my_world.agents[0].type_properties == "wolf")
-    # assert(my_world.agents[0].health >= 140.0)
+def test_thing_perception_encode_decode():
+    thing = new_stone()
+    perception = [thing]
+    encoded_perception = encode_perception(perception=perception, expected_number_perceptions=5)
+    decoded_perception = decode_perception(encoded_perception=encoded_perception)
+    assert(len(decoded_perception) == len(perception))
+    assert(len(decoded_perception) == 1)
+
+    decoded_thing = decoded_perception[0]
+    assert(thing.health == decoded_thing.health)
+    assert(thing.malus == decoded_thing.malus)
+    assert(thing.max_speed == decoded_thing.max_speed)
+    assert(np.all(thing.position == decoded_thing.position))
+    assert(thing.strength == decoded_thing.strength)
+    assert(thing.type_properties == decoded_thing.type_properties)
+    assert(np.all(thing.velocity == decoded_thing.velocity))
+
+
+def test_agent_perception_encode_decode():
+    agent = new_sheep()
+    perception = [agent]
+    encoded_perception = encode_perception(perception=perception, expected_number_perceptions=5)
+    decoded_perception = decode_perception(encoded_perception=encoded_perception)
+    assert(len(decoded_perception) == len(perception))
+    assert(len(decoded_perception) == 1)
+
+    decoded_agent = decoded_perception[0]
+    assert(agent.health == decoded_agent.health)
+    assert(agent.malus == decoded_agent.malus)
+    assert(agent.max_speed == decoded_agent.max_speed)
+    assert(np.all(agent.position == decoded_agent.position))
+    assert(agent.strength == decoded_agent.strength)
+    assert(agent.type_properties == decoded_agent.type_properties)
+    assert(np.all(agent.velocity == decoded_agent.velocity))
+    assert(agent.action_cooldown == decoded_agent.action_cooldown)
+    assert(agent.last_action == decoded_agent.last_action)
+    assert(agent.last_cause == decoded_agent.last_cause)

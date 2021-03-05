@@ -1,8 +1,8 @@
 import numpy as np
 from ..thing import Thing
-# from ..agent import Agent
-from .ai_action_interface import action_to_numeric_encoding
+from .ai_action_interface import action_to_numeric_encoding, numeric_encoding_to_action
 from ..world_map import _type_encoding
+from ..utils import random_position
 
 # list of messages
 
@@ -34,15 +34,27 @@ def _encode_type_properties(type):
     return type_encoding
 
 
+def _decode_type_properties(encoded_type):
+    type_decoding = {value: key for key, value in _type_encoding.items()}
+    original_type = type_decoding[encoded_type]
+    return original_type
+
+
 def _encode_unique_name(unique_properties):
     if unique_properties is None:
         return 0
+    return unique_properties
 
-    print(unique_properties)
-    number = int(unique_properties)
-    print(number)
-    # TODO we could just enum the things in a world?
-    return number
+    # print(unique_properties)
+    # number = int(unique_properties)
+    # print(number)
+    # # TODO we could just enum the things in a world?
+    # return number
+
+def _decode_unique_name(encoded_unique):
+    if encoded_unique == 0:
+        return None
+    return encoded_unique
 
 
 def _perceived_thing_to_encoding(thing: Thing):
@@ -77,6 +89,13 @@ def _perceived_thing_to_encoding(thing: Thing):
 
 
 def encode_perception(perception, expected_number_perceptions: int = 0):
+    encoding_length = _encoding_length(properties_to_encode=properties_to_encode)
+    if len(perception) == 0:
+        if expected_number_perceptions == 0:
+            return None
+        else:
+            return np.zeros(expected_number_perceptions * encoding_length)
+
     encodings = list()
     for thing in perception:
         encodings.append(_perceived_thing_to_encoding(thing))
@@ -84,10 +103,64 @@ def encode_perception(perception, expected_number_perceptions: int = 0):
     encoded_perception = np.concatenate(encodings, axis=0)
 
     # pad the perception if the interface requires more
-    if expected_number_perceptions > 0:
-        encoding_length = _encoding_length(properties_to_encode=properties_to_encode)
+    if expected_number_perceptions > 0:    
         total_length = expected_number_perceptions * encoding_length
         missing_padding = total_length - encoded_perception.shape[0]
         encoded_perception = np.pad(encoded_perception, (0, missing_padding), 'constant', constant_values=0.0)
 
     return encoded_perception
+
+
+def decode_perceived_thing(encoding: np.ndarray):
+    encoding_length = _encoding_length(properties_to_encode=properties_to_encode)
+    assert(encoding.shape[0] == encoding_length)
+
+    if (np.sum(encoding) == 0.0):
+        return None
+
+    type_properties = _decode_type_properties(encoding[6])
+
+    thing = Thing(position=random_position())
+    thing.health = encoding[0]
+    thing.malus = encoding[1]
+    thing.max_speed = encoding[2]
+    thing.position = np.array([encoding[3], encoding[4], 0.0])
+    thing.strength = encoding[5]
+    thing.type_properties = type_properties
+    thing.unique_properties = _decode_unique_name(encoding[7])
+    thing.velocity = np.array([encoding[8], encoding[9], 0.0])
+
+    if type_properties in ["dummy", "sheep", "wolf", "monkey", "ape"]:
+        thing.action_cooldown = encoding[10]
+        thing.last_cause = _decode_unique_name(encoding[11])
+        thing.last_action = numeric_encoding_to_action(encoding[12:12 + 17])
+
+    return thing
+
+
+def decode_perception(encoded_perception: np.ndarray):
+    encoding_length = _encoding_length(properties_to_encode=properties_to_encode)
+    assert(encoded_perception.shape[0] % encoding_length == 0)
+    number_encoded_things = int(encoded_perception.shape[0] / encoding_length)
+    assert(encoding_length * number_encoded_things == encoded_perception.shape[0])
+
+    perception = []
+    for i in range(number_encoded_things):
+        encoded_thing = encoded_perception[i * encoding_length: (i + 1) * encoding_length]
+        perceived_thing = decode_perceived_thing(encoding=encoded_thing)
+        if perceived_thing is not None:
+            perception.append(perceived_thing)
+
+    return perception
+
+
+    
+
+
+
+
+
+
+
+
+
