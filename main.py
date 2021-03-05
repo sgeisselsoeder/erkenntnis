@@ -1,6 +1,8 @@
 import time
-from erkenntnis.world import *
+from erkenntnis.world import World
 from erkenntnis.utils import random_position
+from erkenntnis.things_available import *
+from erkenntnis.agents_available import *
 
 initial_world_scale = 100
 
@@ -23,7 +25,7 @@ for i in range(5):
 my_world.print()
 my_world.map(resolution=80, fixed_boundary=initial_world_scale * 1.2)
 
-time.sleep(15)
+time.sleep(2)
 
 for i in range(1000):
     my_world.run(time_delta=0.3)

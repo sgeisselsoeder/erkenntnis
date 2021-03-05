@@ -1,6 +1,6 @@
 from .brain_simple_memory import Brain_simple_memory
 from ..world_actions import *
-from ..analyze_perception import split_perception_by_type
+from .preprocess_perception import split_perception_by_type
 from ..utils import random_position, vector_length
 from .ai_action_interface import action_to_numeric_encoding, numeric_encoding_to_action
 

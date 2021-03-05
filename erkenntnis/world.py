@@ -27,6 +27,9 @@ class World:
         self.agent_health_decline = agent_health_decline
         self.malus_propability = malus_propability
 
+        # self.total_perception_length = 0
+        # self.total_perception_counter = 0
+
     def add_agent(self, agent: Agent):
         self.agents.append(agent)
 
@@ -44,7 +47,12 @@ class World:
     def process_agent(self, agent: Agent, time_delta=0.01):
         perception, raw_perception = perception_at_position(all_things=self.things + self.agents,
                                                             position=agent.position,
-                                                            radius=agent.perception_radius)
+                                                            radius=agent.perception_radius,
+                                                            max_things=agent.max_number_perceived_things)
+        # self.total_perception_length += len(perception)
+        # self.total_perception_counter += 1
+
+        # reset the perception radius of the agent to clear infreased radius from focus action
         agent.perception_radius = agent.default_perception_radius
 
         if agent.action_cooldown <= 0:
@@ -122,6 +130,11 @@ class World:
         print("Time is ", self.time)
         for this_thing in self.things + self.agents:
             print(this_thing)
+
+        # if self.total_perception_counter > 0:
+        #     print(self.total_perception_counter)
+        #     print(self.total_perception_length)
+        #     print("average number of things perceived: ", self.total_perception_length / self.total_perception_counter)
 
     def map(self, resolution: int = 40, fixed_boundary: float = None, plotstyle: str = "sparse"):
         print_map(get_map(self.things + self.agents, size=resolution, fixed_boundary=fixed_boundary), plotstyle=plotstyle)

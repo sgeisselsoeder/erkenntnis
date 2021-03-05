@@ -14,13 +14,15 @@ def new_dummy_agent(position: np.ndarray = None, velocity=None, health: int = No
     max_speed = 3.0
     strength = 1.0
     perception_radius = 10.0
+    max_number_perceived_things = 2
 
     if position is None:
         position = random_position()
     if health is None:
         health = default_health
-    agent = Agent(behavior=Brain_dummy(), position=position, velocity=velocity,
-                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed, strength=strength)
+    agent = Agent(brain=Brain_dummy(), position=position, velocity=velocity,
+                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
+                  strength=strength, max_number_perceived_things=max_number_perceived_things)
     agent.type_properties = "dummy"
     return agent
 
@@ -32,13 +34,15 @@ def new_sheep(position: np.ndarray = None, velocity=None, health: float = None):
     max_speed = 1.5
     strength = 5.0
     perception_radius = 11.0
+    max_number_perceived_things = 4
 
     if position is None:
         position = random_position()
     if health is None:
         health = default_health
-    agent = Agent(behavior=Brain_sheep_hardcode(action_distance=max_speed), position=position, velocity=velocity,
-                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed, strength=strength)
+    agent = Agent(brain=Brain_sheep_hardcode(action_distance=max_speed), position=position, velocity=velocity,
+                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
+                  strength=strength, max_number_perceived_things=max_number_perceived_things)
     agent.type_properties = "sheep"
     return agent
 
@@ -50,13 +54,15 @@ def new_wolf(position: np.ndarray = None, velocity=None, health: float = None):
     max_speed = 2.0
     strength = 10.0
     perception_radius = 10.0
+    max_number_perceived_things = 5
 
     if position is None:
         position = random_position()
     if health is None:
         health = default_health
-    agent = Agent(behavior=Brain_wolf_hardcode(action_distance=max_speed), position=position, velocity=velocity,
-                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed, strength=strength)
+    agent = Agent(brain=Brain_wolf_hardcode(action_distance=max_speed), position=position, velocity=velocity,
+                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
+                  strength=strength, max_number_perceived_things=max_number_perceived_things)
     agent.type_properties = "wolf"
     return agent
 
@@ -68,19 +74,22 @@ def new_monkey(position: np.ndarray = None, velocity=None, health: float = None)
     max_speed = 2.5
     strength = 8.0
     perception_radius = 11.0
+    max_number_perceived_things = 8
 
     if position is None:
         position = random_position()
     if health is None:
         health = default_health
-    agent = Agent(behavior=Brain_monkey_hardcode(action_distance=max_speed), position=position, velocity=velocity,
-                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed, strength=strength)
+    agent = Agent(brain=Brain_monkey_hardcode(action_distance=max_speed), position=position, velocity=velocity,
+                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
+                  strength=strength, max_number_perceived_things=max_number_perceived_things)
     agent.type_properties = "monkey"
     return agent
 
 
 def new_ape(position: np.ndarray = None, velocity=None, health: float = None):
+    # here, apes are monkies with better brains
     agent = new_monkey(position=position, velocity=velocity, health=health)
-    agent.behavior = Brain_ape_ml(action_distance=agent.max_speed)
+    agent.brain = Brain_ape_ml(action_distance=agent.max_speed)
     agent.type_properties = "ape"
     return agent

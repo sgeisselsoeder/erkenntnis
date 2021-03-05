@@ -1,6 +1,5 @@
-import numpy as np
-from .thing import Thing
-from .utils import vector_length
+from ..thing import Thing
+from ..utils import vector_length
 
 
 def split_perception_by_type(perception):

@@ -55,7 +55,7 @@ def test_monkey_talks_to_monkey():
 
     communication_found = False
     for i in range(5):
-        if my_world.agents[0].behavior.last_actions[-i]["type"] == "communicate":
-            if my_world.agents[0].behavior.last_causes[-i] == my_world.agents[1].unique_properties:
+        if my_world.agents[0].brain.last_actions[-i]["type"] == "communicate":
+            if my_world.agents[0].brain.last_causes[-i] == my_world.agents[1].unique_properties:
                 communication_found = True
     assert(communication_found)
