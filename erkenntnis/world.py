@@ -96,7 +96,8 @@ class World:
                 agent.health = 0.5 * agent.health
                 new_agent = copy.deepcopy(agent)
                 new_agent.position = agent.position + random_position()
-                new_agent.unique_properties = uuid.uuid1()
+                new_agent.unique_properties = self.thing_enumerator
+                self.thing_enumerator += 1
                 self.agents.append(new_agent)
 
     def _malus_effect(self):

@@ -1,4 +1,4 @@
 
 class Brain:
-    def think(self, perception, messages=list()):
+    def think(self, encoded_perception, encoded_messages=list()):
         return None

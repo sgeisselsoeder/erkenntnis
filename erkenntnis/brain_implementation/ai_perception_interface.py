@@ -3,6 +3,7 @@ from ..thing import Thing
 from .ai_action_interface import action_to_numeric_encoding, numeric_encoding_to_action
 from ..world_map import _type_encoding
 from ..utils import random_position
+import uuid
 
 # list of messages
 
@@ -30,7 +31,10 @@ def _encoding_length(properties_to_encode: dict):
 
 
 def _encode_type_properties(type):
-    type_encoding = _type_encoding[type]
+    try:
+        type_encoding = _type_encoding[type]
+    except KeyError:
+        type_encoding = _type_encoding["unknown"]
     return type_encoding
 
 

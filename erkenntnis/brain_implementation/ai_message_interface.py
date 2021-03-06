@@ -43,7 +43,7 @@ def encode_messages(messages, required_number_of_messages: int = 0):
 
 
 def _decode_message(encoded):
-    if np.sum(encoded == 0.0):
+    if np.sum(encoded) == 0.0:
         return None
 
     message = {}

@@ -26,8 +26,8 @@ class Brain_simple_memory(Brain):
         self.last_causes = self.last_causes[-self.memory_length:]
         self.last_messages = self.last_messages[-self.memory_length:]
 
-    def think(self, perception, messages):
+    def think(self, encoded_perception, encoded_messages):
         action = action_accelerate(direction=random_position())
-        self._remember(perception=perception, messages=messages, action=action, cause=None)
+        self._remember(perception=encoded_perception, messages=encoded_messages, action=action, cause=None)
         encoded_action = action_to_numeric_encoding(action=action)
         return encoded_action, None

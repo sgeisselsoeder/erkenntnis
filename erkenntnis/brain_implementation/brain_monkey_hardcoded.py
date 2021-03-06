@@ -3,6 +3,8 @@ from ..world_actions import *
 from .preprocess_perception import split_perception_by_type
 from ..utils import random_position, vector_length
 from .ai_action_interface import action_to_numeric_encoding, numeric_encoding_to_action
+from .ai_perception_interface import decode_perception
+from .ai_message_interface import decode_messages
 
 
 class Brain_monkey_hardcode(Brain_simple_memory):
@@ -30,7 +32,10 @@ class Brain_monkey_hardcode(Brain_simple_memory):
         cause = enemy.unique_properties
         return action, cause
 
-    def think(self, perception, messages):
+    def think(self, encoded_perception, encoded_messages):
+        perception = decode_perception(encoded_perception)
+        messages = decode_messages(encoded_messages)
+
         action = None
         cause = None
 
