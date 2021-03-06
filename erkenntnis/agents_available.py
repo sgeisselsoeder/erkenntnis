@@ -3,7 +3,7 @@ from .agent import Agent
 from .brain_implementation.brain_dummy import Brain_dummy
 from .brain_implementation.brain_sheep_hardcoded import Brain_sheep_hardcode
 from .brain_implementation.brain_wolf_hardcoded import Brain_wolf_hardcode
-from .brain_implementation.brain_ape_ml import Brain_ape_ml
+from .brain_implementation.ai.brain_ape_ml import Brain_ape_ml
 from .brain_implementation.brain_monkey_hardcoded import Brain_monkey_hardcode
 from .utils import random_position
 
