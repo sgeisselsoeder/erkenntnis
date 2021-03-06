@@ -1,5 +1,7 @@
 import numpy as np
 
+_message_encoding_default = 0.5
+
 _available_actions = {"accelerate": ["direction1", "direction2", "strength"],
                       "focus": None,
                       "remove_malus": None,
@@ -58,7 +60,7 @@ def action_to_numeric_encoding(action, available_actions=_available_actions):
         try:
             encoding[action_index + 3] = float(action["message"])
         except Exception:
-            encoding[action_index + 3] = 0.5
+            encoding[action_index + 3] = _message_encoding_default
 
     elif action["type"] == "inform_malus":
         encoding[action_index + 1] = action["direction"][0]
@@ -72,7 +74,7 @@ def action_to_numeric_encoding(action, available_actions=_available_actions):
         try:
             encoding[action_index + 5] = float(action["reason"])
         except Exception:
-            encoding[action_index + 5] = 0.5
+            encoding[action_index + 5] = _message_encoding_default
 
     elif action["type"] == "push":
         encoding[action_index + 1] = action["direction"][0]
