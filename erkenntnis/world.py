@@ -26,14 +26,16 @@ class World:
         self.things = list()
         self.agent_health_decline = agent_health_decline
         self.malus_propability = malus_propability
-
-        # self.total_perception_length = 0
-        # self.total_perception_counter = 0
+        self.thing_enumerator = 1
 
     def add_agent(self, agent: Agent):
+        agent.unique_properties = self.thing_enumerator
+        self.thing_enumerator += 1
         self.agents.append(agent)
 
     def add_thing(self, thing: Thing):
+        thing.unique_properties = self.thing_enumerator
+        self.thing_enumerator += 1
         self.things.append(thing)
 
     def add(self, thing: Thing, position: np.ndarray = None):
@@ -49,8 +51,6 @@ class World:
                                                             position=agent.position,
                                                             radius=agent.perception_radius,
                                                             max_things=agent.max_number_perceived_things)
-        # self.total_perception_length += len(perception)
-        # self.total_perception_counter += 1
 
         # reset the perception radius of the agent to clear infreased radius from focus action
         agent.perception_radius = agent.default_perception_radius
@@ -130,11 +130,6 @@ class World:
         print("Time is ", self.time)
         for this_thing in self.things + self.agents:
             print(this_thing)
-
-        # if self.total_perception_counter > 0:
-        #     print(self.total_perception_counter)
-        #     print(self.total_perception_length)
-        #     print("average number of things perceived: ", self.total_perception_length / self.total_perception_counter)
 
     def map(self, resolution: int = 40, fixed_boundary: float = None, plotstyle: str = "sparse"):
         print_map(get_map(self.things + self.agents, size=resolution, fixed_boundary=fixed_boundary), plotstyle=plotstyle)

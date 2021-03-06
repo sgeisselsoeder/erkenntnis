@@ -16,10 +16,9 @@ def _encode_message_text(text):
 
 
 def _decode_message_text(encoded):
-    decoded = _message_encoding_default
     if np.fabs(1.0 - encoded) < 0.01:
-        decoded = "malus"
-    return decoded
+        return "malus"
+    return encoded
 
 
 def _encode_message(message):
@@ -48,7 +47,7 @@ def _decode_message(encoded):
         return None
 
     message = {}
-    message["from"] = encoded[0]
+    message["from"] = int(encoded[0])
     message["from_location"] = np.array([encoded[1], encoded[2], 0.0])
     message["message"] = _decode_message_text(encoded=encoded[3])
     return message
