@@ -2,7 +2,7 @@ from .brain_simple_memory import Brain_simple_memory
 from ..world_actions import *
 from .preprocess_perception import split_perception_by_type
 from ..utils import random_position, vector_length
-from .ai_action_interface import action_to_numeric_encoding, numeric_encoding_to_action
+from .ai_action_interface import action_to_numeric_encoding
 from .ai_perception_interface import decode_perception
 from .ai_message_interface import decode_messages
 
@@ -100,8 +100,7 @@ class Brain_monkey_hardcode(Brain_simple_memory):
             # we might want to keep a direction, but random for now
             if np.random.random() < 0.9:
                 self.current_target_direction = random_position()
-                action = action_accelerate(
-                    direction=self.current_target_direction)
+                action = action_accelerate(direction=self.current_target_direction)
             else:
                 action = action_focus()
 
