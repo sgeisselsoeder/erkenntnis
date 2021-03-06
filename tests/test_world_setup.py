@@ -10,7 +10,7 @@ def _setup_world():
     my_world.add_agent(new_dummy_agent(position=None))
     my_world.add_agent(new_sheep(position=None))
     my_world.add_agent(new_wolf(position=None))
-    my_world.add_agent(new_ape(position=None))
+    my_world.add_agent(new_monkey(position=None))
     return my_world
 
 

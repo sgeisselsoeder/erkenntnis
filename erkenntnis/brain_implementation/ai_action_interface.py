@@ -2,7 +2,7 @@ import numpy as np
 
 _message_encoding_default = 0.5
 
-_available_actions = {"accelerate": ["direction1", "direction2", "strength"],
+_full_available_actions = {"accelerate": ["direction1", "direction2", "strength"],
                       "focus": None,
                       "remove_malus": None,
                       "communicate": ["direction1", "direction2", "message"],
