@@ -11,6 +11,8 @@ class Brain_simple_memory(Brain):
         self.last_causes = list()
         self.last_messages = list()
         self.memory_length = memory_length
+        # TODO: have a fixed length list of known agents. encode unique agent ids using that?
+        self.known_agents = list()
 
     def _remember(self, perception, messages, action, cause=None):
         # print(type(self), " ", action, " ", cause)

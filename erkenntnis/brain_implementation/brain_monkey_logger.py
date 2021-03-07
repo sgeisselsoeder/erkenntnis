@@ -10,6 +10,18 @@ class Brain_monkey_logger(Brain_monkey_hardcode):
     def think(self, encoded_perception, encoded_messages):
         encoded_action, cause = super().think(encoded_perception=encoded_perception, encoded_messages=encoded_messages)
 
-        logstring = encoded_perception + " " + encoded_messages + ""
+        logstring = encoded_perception + " " + encoded_messages + " "
         self.logfile.write(logstring)
         return encoded_action, cause
+
+
+# Use open() with the 'append' mode, and pass the stream to the savetxt method:
+
+# with open("test.txt", "ab") as f:
+#     numpy.savetxt(f, a)
+
+# Edit: To add a new line, or whatever:
+
+# with open("test.txt", "ab") as f:
+#     f.write(b"\n")
+#     numpy.savetxt(f, a)
