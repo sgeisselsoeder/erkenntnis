@@ -22,7 +22,7 @@ def new_dummy_agent(position: np.ndarray = None, velocity=None, health: int = No
     if health is None:
         health = default_health
 
-    logfile = "dummy_" + str(time.time()) + str(random_position[0]) + ".npy"
+    logfile = "dummy_" + str(time.time()) + str(random_position()[0]) + ".npy"
     agent = Agent(brain=Brain_dummy(logfile=logfile), position=position, velocity=velocity,
                   radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
                   strength=strength, max_number_perceived_things=max_number_perceived_things)
@@ -88,16 +88,16 @@ def new_monkey(position: np.ndarray = None, velocity=None, health: float = None,
     if log:
         logfile = "monkey_" + str(time.time()) + str(random_position[0]) + ".npy"
     agent = Agent(brain=Brain_monkey_hardcode(action_distance=max_speed, logfile=logfile),
-                    position=position, velocity=velocity,
-                    radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
-                    strength=strength, max_number_perceived_things=max_number_perceived_things)
+                  position=position, velocity=velocity,
+                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
+                  strength=strength, max_number_perceived_things=max_number_perceived_things)
     agent.type_properties = "monkey"
     return agent
 
 
-def new_ape(position: np.ndarray = None, velocity=None, health: float = None):
+def new_ape(position: np.ndarray = None, velocity=None, health: float = None, log: bool = False):
     # here, apes are monkies with better brains
-    agent = new_monkey(position=position, velocity=velocity, health=health)
+    agent = new_monkey(position=position, velocity=velocity, health=health, log=log)
     agent.brain = Brain_ape_ml(action_distance=agent.max_speed)
     agent.type_properties = "ape"
     return agent

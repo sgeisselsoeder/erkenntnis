@@ -39,7 +39,7 @@ class Agent(Thing):
         if self.brain.logfile is not None:
             try:
                 self.brain.log()
-            except:
+            except Exception:
                 print("Failed to log for agent ", self.unique_properties, " of type ", self.type_properties)
 
         action = numeric_encoding_to_action(encoding=encoded_action)

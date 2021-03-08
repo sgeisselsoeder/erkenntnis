@@ -1,5 +1,6 @@
 from erkenntnis.brain_implementation.ai_message_interface import *
-from erkenntnis.brain_implementation.ai_message_interface import _length_of_message, _encode_message, _decode_message, _message_encoding_malus, _message_encoding_default
+from erkenntnis.brain_implementation.ai_message_interface import _length_of_message, _encode_message, _decode_message
+from erkenntnis.brain_implementation.ai_message_interface import _message_encoding_malus, _message_encoding_default
 from erkenntnis.agents_available import new_ape, new_monkey, new_sheep, new_wolf
 from erkenntnis.world_actions import action_communicate, action_inform_malus
 from erkenntnis.utils import random_position

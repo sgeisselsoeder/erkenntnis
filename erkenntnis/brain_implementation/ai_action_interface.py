@@ -1,5 +1,5 @@
 import numpy as np
-from ..world_actions import _available_actions
+from ..available_actions import _available_actions
 
 _message_encoding_default = 0.5
 

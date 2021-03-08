@@ -55,6 +55,7 @@ def _encode_unique_name(unique_properties):
     # # TODO we could just enum the things in a world?
     # return number
 
+
 def _decode_unique_name(encoded_unique):
     if encoded_unique == 0:
         return None
@@ -107,7 +108,7 @@ def encode_perception(perception, expected_number_perceptions: int = 0):
     encoded_perception = np.concatenate(encodings, axis=0)
 
     # pad the perception if the interface requires more
-    if expected_number_perceptions > 0:    
+    if expected_number_perceptions > 0:
         total_length = expected_number_perceptions * encoding_length
         missing_padding = total_length - encoded_perception.shape[0]
         encoded_perception = np.pad(encoded_perception, (0, missing_padding), 'constant', constant_values=0.0)
@@ -156,15 +157,3 @@ def decode_perception(encoded_perception: np.ndarray):
             perception.append(perceived_thing)
 
     return perception
-
-
-    
-
-
-
-
-
-
-
-
-

@@ -98,6 +98,8 @@ class World:
                 new_agent.position = agent.position + random_position()
                 new_agent.unique_properties = self.thing_enumerator
                 self.thing_enumerator += 1
+                if agent.brain.logfile is not None:
+                    new_agent.brain.logfile = agent.brain.logfile + "_" + str(new_agent.unique_properties) + ".npy"
                 self.agents.append(new_agent)
 
     def _malus_effect(self):

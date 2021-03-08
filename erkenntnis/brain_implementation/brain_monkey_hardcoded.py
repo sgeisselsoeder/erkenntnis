@@ -8,8 +8,8 @@ from .ai_message_interface import decode_messages
 
 
 class Brain_monkey_hardcode(Brain_simple_memory):
-    def __init__(self, action_distance: float):
-        super().__init__(memory_length=100)
+    def __init__(self, action_distance: float, logfile: str = None):
+        super().__init__(memory_length=100, logfile=logfile)
         self.current_target_direction = None
         self.action_distance = action_distance
         self.type_name = "monkey"

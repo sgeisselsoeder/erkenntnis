@@ -1,8 +1,7 @@
 import numpy as np
 from .brain import Brain
 from .ai_action_interface import action_to_numeric_encoding
-from ..world_actions import random_action
-from .ai_action_interface import action_to_numeric_encoding
+from ..available_actions import random_action
 
 
 class Brain_simple_memory(Brain):
@@ -15,10 +14,9 @@ class Brain_simple_memory(Brain):
         # TODO: have a fixed length list of known agents. encode unique agent ids using that?
         # (forgetting old agents)
         self.known_agents = list()
-        
-        self.logfile = None
-        if logfile is not None:
-            self.logfile = open(logfile, 'a+')
+        self.logfile = logfile
+        # if logfile is not None:
+        #     self.logfile = open(logfile, 'a+')
 
     def _remember(self, perception, messages, action, cause=None):
         # print(type(self), " ", action, " ", cause)
@@ -46,7 +44,8 @@ class Brain_simple_memory(Brain):
             if last_cause is None:
                 last_cause = np.array([0.0])
             logstate = np.concatenate([self.last_perceptions[-1], self.last_messages[-1],
-                                   self.last_actions[-1], last_cause])
-            np.savetxt(self.logfile, logstate)
-            self.logfile.write(b"\n")
-
+                                       self.last_actions[-1], last_cause])
+            logfile = open(self.logfile, 'a+')
+            np.savetxt(logfile, logstate)
+            logfile.write(b"\n")
+            logfile.close()
