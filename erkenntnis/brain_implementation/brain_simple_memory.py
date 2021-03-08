@@ -45,7 +45,7 @@ class Brain_simple_memory(Brain):
                 last_cause = np.array([0.0])
             logstate = np.concatenate([self.last_perceptions[-1], self.last_messages[-1],
                                        self.last_actions[-1], last_cause])
+            logstate = np.reshape(logstate, (1, logstate.shape[0]))
             logfile = open(self.logfile, 'a+')
             np.savetxt(logfile, logstate)
-            logfile.write(b"\n")
             logfile.close()
