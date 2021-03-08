@@ -36,7 +36,12 @@ class Agent(Thing):
         encoded_perception = encode_perception(perception[:1], expected_number_perceptions=self.max_number_perceived_things)
         encoded_messages = encode_messages(messages=self.messages, required_number_of_messages=self.max_number_perceived_things)
         encoded_action, cause = self.brain.think(encoded_perception=encoded_perception, encoded_messages=encoded_messages)
-        # encoded_action, cause = self.brain.think(perception=perception, messages=self.messages)
+        if self.brain.logfile is not None:
+            try:
+                self.brain.log()
+            except:
+                print("Failed to log for agent ", self.unique_properties, " of type ", self.type_properties)
+
         action = numeric_encoding_to_action(encoding=encoded_action)
         self.last_action = action
         self.last_cause = cause

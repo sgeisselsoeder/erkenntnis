@@ -1,18 +1,24 @@
+import numpy as np
 from .brain import Brain
-from ..utils import random_position
-from ..world_actions import action_accelerate
+from .ai_action_interface import action_to_numeric_encoding
+from ..world_actions import random_action
 from .ai_action_interface import action_to_numeric_encoding
 
 
 class Brain_simple_memory(Brain):
-    def __init__(self, memory_length: int = 10):
+    def __init__(self, memory_length: int = 10, logfile: str = None):
         self.last_perceptions = list()
         self.last_actions = list()
         self.last_causes = list()
         self.last_messages = list()
         self.memory_length = memory_length
         # TODO: have a fixed length list of known agents. encode unique agent ids using that?
+        # (forgetting old agents)
         self.known_agents = list()
+        
+        self.logfile = None
+        if logfile is not None:
+            self.logfile = open(logfile, 'a+')
 
     def _remember(self, perception, messages, action, cause=None):
         # print(type(self), " ", action, " ", cause)
@@ -29,7 +35,18 @@ class Brain_simple_memory(Brain):
         self.last_messages = self.last_messages[-self.memory_length:]
 
     def think(self, encoded_perception, encoded_messages):
-        action = action_accelerate(direction=random_position())
-        self._remember(perception=encoded_perception, messages=encoded_messages, action=action, cause=None)
+        action = random_action()
         encoded_action = action_to_numeric_encoding(action=action)
+        self._remember(perception=encoded_perception, messages=encoded_messages, action=encoded_action, cause=None)
         return encoded_action, None
+
+    def log(self):
+        if self.logfile:
+            last_cause = self.last_causes[-1]
+            if last_cause is None:
+                last_cause = np.array([0.0])
+            logstate = np.concatenate([self.last_perceptions[-1], self.last_messages[-1],
+                                   self.last_actions[-1], last_cause])
+            np.savetxt(self.logfile, logstate)
+            self.logfile.write(b"\n")
+

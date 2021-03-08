@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from .agent import Agent
 from .brain_implementation.brain_dummy import Brain_dummy
 from .brain_implementation.brain_sheep_hardcoded import Brain_sheep_hardcode
@@ -20,7 +21,9 @@ def new_dummy_agent(position: np.ndarray = None, velocity=None, health: int = No
         position = random_position()
     if health is None:
         health = default_health
-    agent = Agent(brain=Brain_dummy(), position=position, velocity=velocity,
+
+    logfile = "dummy_" + str(time.time()) + str(random_position[0]) + ".npy"
+    agent = Agent(brain=Brain_dummy(logfile=logfile), position=position, velocity=velocity,
                   radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
                   strength=strength, max_number_perceived_things=max_number_perceived_things)
     agent.type_properties = "dummy"
@@ -67,7 +70,7 @@ def new_wolf(position: np.ndarray = None, velocity=None, health: float = None):
     return agent
 
 
-def new_monkey(position: np.ndarray = None, velocity=None, health: float = None):
+def new_monkey(position: np.ndarray = None, velocity=None, health: float = None, log: bool = False):
     # monkey and ape properties
     default_health = 80
     radius = 1.0
@@ -80,9 +83,14 @@ def new_monkey(position: np.ndarray = None, velocity=None, health: float = None)
         position = random_position()
     if health is None:
         health = default_health
-    agent = Agent(brain=Brain_monkey_hardcode(action_distance=max_speed), position=position, velocity=velocity,
-                  radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
-                  strength=strength, max_number_perceived_things=max_number_perceived_things)
+
+    logfile = None
+    if log:
+        logfile = "monkey_" + str(time.time()) + str(random_position[0]) + ".npy"
+    agent = Agent(brain=Brain_monkey_hardcode(action_distance=max_speed, logfile=logfile),
+                    position=position, velocity=velocity,
+                    radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
+                    strength=strength, max_number_perceived_things=max_number_perceived_things)
     agent.type_properties = "monkey"
     return agent
 

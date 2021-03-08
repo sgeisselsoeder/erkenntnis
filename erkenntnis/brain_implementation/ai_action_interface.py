@@ -1,26 +1,7 @@
 import numpy as np
+from ..world_actions import _available_actions
 
 _message_encoding_default = 0.5
-
-_full_available_actions = {"accelerate": ["direction1", "direction2", "strength"],
-                      "focus": None,
-                      "remove_malus": None,
-                      "communicate": ["direction1", "direction2", "message"],
-                      "point": ["direction1", "direction2", "point_direction1", "point_direction2", "reason"],
-                      "push": ["direction1", "direction2", "strength"],
-                      "pull": ["direction1", "direction2", "strength"],
-                      "attack": ["direction1", "direction2", "strength"],
-                      "eat": ["direction1", "direction2", "strength"],
-                      "inform_malus": ["direction1", "direction2"]}
-
-_limited_actions = {"accelerate": ["direction1", "direction2", "strength"],
-                    "focus": None,
-                    "remove_malus": None,
-                    "communicate": ["direction1", "direction2", "message"],
-                    "eat": ["direction1", "direction2", "strength"],
-                    "inform_malus": ["direction1", "direction2"]}
-
-_available_actions = _limited_actions
 
 
 def get_numeric_encoding_and_action_indices(available_actions: dict):
