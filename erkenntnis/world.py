@@ -46,6 +46,16 @@ class World:
         else:
             self.add_thing(thing)
 
+    # NOTE: unclear if it's better to execute the action for each agent immediatelly
+    # or to store them and execute all actions at once.
+    #
+    # pro for immediatelly: - easiest to code
+    #                       - other agents will be able to react to the first agent (maybe mitigating the drawback of acting later),
+    #                       - no conflicting actions possible (but unrealistic first come (in array), first serve)
+    # pro for later:    - feels more realistic,
+    #                   - potentially possible to resolve conflicting actions if they are all known at the same time
+    #
+    # current solution: immediate action: easier to resolve conflicts, "unrealistic" order should not be relevant for current goals
     def process_agent(self, agent: Agent, time_delta=0.01):
         perception, raw_perception = perception_at_position(all_things=self.things + self.agents,
                                                             position=agent.position,
@@ -55,22 +65,20 @@ class World:
         # reset the perception radius of the agent to clear infreased radius from focus action
         agent.perception_radius = agent.default_perception_radius
 
-        if agent.action_cooldown <= 0:
-            action = agent.think(perception=perception)
-            # NOTE: unclear if it's better to execute the action for each agent immediatelly
-            # or to store them and execute all actions at once.
-            #
-            # pro for immediatelly: - easiest to code
-            #                       - other agents will be able to react to the first agent (maybe mitigating the drawback of acting later),
-            #                       - no conflicting actions possible (but unrealistic first come (in array), first serve)
-            # pro for later:    - feels more realistic,
-            #                   - potentially possible to resolve conflicting actions if they are all known at the same time
-            #
-            # current solution: immediate action: easier to resolve conflicts, "unrealistic" order should not be relevant for current goal
+        old_cooldown = agent.action_cooldown
+        action = agent.think(perception=perception)
+
+        if old_cooldown > 0:
+            if agent.action_cooldown != old_cooldown - 1:
+                print("NO CHEATING! AGENTS MUST RESPECT THEIR COOLDOWN")
+                agent.action_cooldown = old_cooldown - 1
+
             if action is not None:
-                perform_action(world=self, agent=agent, action=action, surroundings=raw_perception, time_delta=time_delta)
-        else:
-            agent.action_cooldown = agent.action_cooldown - 1
+                print("NO CHEATING! NO AGENT ACTIONS DURING COOLDOWN")
+                action = None
+
+        if action is not None:
+            perform_action(world=self, agent=agent, action=action, surroundings=raw_perception, time_delta=time_delta)
 
         # agents struggle to survive
         agent.health -= self.agent_health_decline

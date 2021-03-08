@@ -1,4 +1,5 @@
 from erkenntnis.world import *
+from erkenntnis.brain_implementation.ai_action_interface import numeric_encoding_to_action
 
 
 def test_monkey_attack_sheep():
@@ -55,7 +56,7 @@ def test_monkey_talks_to_monkey():
 
     communication_found = False
     for i in range(5):
-        if my_world.agents[0].brain.last_actions[-i]["type"] == "communicate":
+        if numeric_encoding_to_action(my_world.agents[0].brain.last_actions[-i])["type"] == "communicate":
             if my_world.agents[0].brain.last_causes[-i] == my_world.agents[1].unique_properties:
                 communication_found = True
     assert(communication_found)

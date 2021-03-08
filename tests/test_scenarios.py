@@ -44,4 +44,3 @@ def test_sheep_has_kid():
 
     assert(len(my_world.things) < number_gras)
     assert(len(my_world.agents) > 1)
-    assert(my_world.agents[0].health > 80.0)

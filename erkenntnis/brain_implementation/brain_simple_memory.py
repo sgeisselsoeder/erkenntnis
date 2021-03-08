@@ -38,13 +38,12 @@ class Brain_simple_memory(Brain):
         self._remember(perception=encoded_perception, messages=encoded_messages, action=encoded_action, cause=None)
         return encoded_action, None
 
-    def log(self):
+    def log(self, encoded_perception, encoded_messages, encoded_action, cause):
         if self.logfile:
-            last_cause = self.last_causes[-1]
-            if last_cause is None:
-                last_cause = np.array([0.0])
-            logstate = np.concatenate([self.last_perceptions[-1], self.last_messages[-1],
-                                       self.last_actions[-1], last_cause])
+            cause = cause
+            if cause is None:
+                cause = np.array([0.0])
+            logstate = np.concatenate([encoded_perception, encoded_messages, encoded_action, cause])
             logstate = np.reshape(logstate, (1, logstate.shape[0]))
             logfile = open(self.logfile, 'a+')
             np.savetxt(logfile, logstate)
