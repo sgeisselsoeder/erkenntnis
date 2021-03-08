@@ -86,7 +86,7 @@ def new_monkey(position: np.ndarray = None, velocity=None, health: float = None,
 
     logfile = None
     if log:
-        logfile = "monkey_" + str(time.time()) + str(random_position[0]) + ".npy"
+        logfile = "monkey_" + str(time.time()) + str(random_position()[0]) + ".npy"
     agent = Agent(brain=Brain_monkey_hardcode(action_distance=max_speed, logfile=logfile),
                   position=position, velocity=velocity,
                   radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,

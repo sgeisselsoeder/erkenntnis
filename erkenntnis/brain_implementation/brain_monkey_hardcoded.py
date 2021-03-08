@@ -104,6 +104,6 @@ class Brain_monkey_hardcode(Brain_simple_memory):
             else:
                 action = action_focus()
 
-        self._remember(perception=perception, messages=messages, action=action, cause=cause)
         encoded_action = action_to_numeric_encoding(action=action)
+        self._remember(perception=encoded_perception, messages=encoded_messages, action=encoded_action, cause=cause)
         return encoded_action, cause
