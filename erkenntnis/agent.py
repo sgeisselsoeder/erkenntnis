@@ -43,6 +43,9 @@ class Agent(Thing):
             self.action_cooldown = self.action_cooldown - 1
             encoded_action = action_to_numeric_encoding(action=None)
             cause = -1.0
+        if cause is None:
+            cause = 0.0
+            
         cause_encoded = np.array([cause])
 
         if self.brain.logfile is not None:
