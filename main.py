@@ -22,7 +22,7 @@ for i in range(3):
     my_world.add(new_wolf(), position=random_position(scale=0.6*initial_world_scale))
 
 for i in range(5):
-    my_world.add(new_monkey(), position=random_position(scale=0.7*initial_world_scale))
+    my_world.add(new_monkey(), position=random_position(scale=0.4*initial_world_scale))
 
 my_world.print()
 my_world.map(resolution=map_resultion, fixed_boundary=map_boundary, plotstyle="dense")
