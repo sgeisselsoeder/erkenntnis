@@ -40,7 +40,6 @@ class Brain_simple_memory(Brain):
 
     def log(self, encoded_perception, encoded_messages, encoded_action, cause):
         if self.logfile:
-            cause = cause
             if cause is None:
                 cause = np.array([0.0])
             logstate = np.concatenate([encoded_perception, encoded_messages, encoded_action, cause])

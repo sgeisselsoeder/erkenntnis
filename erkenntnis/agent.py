@@ -1,3 +1,4 @@
+import numpy as np
 from .thing import Thing
 from .brain_implementation.brain import Brain
 from .brain_implementation.ai_action_interface import numeric_encoding_to_action, action_to_numeric_encoding
@@ -42,11 +43,12 @@ class Agent(Thing):
             self.action_cooldown = self.action_cooldown - 1
             encoded_action = action_to_numeric_encoding(action=None)
             cause = -1.0
+        cause_encoded = np.array([cause])
 
         if self.brain.logfile is not None:
             try:
                 self.brain.log(encoded_perception=encoded_perception, encoded_messages=encoded_messages,
-                               encoded_action=encoded_action, cause=cause)
+                               encoded_action=encoded_action, cause=cause_encoded)
             except Exception:
                 print("Failed to log for agent ", self.unique_properties, " of type ", self.type_properties)
 
