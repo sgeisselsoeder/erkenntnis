@@ -19,7 +19,7 @@ def load_world(filename: str):
 
 
 class World:
-    def __init__(self, world_scale: float = 100.0, agent_health_decline: float = 0.1, malus_propability: float = 0.01):
+    def __init__(self, world_scale: float = 100.0, agent_health_decline: float = 0.3, malus_propability: float = 0.01):
         self.world_scale = world_scale
         self.time = 0
         self.agents = list()
@@ -81,7 +81,7 @@ class World:
             perform_action(world=self, agent=agent, action=action, surroundings=raw_perception, time_delta=time_delta)
 
         # agents struggle to survive
-        agent.health -= self.agent_health_decline
+        agent.health -= self.agent_health_decline * time_delta
 
     def _remove_dead(self):
         things_to_remove = list()
