@@ -15,6 +15,7 @@ except FileNotFoundError:
 
 log_path = "./"
 log_files = [f for f in listdir(log_path) if isfile(join(log_path, f)) and ".npy" in f and "monkey" in f]
+# log_files = [f for f in listdir(log_path) if isfile(join(log_path, f)) and ".npy" in f and "dummy" in f]
 
 # TODO: load all logs at once, train at once, more epochs
 
