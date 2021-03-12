@@ -4,8 +4,8 @@ from ..preprocess_perception import fuse_state
 
 
 class Worldmodel():
-    def __init__(self):
-        self.model = Autoenc(latent_space_size=0)
+    def __init__(self, latent_space_size: int = 0):
+        self.model = Autoenc(latent_space_size=latent_space_size)
 
     #
     def train_perceptions(self, encoded_perception, encoded_messages, encoded_action, encoded_cause, epochs: int = 0):

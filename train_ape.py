@@ -3,10 +3,13 @@ from os.path import isfile, join
 import numpy as np
 from erkenntnis.brain_implementation.ai.world_model import Worldmodel
 
-ape_brain = Worldmodel()
+
+latent_space_size = 10
+
+ape_brain = Worldmodel(latent_space_size=latent_space_size)
 
 ending = ".pkl"
-model_file = "ape_brain"
+model_file = "ape_brain_" + str(latent_space_size) + "_"
 try:
     ape_brain.model.load(path=model_file)
     print("Trained on ", ape_brain.model.total_examples_trained, " examples")
