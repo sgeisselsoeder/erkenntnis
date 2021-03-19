@@ -30,9 +30,11 @@ def action_to_numeric_encoding(action, available_actions=_available_actions):
         encoding[action_index + 3] = action["strength"]
 
     elif action["type"] == "focus":
+        # the action is already set to 1.0, no parameters to encode here
         pass
 
     elif action["type"] == "remove_malus":
+        # the action is already set to 1.0, no parameters to encode here
         pass
 
     elif action["type"] == "communicate":
@@ -107,9 +109,11 @@ def numeric_encoding_to_action(encoding, available_actions=_available_actions):
         action["strength"] = encoding[action_index + 3]
 
     elif selected_action == "focus":
+        # the action is already set, no parameters to decode here
         pass
 
     elif selected_action == "remove_malus":
+        # the action is already set, no parameters to decode here
         pass
 
     elif selected_action == "communicate":
