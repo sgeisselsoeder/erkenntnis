@@ -22,7 +22,7 @@ def _decode_message_text(encoded):
 
 
 def _encode_message(message):
-    encoded = np.zeros(_length_of_message)
+    encoded = np.zeros(_length_of_message, dtype=np.float32)
     encoded[0] = message["from"]
     encoded[1] = message["from_location"][0]
     encoded[2] = message["from_location"][1]
@@ -32,9 +32,9 @@ def _encode_message(message):
 
 def encode_messages(messages, required_number_of_messages: int = 0):
     if required_number_of_messages > 0:
-        encoded_messages = np.zeros(required_number_of_messages * _length_of_message)
+        encoded_messages = np.zeros(required_number_of_messages * _length_of_message, dtype=np.float32)
     else:
-        encoded_messages = np.zeros(len(messages) * _length_of_message)
+        encoded_messages = np.zeros(len(messages) * _length_of_message, dtype=np.float32)
 
     for i in range(len(messages)):
         encoded_messages[i * _length_of_message:(i + 1) * _length_of_message] = _encode_message(message=messages[i])
@@ -48,7 +48,7 @@ def _decode_message(encoded):
 
     message = {}
     message["from"] = int(encoded[0])
-    message["from_location"] = np.array([encoded[1], encoded[2], 0.0])
+    message["from_location"] = np.array([encoded[1], encoded[2], 0.0], dtype=np.float32)
     message["message"] = _decode_message_text(encoded=encoded[3])
     return message
 
@@ -64,5 +64,5 @@ def decode_messages(encoded_messages):
         message = _decode_message(encoded=encoded_message)
         if message is not None:
             messages.append(message)
-    
+
     return messages

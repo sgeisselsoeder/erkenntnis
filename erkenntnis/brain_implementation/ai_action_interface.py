@@ -12,7 +12,7 @@ def get_numeric_encoding_and_action_indices(available_actions: dict):
         parameter_count += 1    # the action itself
         if available_actions[action_name] is not None:
             parameter_count += len(available_actions[action_name])    # the parameters of this action
-    numeric_action_encoding = np.zeros(parameter_count)
+    numeric_action_encoding = np.zeros(parameter_count, dtype=np.float32)
     return numeric_action_encoding, action_indices
 
 
@@ -103,7 +103,7 @@ def numeric_encoding_to_action(encoding, available_actions=_available_actions):
     action = {"type": selected_action}
 
     if selected_action == "accelerate":
-        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0])
+        action["direction"] = np.array([encoding[action_index + 1], encoding[action_index + 2], 0.0], dtype=np.float32)
         action["strength"] = encoding[action_index + 3]
 
     elif selected_action == "focus":

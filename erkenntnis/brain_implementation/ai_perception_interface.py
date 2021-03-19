@@ -64,7 +64,7 @@ def _decode_unique_name(encoded_unique):
 
 def _perceived_thing_to_encoding(thing: Thing):
     encoding_length = _encoding_length(properties_to_encode=properties_to_encode)
-    encoding = np.zeros(encoding_length)
+    encoding = np.zeros(encoding_length, dtype=np.float32)
 
     encoding[0] = thing.health
     encoding[1] = thing.malus
@@ -99,7 +99,7 @@ def encode_perception(perception, expected_number_perceptions: int = 0):
         if expected_number_perceptions == 0:
             return None
         else:
-            return np.zeros(expected_number_perceptions * encoding_length)
+            return np.zeros(expected_number_perceptions * encoding_length, dtype=np.float32)
 
     encodings = list()
     for thing in perception:
