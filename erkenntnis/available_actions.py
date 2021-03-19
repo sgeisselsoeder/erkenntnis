@@ -14,7 +14,7 @@ _full_available_actions = {"accelerate": ["direction1", "direction2", "strength"
                            "inform_malus": ["direction1", "direction2"]}
 
 _limited_actions = {"accelerate": ["direction1", "direction2", "strength"],
-                    "focus": None,
+                    # "focus": None,
                     "remove_malus": None,
                     "communicate": ["direction1", "direction2", "message"],
                     "eat": ["direction1", "direction2", "strength"],

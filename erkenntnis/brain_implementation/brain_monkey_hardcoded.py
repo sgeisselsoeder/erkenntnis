@@ -5,6 +5,7 @@ from ..utils import random_position, vector_length
 from .ai_action_interface import action_to_numeric_encoding
 from .ai_perception_interface import decode_perception
 from .ai_message_interface import decode_messages
+from ..available_actions import random_action
 
 
 class Brain_monkey_hardcode(Brain_simple_memory):
@@ -102,7 +103,8 @@ class Brain_monkey_hardcode(Brain_simple_memory):
                 self.current_target_direction = random_position()
                 action = action_accelerate(direction=self.current_target_direction)
             else:
-                action = action_focus()
+                action = random_action()
+                # action = action_focus()
 
         encoded_action = action_to_numeric_encoding(action=action)
         self._remember(perception=encoded_perception, messages=encoded_messages, action=encoded_action, cause=cause)

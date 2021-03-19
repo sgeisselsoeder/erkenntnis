@@ -5,8 +5,8 @@ from erkenntnis.things_available import *
 from erkenntnis.agents_available import *
 
 initial_world_scale = 100
-map_boundary = 2.0 * initial_world_scale
-map_resultion = 140
+map_boundary = 1.6 * initial_world_scale
+map_resolution = 80
 
 my_world = World(world_scale=initial_world_scale, malus_propability=0.0)
 my_world.add(new_stone(position=None))
@@ -28,16 +28,16 @@ for i in range(10):
     my_world.add(new_dummy_agent(), position=random_position(scale=initial_world_scale))
 
 my_world.print()
-my_world.map(resolution=map_resultion, fixed_boundary=map_boundary, plotstyle="dense")
+my_world.map(resolution=map_resolution, fixed_boundary=map_boundary, plotstyle="dense")
 
 time.sleep(2)
 
 for i in range(3000):
     my_world.run(time_delta=0.3)
-    # my_world.map(resolution=map_resultion, fixed_boundary=map_boundary, plotstyle="dense")
+    # my_world.map(resolution=map_resolution, fixed_boundary=map_boundary, plotstyle="dense")
     if np.random.random() < 0.5:
         my_world.add(new_grass(), position=random_position(scale=initial_world_scale*1.8))
-    my_world.map(resolution=map_resultion, fixed_boundary=map_boundary)
+    my_world.map(resolution=map_resolution, fixed_boundary=map_boundary)
 
 my_world.print()
-my_world.map(resolution=map_resultion, fixed_boundary=map_boundary)
+my_world.map(resolution=map_resolution, fixed_boundary=map_boundary)

@@ -13,6 +13,7 @@ class Brain_ape_ml(Brain_simple_memory):
         self.behavior = None
 
     def _predict_one_action(self, encoded_perception, encoded_messages, action):
+        # maybe this should not just return one cost/benefit/future reward estimation, but a probability distribution of future rewards
         self.world_model.estimate_future_state(encoded_perception, encoded_messages, last_states=self.last_perceptions,
                                                last_actions=self.last_actions, next_action=action)
 
