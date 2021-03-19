@@ -110,6 +110,8 @@ def perform_action(world, agent: Agent, action, surroundings, time_delta):
         agent.malus = -1
         # removes the malus, but prevents actions for some time
         agent.action_cooldown = 20
+        # also wounds the agent severely
+        agent.health = 0.3 * agent.health
 
     elif action["type"] == "communicate":
         _agent_agent_communication(agent=agent, action=action, surroundings=surroundings)
