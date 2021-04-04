@@ -52,7 +52,7 @@ class Autoencoder():
         return decoded_examples
 
     def apply(self, examples):
-        return self.decode(self.encode(exmaples))
+        return self.decode(self.encode(examples))
 
 
 # Import data
