@@ -5,8 +5,8 @@ from typing import Union, List
 
 from tensorflow import keras
 from .helper.pickle import save_pickle, load_pickle
-from .helper.keras_pickle_compatible import make_keras_picklable
 from .helper.data_transformations import normalize_minmax, denormalize
+from .helper.keras_pickle_compatible import make_keras_picklable
 
 
 make_keras_picklable()
