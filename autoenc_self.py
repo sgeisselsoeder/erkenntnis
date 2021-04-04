@@ -16,7 +16,7 @@ from erkenntnis.brain_implementation.ai.helper.keras_pickle_compatible import ma
 make_keras_picklable()
 
 
-class Autoencoder(object):
+class Autoencoder():
 
     def __init__(self, input_dim, encoded_dim):
         input_layer = Input(shape=(input_dim,))
@@ -43,16 +43,16 @@ class Autoencoder(object):
                                     epochs=epochs, batch_size=batch_size,
                                     shuffle=True, validation_data=validation_data)
 
-    def getEncodedImage(self, image):
-        encoded_image = self._encoder_model.predict(image)
-        return encoded_image
+    def encode(self, examples):
+        encoded = self._encoder_model.predict(examples)
+        return encoded
 
-    def getDecodedImage(self, encoded_imgs):
-        decoded_image = self._decoder_model.predict(encoded_imgs)
-        return decoded_image
+    def decode(self, encoded_examples):
+        decoded_examples = self._decoder_model.predict(encoded_examples)
+        return decoded_examples
 
-    def apply(self, image):
-        return self.getDecodedImage(self.getEncodedImage(image))
+    def apply(self, examples):
+        return self.decode(self.encode(exmaples))
 
 
 # Import data
@@ -80,8 +80,8 @@ except Exception:
     autoencoder.train(input_train=x_train, input_test=x_test, epochs=200)
     save_pickle(autoencoder, "autoencoder_16eng_200epochs.pkl")
 
-encoded_imgs = autoencoder.getEncodedImage(x_test)
-decoded_imgs = autoencoder.getDecodedImage(encoded_imgs)
+encoded_imgs = autoencoder.encode(x_test)
+decoded_imgs = autoencoder.decode(encoded_imgs)
 
 for i in range(len(x_test[:100])):
     number_pixels = x_test[i].shape[0]
