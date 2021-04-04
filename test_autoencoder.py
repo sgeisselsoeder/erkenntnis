@@ -1,0 +1,51 @@
+from tensorflow.keras.datasets import fashion_mnist
+import numpy as np
+from matplotlib import pyplot as plt
+from erkenntnis.brain_implementation.ai.autoencoder import Autoencoder
+
+
+# Import data
+(x_train, _), (x_test, _) = fashion_mnist.load_data()
+
+def reshape_and_normalize(data):
+    data = data.astype('float32') / 255.
+    data = data.reshape((len(data), np.prod(data.shape[1:])))    
+    return data
+
+# Prepare input
+x_train = reshape_and_normalize(x_train)
+x_test = reshape_and_normalize(x_test)
+
+# Keras implementation
+
+ae = Autoencoder(latent_space_size=16)
+ae.train(x=x_train, epochs=200)
+ae.save("autoencoder_newtype_16eng_200epochs.pkl")
+
+encoded_imgs = ae.encode(x_test)
+decoded_imgs = ae.decode(encoded_imgs)
+
+for i in range(len(x_test[:100])):
+    number_pixels = x_test[i].shape[0]
+    next_image = np.reshape(x_test[i], newshape=(1, number_pixels))
+    result = ae.apply(next_image)
+    print(np.sum(np.abs(result - next_image)) / number_pixels)
+
+# Keras implementation results
+plt.figure(figsize=(20, 4))
+for i in range(9):
+    # Original
+    subplot = plt.subplot(2, 10, i + 1)
+    plt.imshow(x_test[i].reshape(28, 28))
+    plt.gray()
+    subplot.get_xaxis().set_visible(False)
+    subplot.get_yaxis().set_visible(False)
+
+    # Reconstruction
+    subplot = plt.subplot(2, 10, i + 11)
+    plt.imshow(decoded_imgs[i].reshape(28, 28))
+    plt.gray()
+    subplot.get_xaxis().set_visible(False)
+    subplot.get_yaxis().set_visible(False)
+
+plt.show()

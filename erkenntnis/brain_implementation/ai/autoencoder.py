@@ -35,7 +35,7 @@ make_keras_picklable()
 
 # based on https://blog.keras.io/building-autoencoders-in-keras.html ...
 # based now more on https://rubikscode.net/2018/11/26/3-ways-to-implement-autoencoders-with-tensorflow-and-python/
-class Autoenc():
+class Autoencoder():
     def _setup_autoencoder(self, input_dim, encoded_dim):
         input_layer = Input(shape=(input_dim,))
         hidden_input = Input(shape=(encoded_dim,))
