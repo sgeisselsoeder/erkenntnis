@@ -11,28 +11,30 @@ from matplotlib import pyplot as plt
 
 class Autoencoder(object):
 
-    def __init__(self, inout_dim, encoded_dim):
-        input_layer = Input(shape=(inout_dim,))
+    def __init__(self, input_dim, encoded_dim):
+        input_layer = Input(shape=(input_dim,))
         hidden_input = Input(shape=(encoded_dim,))
         hidden_layer = Dense(encoded_dim, activation='relu')(input_layer)
         output_layer = Dense(784, activation='sigmoid')(hidden_layer)
 
         self._autoencoder_model = Model(input_layer, output_layer)
+
         self._encoder_model = Model(input_layer, hidden_layer)
+
         tmp_decoder_layer = self._autoencoder_model.layers[-1]
         self._decoder_model = Model(hidden_input, tmp_decoder_layer(hidden_input))
 
-        self._autoencoder_model.compile(optimizer='adadelta', loss='binary_crossentropy')
+        # self._autoencoder_model.compile(optimizer='adadelta', loss='binary_crossentropy')
+        self._autoencoder_model.compile(optimizer='adam', loss='mae')
 
-    def train(self, input_train, input_test, batch_size, epochs):
-        self._autoencoder_model.fit(input_train,
-                                    input_train,
-                                    epochs=epochs,
-                                    batch_size=batch_size,
-                                    shuffle=True,
-                                    validation_data=(
-                                        input_test,
-                                        input_test))
+    def train(self, input_train, epochs, input_test=None, batch_size=128):
+        if input_test is None:
+            validation_data = None
+        else:
+            validation_data = (input_test, input_test)
+        self._autoencoder_model.fit(x=input_train, y=input_train,
+                                    epochs=epochs, batch_size=batch_size,
+                                    shuffle=True, validation_data=validation_data)
 
     def getEncodedImage(self, image):
         encoded_image = self._encoder_model.predict(image)
@@ -41,6 +43,9 @@ class Autoencoder(object):
     def getDecodedImage(self, encoded_imgs):
         decoded_image = self._decoder_model.predict(encoded_imgs)
         return decoded_image
+
+    def apply(self, image):
+        return 
 
 
 # Import data
@@ -56,8 +61,8 @@ x_train = reshape_and_normalize(x_train)
 x_test = reshape_and_normalize(x_test)
 
 # Keras implementation
-autoencoder = Autoencoder(inout_dim=x_train.shape[1], encoded_dim=32)
-autoencoder.train(input_train=x_train, input_test=x_test, batch_size=256, epochs=20)
+autoencoder = Autoencoder(input_dim=x_train.shape[1], encoded_dim=16)
+autoencoder.train(input_train=x_train, input_test=x_test, epochs=20)
 encoded_imgs = autoencoder.getEncodedImage(x_test)
 decoded_imgs = autoencoder.getDecodedImage(encoded_imgs)
 
