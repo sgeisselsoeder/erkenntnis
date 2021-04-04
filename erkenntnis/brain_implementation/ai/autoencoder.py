@@ -14,25 +14,6 @@ from tensorflow.keras.models import Model
 make_keras_picklable()
 
 
-# def build_autoencoder_layers(input_data: pd.DataFrame, latent_dimension: int):
-#     number_sensors = input_data.values.shape[1]
-#     if latent_dimension == 0:
-#         latent_dimension = int(0.5 * number_sensors)
-
-#     # this is our input placeholder
-#     input_layer = keras.layers.Input(shape=(number_sensors,))
-#     # "encoded" is the encoded representation of the input
-#     encoded = keras.layers.Dense(latent_dimension, activation='relu')(input_layer)
-#     # "decoded" is the lossy reconstruction of the input
-#     decoded = keras.layers.Dense(number_sensors, activation='sigmoid')(encoded)
-
-#     # this model maps an input to its reconstruction
-#     autoencoder = keras.models.Model(input_layer, decoded)
-#     # autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
-#     autoencoder.compile(optimizer='adadelta', loss='mse')
-#     return autoencoder
-
-
 # based on https://blog.keras.io/building-autoencoders-in-keras.html ...
 # based now more on https://rubikscode.net/2018/11/26/3-ways-to-implement-autoencoders-with-tensorflow-and-python/
 class Autoencoder():
@@ -43,13 +24,10 @@ class Autoencoder():
         output_layer = Dense(input_dim, activation='sigmoid')(hidden_layer)
 
         self.autoencoder = Model(input_layer, output_layer)
-
         self.encoder = Model(input_layer, hidden_layer)
-
         tmp_decoder_layer = self.autoencoder.layers[-1]
         self.decoder = Model(hidden_input, tmp_decoder_layer(hidden_input))
 
-        # self._autoencoder_model.compile(optimizer='adadelta', loss='binary_crossentropy')
         self.autoencoder.compile(optimizer='adam', loss='mae')
 
     def __init__(self, latent_space_size: int = 3, default_number_epochs: int = 100):
@@ -114,8 +92,7 @@ class Autoencoder():
         normalized_input, _ = normalize_minmax(x, self.scaler)
 
         estimation = self.autoencoder.predict(normalized_input.values)
-        # TODO: test is this is exactly the same
-        # estimation = self.decode(self.encode(normalized_input.values))
+        # estimation2 = self.decode(self.encode(normalized_input.values))   # confirmed to be exactly the same
 
         if was_array:
             estimation = denormalize(pd.DataFrame(estimation), self.scaler)
