@@ -71,8 +71,9 @@ x_test = reshape_and_normalize(x_test)
 
 
 try:
-    assert(False)
-    autoencoder = load_pickle("autoencoder_16eng_200epochs_0.71mae_test.pkl")
+    # assert(False)
+    autoencoder = load_pickle("autoencoder_16eng_200epochs.pkl")
+    # autoencoder = load_pickle("autoencoder_16eng_200epochs_0.71mae_test.pkl")
 
 except Exception:
     autoencoder = Autoencoder(input_dim=x_train.shape[1], encoded_dim=16)
