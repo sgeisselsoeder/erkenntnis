@@ -76,18 +76,18 @@ class Autoencoder():
     def fit(self, x: Union[np.ndarray, pd.DataFrame], y: Union[np.ndarray, pd.DataFrame] = None, w: Union[np.ndarray, pd.DataFrame] = None,
             number_epochs: int = 0, verbose_level: int = 0, input_test=None, batch_size=128):
 
+        # preprocess the data for this model
+        if isinstance(x, np.ndarray):
+            x = pd.DataFrame(x)
+        x_norm, self.scaler = normalize_minmax(x, self.scaler)  # if we already have a scaler, we want to reuse it? (else this doesn't change anything)
+        training_data = x_norm.values.astype('float32')
+
         # make sure we have the network architecture in place
         if self.autoencoder is None:
             number_sensors = x.values.shape[1]
             if self.latent_space_size == 0:
                 self.latent_space_size = int(0.1 * number_sensors)
             self._setup_autoencoder(input_dim=number_sensors, encoded_dim=self.latent_space_size)
-
-        # preprocess the data for this model
-        if isinstance(x, np.ndarray):
-            x = pd.DataFrame(x)
-        x_norm, self.scaler = normalize_minmax(x, self.scaler)  # if we already have a scaler, we want to reuse it? (else this doesn't change anything)
-        training_data = x_norm.values.astype('float32')
 
         # sanitize training parameters
         if number_epochs <= 0:
@@ -129,6 +129,7 @@ class Autoencoder():
         io_dict = {'autoencoder': self.autoencoder,
                    'encoder': self.encoder,
                    'decoder': self.decoder,
+                   'scaler': self.scaler,
                    'latent_space_size': self.latent_space_size,
                    'default_number_epochs': self.default_number_epochs,
                    'total_examples_trained': self.total_examples_trained
@@ -140,6 +141,7 @@ class Autoencoder():
         self.autoencoder = io_dict['autoencoder']
         self.encoder = io_dict['encoder']
         self.decoder = io_dict['decoder']
+        self.scaler = io_dict['scaler']
         self.latent_space_size = io_dict['latent_space_size']
         self.default_number_epochs = io_dict['default_number_epochs']
         self.total_examples_trained = io_dict['total_examples_trained']

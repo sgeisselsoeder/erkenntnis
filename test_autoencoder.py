@@ -16,11 +16,14 @@ def reshape_and_normalize(data):
 x_train = reshape_and_normalize(x_train)
 x_test = reshape_and_normalize(x_test)
 
-# Keras implementation
+# train Autoencoder
+ae = Autoencoder(latent_space_size=8)
+try:
+    ae.load("autoencoder_newtype_8eng_60epochs.pkl")
 
-ae = Autoencoder(latent_space_size=16)
-ae.train(x=x_train, epochs=200)
-ae.save("autoencoder_newtype_16eng_200epochs.pkl")
+except FileNotFoundError as e:
+    ae.fit(x=x_train, number_epochs=60, input_test=x_test)
+    ae.save("autoencoder_newtype_8eng_60epochs.pkl")
 
 encoded_imgs = ae.encode(x_test)
 decoded_imgs = ae.decode(encoded_imgs)
@@ -28,12 +31,12 @@ decoded_imgs = ae.decode(encoded_imgs)
 for i in range(len(x_test[:100])):
     number_pixels = x_test[i].shape[0]
     next_image = np.reshape(x_test[i], newshape=(1, number_pixels))
-    result = ae.apply(next_image)
+    result = ae.predict(next_image)
     print(np.sum(np.abs(result - next_image)) / number_pixels)
 
 # Keras implementation results
 plt.figure(figsize=(20, 4))
-for i in range(9):
+for i in range(10):
     # Original
     subplot = plt.subplot(2, 10, i + 1)
     plt.imshow(x_test[i].reshape(28, 28))
