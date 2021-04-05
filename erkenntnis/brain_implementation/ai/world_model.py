@@ -1,11 +1,11 @@
-from .autoencoder import Autoenc
+from .autoencoder import Autoencoder
 from ..preprocess_perception import fuse_state
 # TODO: generate a world model to "understand" its state.
 
 
 class Worldmodel():
     def __init__(self, latent_space_size: int = 0):
-        self.model = Autoenc(latent_space_size=latent_space_size)
+        self.model = Autoencoder(latent_space_size=latent_space_size)
 
     #
     def train_perceptions(self, encoded_perception, encoded_messages, encoded_action, encoded_cause, epochs: int = 0):
