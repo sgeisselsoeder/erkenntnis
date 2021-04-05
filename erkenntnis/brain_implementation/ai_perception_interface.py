@@ -89,7 +89,8 @@ def _perceived_thing_to_encoding(thing: Thing):
         encoding[10] = thing.action_cooldown
         encoding[11] = _encode_unique_name(thing.last_cause)
         last_encoded_action = action_to_numeric_encoding(thing.last_action)
-        encoding[12:12 + 17] = last_encoded_action[:]
+        len_action_encoding = last_encoded_action.size
+        encoding[12:12 + len_action_encoding] = last_encoded_action[:]
     return encoding
 
 
