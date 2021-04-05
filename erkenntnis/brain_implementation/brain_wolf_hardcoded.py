@@ -61,11 +61,9 @@ class Brain_wolf_hardcode(Brain_simple_memory):
 
         if action is None:
             # we might want to keep a direction, but random for now
-            if np.random.random() < 0.9:
-                self.current_target_direction = random_position()
-                action = action_accelerate(direction=self.current_target_direction)
-            else:
-                action = action_focus()
+            self.current_target_direction = random_position()
+            action = action_accelerate(direction=self.current_target_direction)
+            # wolf must be predictable, no random action!
 
         self._remember(perception=perception, messages=messages, action=action, cause=cause)
         encoded_action = action_to_numeric_encoding(action=action)
