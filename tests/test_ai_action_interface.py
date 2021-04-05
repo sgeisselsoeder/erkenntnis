@@ -1,6 +1,6 @@
 from erkenntnis.brain_implementation.ai_action_interface import *
 from erkenntnis.world_actions import *
-from erkenntnis.utils import random_position
+from erkenntnis.utils import random_position, assert_approx_equal
 
 
 available_test_actions = {"accelerate": ["direction1", "direction2", "strength"],
@@ -69,18 +69,13 @@ def test_action_encoding_action_conversions():
     encoded = action_to_numeric_encoding(action=action, available_actions=available_test_actions)
     action2 = numeric_encoding_to_action(encoding=encoded, available_actions=available_test_actions)
     for key in action:
-        assert(np.all(action[key] == action2[key]))
-
-    # action = action_point_out(agent_direction=random_position(), pointing_direction=random_position(), reason=0.88)
-    # encoded = action_to_numeric_encoding(action=action)
-    # action2 = numeric_encoding_to_action(encoding=encoded)
-    # assert(action == action2)
+        assert_approx_equal(action[key], action2[key])
 
     action = action_point_out(agent_direction=random_position(), pointing_direction=random_position(), reason=0.88)
     encoded = action_to_numeric_encoding(action=action, available_actions=available_test_actions)
     action2 = numeric_encoding_to_action(encoding=encoded, available_actions=available_test_actions)
     for key in action:
-        assert(np.all(action[key] == action2[key]))
+        assert_approx_equal(action[key], action2[key])
 
 
 def test_encoding_action_encoding_conversions():
@@ -110,47 +105,62 @@ def test_action_encoding_conversions():
     action = action_accelerate(direction=random_position(), strength=0.6)
     offset = 0
     encoded = action_to_numeric_encoding(action, available_actions=available_test_actions)
-    assert(encoded[offset + 0] == 1.0)
-    assert(encoded[offset + 1] == action["direction"][0])
-    assert(encoded[offset + 2] == action["direction"][1])
-    assert(encoded[offset + 3] == action["strength"])
+    assert_approx_equal(encoded[offset + 0], 1.0)
+    assert_approx_equal(encoded[offset + 1], action["direction"][0])
+    assert_approx_equal(encoded[offset + 2], action["direction"][1])
+    assert_approx_equal(encoded[offset + 3], action["strength"])
+    # assert(encoded[offset + 0] == 1.0)
+    # assert(encoded[offset + 1] == action["direction"][0])
+    # assert(encoded[offset + 2] == action["direction"][1])
+    # assert(encoded[offset + 3] == action["strength"])
 
     action = action_attack(direction=random_position(), strength=0.4)
     offset = 24
     encoded = action_to_numeric_encoding(action, available_actions=available_test_actions)
-    assert(encoded[offset + 0] == 1.0)
-    assert(encoded[offset + 1] == action["direction"][0])
-    assert(encoded[offset + 2] == action["direction"][1])
-    assert(encoded[offset + 3] == action["strength"])
+    assert_approx_equal(encoded[offset + 0], 1.0)
+    assert_approx_equal(encoded[offset + 1], action["direction"][0])
+    assert_approx_equal(encoded[offset + 2], action["direction"][1])
+    assert_approx_equal(encoded[offset + 3], action["strength"])
 
     action = action_eat(direction=random_position(), strength=0.2)
     offset = 28
     encoded = action_to_numeric_encoding(action, available_actions=available_test_actions)
-    assert(encoded[offset + 0] == 1.0)
-    assert(encoded[offset + 1] == action["direction"][0])
-    assert(encoded[offset + 2] == action["direction"][1])
-    assert(encoded[offset + 3] == action["strength"])
+    assert_approx_equal(encoded[offset + 0], 1.0)
+    assert_approx_equal(encoded[offset + 1], action["direction"][0])
+    assert_approx_equal(encoded[offset + 2], action["direction"][1])
+    assert_approx_equal(encoded[offset + 3], action["strength"])
 
     action = action_communicate(direction=random_position(), message="lol_test")
     encoded = action_to_numeric_encoding(action, available_actions=available_test_actions)
     offset = 6  # communicate, --> 7 - 1
-    assert(encoded[offset + 0] == 1.0)
-    assert(encoded[offset + 1] == action["direction"][0])
-    assert(encoded[offset + 2] == action["direction"][1])
-    # assert(encoded[offset + 3] == action["message"])
-    assert(encoded[offset + 3] == 0.5)
+    assert_approx_equal(encoded[offset + 0], 1.0)
+    assert_approx_equal(encoded[offset + 1], action["direction"][0])
+    assert_approx_equal(encoded[offset + 2], action["direction"][1])
+    assert_approx_equal(encoded[offset + 3], 0.5)
+    # assert(encoded[offset + 0] == 1.0)
+    # assert(encoded[offset + 1] == action["direction"][0])
+    # assert(encoded[offset + 2] == action["direction"][1])
+    # # assert(encoded[offset + 3] == action["message"])
+    # assert(encoded[offset + 3] == 0.5)
 
     action = action_communicate(direction=random_position(), message=0.57)
     encoded = action_to_numeric_encoding(action, available_actions=available_test_actions)
     offset = 6  # communicate, --> 7 - 1
-    assert(encoded[offset + 0] == 1.0)
-    assert(encoded[offset + 1] == action["direction"][0])
-    assert(encoded[offset + 2] == action["direction"][1])
-    assert(encoded[offset + 3] == action["message"])
+    assert_approx_equal(encoded[offset + 0], 1.0)
+    assert_approx_equal(encoded[offset + 1], action["direction"][0])
+    assert_approx_equal(encoded[offset + 2], action["direction"][1])
+    assert_approx_equal(encoded[offset + 3], action["message"])
+    # assert(encoded[offset + 0] == 1.0)
+    # assert(encoded[offset + 1] == action["direction"][0])
+    # assert(encoded[offset + 2] == action["direction"][1])
+    # assert(encoded[offset + 3] == action["message"])
 
     action = action_inform_malus(direction=random_position())
     encoded = action_to_numeric_encoding(action, available_actions=available_test_actions)
     offset = 32
-    assert(encoded[offset + 0] == 1.0)
-    assert(encoded[offset + 1] == action["direction"][0])
-    assert(encoded[offset + 2] == action["direction"][1])
+    assert_approx_equal(encoded[offset + 0], 1.0)
+    assert_approx_equal(encoded[offset + 1], action["direction"][0])
+    assert_approx_equal(encoded[offset + 2], action["direction"][1])
+    # assert(encoded[offset + 0] == 1.0)
+    # assert(encoded[offset + 1] == action["direction"][0])
+    # assert(encoded[offset + 2] == action["direction"][1])

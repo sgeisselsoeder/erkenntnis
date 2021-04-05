@@ -3,7 +3,7 @@ from erkenntnis.brain_implementation.ai_message_interface import _length_of_mess
 from erkenntnis.brain_implementation.ai_message_interface import _message_encoding_malus, _message_encoding_default
 from erkenntnis.agents_available import new_ape, new_monkey, new_sheep, new_wolf
 from erkenntnis.world_actions import action_communicate, action_inform_malus
-from erkenntnis.utils import random_position
+from erkenntnis.utils import random_position, assert_approx_equal
 from erkenntnis.world import World
 
 
@@ -19,10 +19,14 @@ def test_message_encoding():
 
     encoded = _encode_message(message=message)
     assert(encoded.shape[0] == _length_of_message)
-    assert(encoded[0] == message["from"])
-    assert(encoded[1] == message["from_location"][0])
-    assert(encoded[2] == message["from_location"][1])
-    assert(encoded[3] == message["message"])
+    assert_approx_equal(encoded[0], message["from"])
+    assert_approx_equal(encoded[1], message["from_location"][0])
+    assert_approx_equal(encoded[2], message["from_location"][1])
+    assert_approx_equal(encoded[3], message["message"])
+    # assert(encoded[0] == message["from"])
+    # assert(encoded[1] == message["from_location"][0])
+    # assert(encoded[2] == message["from_location"][1])
+    # assert(encoded[3] == message["message"])
 
 
 def test_messages_encoding():
@@ -40,18 +44,30 @@ def test_messages_encoding():
     encoded = encode_messages(messages=messages)
 
     assert(encoded.shape[0] == _length_of_message * len(messages))
-    assert(encoded[0] == messages[0]["from"])
-    assert(encoded[1] == messages[0]["from_location"][0])
-    assert(encoded[2] == messages[0]["from_location"][1])
-    assert(encoded[3] == messages[0]["message"])
-    assert(encoded[4] == messages[1]["from"])
-    assert(encoded[5] == messages[1]["from_location"][0])
-    assert(encoded[6] == messages[1]["from_location"][1])
-    assert(encoded[7] == _message_encoding_malus)
-    assert(encoded[8] == messages[2]["from"])
-    assert(encoded[9] == messages[2]["from_location"][0])
-    assert(encoded[10] == messages[2]["from_location"][1])
-    assert(encoded[11] == _message_encoding_default)
+    assert_approx_equal(encoded[0], messages[0]["from"])
+    assert_approx_equal(encoded[1], messages[0]["from_location"][0])
+    assert_approx_equal(encoded[2], messages[0]["from_location"][1])
+    assert_approx_equal(encoded[3], messages[0]["message"])
+    assert_approx_equal(encoded[4], messages[1]["from"])
+    assert_approx_equal(encoded[5], messages[1]["from_location"][0])
+    assert_approx_equal(encoded[6], messages[1]["from_location"][1])
+    assert_approx_equal(encoded[7], _message_encoding_malus)
+    assert_approx_equal(encoded[8], messages[2]["from"])
+    assert_approx_equal(encoded[9], messages[2]["from_location"][0])
+    assert_approx_equal(encoded[10], messages[2]["from_location"][1])
+    assert_approx_equal(encoded[11], _message_encoding_default)
+    # assert(encoded[0] == messages[0]["from"])
+    # assert(encoded[1] == messages[0]["from_location"][0])
+    # assert(encoded[2] == messages[0]["from_location"][1])
+    # assert(encoded[3] == messages[0]["message"])
+    # assert(encoded[4] == messages[1]["from"])
+    # assert(encoded[5] == messages[1]["from_location"][0])
+    # assert(encoded[6] == messages[1]["from_location"][1])
+    # assert(encoded[7] == _message_encoding_malus)
+    # assert(encoded[8] == messages[2]["from"])
+    # assert(encoded[9] == messages[2]["from_location"][0])
+    # assert(encoded[10] == messages[2]["from_location"][1])
+    # assert(encoded[11] == _message_encoding_default)
 
 
 def test_messages_encoding_padding():
@@ -70,18 +86,30 @@ def test_messages_encoding_padding():
     encoded = encode_messages(messages=messages, required_number_of_messages=required_number)
 
     assert(encoded.shape[0] == _length_of_message * required_number)
-    assert(encoded[0] == messages[0]["from"])
-    assert(encoded[1] == messages[0]["from_location"][0])
-    assert(encoded[2] == messages[0]["from_location"][1])
-    assert(encoded[3] == float(messages[0]["message"]))
-    assert(encoded[4] == messages[1]["from"])
-    assert(encoded[5] == messages[1]["from_location"][0])
-    assert(encoded[6] == messages[1]["from_location"][1])
-    assert(encoded[7] == _message_encoding_malus)
-    assert(encoded[8] == messages[2]["from"])
-    assert(encoded[9] == messages[2]["from_location"][0])
-    assert(encoded[10] == messages[2]["from_location"][1])
-    assert(encoded[11] == _message_encoding_default)
+    assert_approx_equal(encoded[0], messages[0]["from"])
+    assert_approx_equal(encoded[1], messages[0]["from_location"][0])
+    assert_approx_equal(encoded[2], messages[0]["from_location"][1])
+    assert_approx_equal(encoded[3], float(messages[0]["message"]))
+    assert_approx_equal(encoded[4], messages[1]["from"])
+    assert_approx_equal(encoded[5], messages[1]["from_location"][0])
+    assert_approx_equal(encoded[6], messages[1]["from_location"][1])
+    assert_approx_equal(encoded[7], _message_encoding_malus)
+    assert_approx_equal(encoded[8], messages[2]["from"])
+    assert_approx_equal(encoded[9], messages[2]["from_location"][0])
+    assert_approx_equal(encoded[10], messages[2]["from_location"][1])
+    assert_approx_equal(encoded[11], _message_encoding_default)
+    # assert(encoded[0] == messages[0]["from"])
+    # assert(encoded[1] == messages[0]["from_location"][0])
+    # assert(encoded[2] == messages[0]["from_location"][1])
+    # assert(encoded[3] == float(messages[0]["message"]))
+    # assert(encoded[4] == messages[1]["from"])
+    # assert(encoded[5] == messages[1]["from_location"][0])
+    # assert(encoded[6] == messages[1]["from_location"][1])
+    # assert(encoded[7] == _message_encoding_malus)
+    # assert(encoded[8] == messages[2]["from"])
+    # assert(encoded[9] == messages[2]["from_location"][0])
+    # assert(encoded[10] == messages[2]["from_location"][1])
+    # assert(encoded[11] == _message_encoding_default)
     assert(np.sum(encoded[12:]) == 0.0)
 
 
@@ -125,10 +153,11 @@ def test_messages_encoding_decoding():
         message = messages[i]
         decoded_message = decoded[i]
         for key in message:
-            try:
-                assert(np.all(message[key] == decoded_message[key]))
-            except Exception:
-                assert(float(message[key]) == float(decoded_message[key]))
+            assert_approx_equal(message[key], decoded_message[key])
+            # try:
+            #     assert(np.all(message[key] == decoded_message[key]))
+            # except Exception:
+            #     assert(float(message[key]) == float(decoded_message[key]))
 
 
 def test_messages_encoding_decoding_padding():
@@ -152,7 +181,8 @@ def test_messages_encoding_decoding_padding():
         message = messages[i]
         decoded_message = decoded[i]
         for key in message:
-            assert(np.all(message[key] == decoded_message[key]))
+            assert_approx_equal(message[key], decoded_message[key])
+            # assert(np.all(message[key] == decoded_message[key]))
 
 
 def test_real_message_scenario():
@@ -175,4 +205,5 @@ def test_real_message_scenario():
         message = messages1[i]
         decoded_message = decoded[i]
         for key in message:
-            assert(np.all(message[key] == decoded_message[key]))
+            assert_approx_equal(message[key], decoded_message[key])
+            # assert(np.all(message[key] == decoded_message[key]))
