@@ -1,5 +1,6 @@
 from erkenntnis.world import *
 from erkenntnis.brain_implementation.ai_action_interface import numeric_encoding_to_action
+from erkenntnis.utils import assert_approx_equal
 
 
 def test_monkey_attack_sheep():
@@ -26,8 +27,8 @@ def test_monkey_flees_wolf():
 
     assert(len(my_world.things) == 0)
     assert(len(my_world.agents) == 2)
-    assert(my_world.agents[0].health == my_world.agents[0].default_health)
-    assert(my_world.agents[1].health == my_world.agents[1].default_health)
+    assert_approx_equal(my_world.agents[0].health, my_world.agents[0].default_health)
+    assert_approx_equal(my_world.agents[1].health, my_world.agents[1].default_health)
 
 
 def test_monkies_fixing_malus():
