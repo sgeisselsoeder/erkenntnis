@@ -24,6 +24,7 @@ def new_dummy_agent(position: np.ndarray = None, velocity=None, health: int = No
         health = default_health
 
     logfile = "dummy_" + str(time.time()) + str(random_position()[0]) + ".npy"
+    logfile = None
     agent = Agent(brain=Brain_dummy(logfile=logfile), position=position, velocity=velocity,
                   radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
                   strength=strength, max_number_perceived_things=max_number_perceived_things)
