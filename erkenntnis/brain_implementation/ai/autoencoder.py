@@ -78,7 +78,8 @@ class Autoencoder():
         # fit the model to the data
         self.autoencoder.fit(x=training_data, y=training_data,
                              epochs=number_epochs, batch_size=batch_size,
-                             shuffle=True, validation_data=validation_data)
+                             shuffle=True, validation_data=validation_data,
+                             verbose=verbose_level)
 
         self.total_examples_trained += training_data.shape[0] * number_epochs
 
