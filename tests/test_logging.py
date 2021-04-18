@@ -4,9 +4,9 @@ from erkenntnis.world import *
 def test_logging_loadable():
     my_world = World(agent_health_decline=0.0, malus_propability=0.0)
 
-    my_world.add(new_dummy_agent(), position=np.array([0.0, 0.0, 0.0]))
+    my_world.add(new_monkey(log=True), position=np.array([0.0, 0.0, 0.0]))
 
-    number_time_steps = 9
+    number_time_steps = 2
     for i in range(number_time_steps):
         my_world.run(time_delta=0.1)
 
