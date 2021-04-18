@@ -4,6 +4,7 @@ from erkenntnis.utils import random_position
 from erkenntnis.things_available import *
 from erkenntnis.agents_available import *
 
+
 initial_world_scale = 100
 map_boundary = 1.6 * initial_world_scale
 map_resolution = 80

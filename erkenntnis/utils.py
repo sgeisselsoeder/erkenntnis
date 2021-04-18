@@ -30,4 +30,3 @@ def assert_approx_equal(a, b, rtol=0.001):
         assert(abs(a - b) / max(abs(a), abs(b)) < rtol)
     else:
         assert(np.all(a == b))
-    

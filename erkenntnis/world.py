@@ -62,7 +62,7 @@ class World:
                                                             radius=agent.perception_radius,
                                                             max_things=agent.max_number_perceived_things)
 
-        # reset the perception radius of the agent to clear infreased radius from focus action
+        # reset the perception radius of the agent to clear increased radius from focus action
         agent.perception_radius = agent.default_perception_radius
 
         old_cooldown = agent.action_cooldown
@@ -143,7 +143,8 @@ class World:
             print(this_thing)
 
     def map(self, resolution: int = 40, fixed_boundary: float = None, plotstyle: str = "sparse"):
-        print_map(get_map(self.things + self.agents, size=resolution, fixed_boundary=fixed_boundary), plotstyle=plotstyle)
+        print_map(get_map(self.things + self.agents, size=resolution,
+                          fixed_boundary=fixed_boundary), plotstyle=plotstyle)
 
     def save(self, filename: str = None):
         if filename is None:
