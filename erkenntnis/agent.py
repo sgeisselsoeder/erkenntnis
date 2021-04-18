@@ -34,7 +34,7 @@ class Agent(Thing):
         self.type_properties = "agent"
 
     def think(self, perception):
-        encoded_perception = encode_perception(perception[:1],
+        encoded_perception = encode_perception(perception=perception[:1],
                                                expected_number_perceptions=self.max_number_perceived_things)
         encoded_messages = encode_messages(messages=self.messages,
                                            required_number_of_messages=self.max_number_perceived_things)
