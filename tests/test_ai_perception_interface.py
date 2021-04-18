@@ -5,7 +5,7 @@ from erkenntnis.things_available import new_grass, new_stone
 from erkenntnis.world_actions import action_accelerate, action_remove_malus
 from erkenntnis.utils import random_position, assert_approx_equal
 
-    
+
 def test_encoding_length():
     # this test is required, as the format is hardcoded
     expected_length = _encoding_length(properties_to_encode=properties_to_encode)
@@ -29,7 +29,7 @@ def test_sheep_encoding_no_action():
     assert_approx_equal(encoded_perception[8], agent.velocity[0])
     assert_approx_equal(encoded_perception[9], agent.velocity[1])
     assert_approx_equal(encoded_perception[10], agent.action_cooldown)
-    
+
     assert_approx_equal(np.sum(encoded_perception[12:]), 0.0)
     # assert(encoded_perception[0] == agent.health)
     # assert(encoded_perception[1] == agent.malus)

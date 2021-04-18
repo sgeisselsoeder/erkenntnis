@@ -19,14 +19,12 @@ def test_autoencoding():
         print(np.sum(np.abs(result - next_image)) / number_pixels)
 
 
-
-
 # # Import data
 # (x_train, _), (x_test, _) = fashion_mnist.load_data()
 
 # def reshape_and_normalize(data):
 #     data = data.astype('float32') / 255.
-#     data = data.reshape((len(data), np.prod(data.shape[1:])))    
+#     data = data.reshape((len(data), np.prod(data.shape[1:])))
 #     return data
 
 # # Prepare input

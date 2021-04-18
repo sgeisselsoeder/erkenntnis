@@ -58,10 +58,12 @@ class Autoencoder():
 # Import data
 (x_train, _), (x_test, _) = fashion_mnist.load_data()
 
+
 def reshape_and_normalize(data):
     data = data.astype('float32') / 255.
-    data = data.reshape((len(data), np.prod(data.shape[1:])))    
+    data = data.reshape((len(data), np.prod(data.shape[1:])))
     return data
+
 
 # Prepare input
 x_train = reshape_and_normalize(x_train)

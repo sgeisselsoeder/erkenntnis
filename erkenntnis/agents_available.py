@@ -16,7 +16,8 @@ def new_dummy_agent(position: np.ndarray = None, velocity=None, health: int = No
     strength = 1.0
     perception_radius = 10.0
     # max_number_perceived_things = 2
-    max_number_perceived_things = 8     # in order to use dummies as monkey training, they need to perceive the same number of things
+    max_number_perceived_things = 8  # in order to use dummies as monkey training,
+    # they need to perceive the same number of things
 
     if position is None:
         position = random_position()
@@ -48,7 +49,8 @@ def new_sheep(position: np.ndarray = None, velocity=None, health: float = None, 
         position = random_position()
     if health is None:
         health = default_health
-    agent = Agent(brain=Brain_sheep_hardcode(action_distance=max_speed, logfile=logfile), position=position, velocity=velocity,
+    agent = Agent(brain=Brain_sheep_hardcode(action_distance=max_speed, logfile=logfile),
+                  position=position, velocity=velocity,
                   radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
                   strength=strength, max_number_perceived_things=max_number_perceived_things)
     agent.type_properties = "sheep"
@@ -71,7 +73,8 @@ def new_wolf(position: np.ndarray = None, velocity=None, health: float = None, l
         position = random_position()
     if health is None:
         health = default_health
-    agent = Agent(brain=Brain_wolf_hardcode(action_distance=max_speed, logfile=logfile), position=position, velocity=velocity,
+    agent = Agent(brain=Brain_wolf_hardcode(action_distance=max_speed, logfile=logfile),
+                  position=position, velocity=velocity,
                   radius=radius, default_health=health, perception_radius=perception_radius, max_speed=max_speed,
                   strength=strength, max_number_perceived_things=max_number_perceived_things)
     agent.type_properties = "wolf"

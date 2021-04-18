@@ -50,12 +50,14 @@ class World:
     # or to store them and execute all actions at once.
     #
     # pro for immediatelly: - easiest to code
-    #                       - other agents will be able to react to the first agent (maybe mitigating the drawback of acting later),
+    #                       - other agents will be able to react to the first agent
+    #                           (maybe mitigating the drawback of acting later),
     #                       - no conflicting actions possible (but unrealistic first come (in array), first serve)
     # pro for later:    - feels more realistic,
     #                   - potentially possible to resolve conflicting actions if they are all known at the same time
     #
-    # current solution: immediate action: easier to resolve conflicts, "unrealistic" order should not be relevant for current goals
+    # current solution: immediate action: easier to resolve conflicts, "unrealistic" order
+    #                   should not be relevant for current goals
     def process_agent(self, agent: Agent, time_delta=0.01):
         perception, raw_perception = perception_at_position(all_things=self.things + self.agents,
                                                             position=agent.position,

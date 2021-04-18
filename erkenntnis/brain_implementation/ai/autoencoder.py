@@ -51,13 +51,14 @@ class Autoencoder():
         decoded_examples = self.decoder.predict(encoded_examples)
         return decoded_examples
 
-    def fit(self, x: Union[np.ndarray, pd.DataFrame], y: Union[np.ndarray, pd.DataFrame] = None, w: Union[np.ndarray, pd.DataFrame] = None,
+    def fit(self, x: Union[np.ndarray, pd.DataFrame],
+            y: Union[np.ndarray, pd.DataFrame] = None, w: Union[np.ndarray, pd.DataFrame] = None,
             number_epochs: int = 0, verbose_level: int = 0, input_test=None, batch_size=128):
 
         # preprocess the data for this model
         if isinstance(x, np.ndarray):
             x = pd.DataFrame(x)
-        x_norm, self.scaler = normalize_minmax(x, self.scaler)  # if we already have a scaler, we want to reuse it? (else this doesn't change anything)
+        x_norm, self.scaler = normalize_minmax(x, self.scaler)
         training_data = x_norm.values.astype('float32')
 
         # make sure we have the network architecture in place
@@ -93,7 +94,8 @@ class Autoencoder():
         normalized_input, _ = normalize_minmax(x, self.scaler)
 
         estimation = self.autoencoder.predict(normalized_input.values)
-        # estimation2 = self.decode(self.encode(normalized_input.values))   # confirmed to be exactly the same
+        # estimation2 = self.decode(self.encode(normalized_input.values))
+        # confirmed to be exactly the same as self.autoencoder.predict(normalized_input.values)
 
         if was_array:
             estimation = denormalize(pd.DataFrame(estimation), self.scaler)

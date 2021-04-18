@@ -13,8 +13,10 @@ class Brain_ape_ml(Brain_simple_memory):
         self.behavior = None
 
     def _predict_one_action(self, encoded_perception, encoded_messages, action):
-        # maybe this should not just return one cost/benefit/future reward estimation, but a probability distribution of future rewards
-        self.world_model.estimate_future_state(encoded_perception, encoded_messages, last_states=self.last_perceptions,
+        # maybe this should not just return one cost/benefit/future reward estimation,
+        # but a probability distribution of future rewards
+        self.world_model.estimate_future_state(encoded_perception, encoded_messages,
+                                               last_states=self.last_perceptions,
                                                last_actions=self.last_actions, next_action=action)
 
     def predict_best_action(self, encoded_perception, encoded_messages):
@@ -33,7 +35,8 @@ class Brain_ape_ml(Brain_simple_memory):
         action = None
         cause = None
 
-        current_state = self.world_model.comprehend_state(encoded_perception=encoded_perception, encoded_messages=encoded_messages)
+        current_state = self.world_model.comprehend_state(encoded_perception=encoded_perception,
+                                                          encoded_messages=encoded_messages)
 
         action = self.predict_best_action(encoded_perception=encoded_perception, encoded_messages=encoded_messages)
 

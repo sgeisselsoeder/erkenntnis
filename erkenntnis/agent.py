@@ -10,8 +10,8 @@ class Agent(Thing):
     def __init__(self, brain: Brain, position, velocity=None, radius=None, default_health: float = None,
                  health: float = None, strength: float = 10.0, perception_radius=None, max_speed: float = 3.0,
                  max_number_perceived_things: int = 0):
-        super().__init__(position=position, velocity=velocity, radius=radius, health=health, default_health=default_health,
-                         max_speed=max_speed, strength=strength)
+        super().__init__(position=position, velocity=velocity, radius=radius, health=health,
+                         default_health=default_health, max_speed=max_speed, strength=strength)
 
         self.brain = brain
         self.action_cooldown = 0
@@ -34,11 +34,14 @@ class Agent(Thing):
         self.type_properties = "agent"
 
     def think(self, perception):
-        encoded_perception = encode_perception(perception[:1], expected_number_perceptions=self.max_number_perceived_things)
-        encoded_messages = encode_messages(messages=self.messages, required_number_of_messages=self.max_number_perceived_things)
+        encoded_perception = encode_perception(perception[:1],
+                                               expected_number_perceptions=self.max_number_perceived_things)
+        encoded_messages = encode_messages(messages=self.messages,
+                                           required_number_of_messages=self.max_number_perceived_things)
 
         if self.action_cooldown <= 0:
-            encoded_action, cause = self.brain.think(encoded_perception=encoded_perception, encoded_messages=encoded_messages)
+            encoded_action, cause = self.brain.think(encoded_perception=encoded_perception,
+                                                     encoded_messages=encoded_messages)
         else:
             self.action_cooldown = self.action_cooldown - 1
             encoded_action = action_to_numeric_encoding(action=None)

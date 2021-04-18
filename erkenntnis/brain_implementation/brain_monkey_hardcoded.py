@@ -93,7 +93,8 @@ class Brain_monkey_hardcode(Brain_simple_memory):
         for prey_category in ["grass"]:
             if action is None and prey_category in split_perception:
                 nearest = split_perception[prey_category][0]
-                # TODO: this should be taken care of in world actions. a monkey eating grass is automatically 0.2 instead of 1.0 strength
+                # TODO: this should be taken care of in world actions. a monkey eating grass
+                # is automatically 0.2 instead of 1.0 strength
                 action, cause = self._hunt(nearest, strength=0.1)
                 break
 

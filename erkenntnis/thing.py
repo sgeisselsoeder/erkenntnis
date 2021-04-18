@@ -5,8 +5,8 @@ from .utils import random_position, normalize_vector_3d, vector_length
 
 
 class Thing:
-    def __init__(self, position, velocity=None, radius=None, friction=None, default_health: float = 100.0, health: float = None,
-                 max_speed: float = 3.0, strength: float = 1.0):
+    def __init__(self, position, velocity=None, radius=None, friction=None, default_health: float = 100.0,
+                 health: float = None, max_speed: float = 3.0, strength: float = 1.0):
         _default_velocity = np.array([0.0, 0.0, 0.0])
         _default_radius = 1.0
         _default_friction = 0.1
