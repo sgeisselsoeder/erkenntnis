@@ -4,3 +4,6 @@ pycodestyle
 autopep8
 tensorflow
 typeguard
+pandas
+scikit-learn
+sklearn
