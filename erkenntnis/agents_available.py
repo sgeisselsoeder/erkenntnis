@@ -16,7 +16,7 @@ def new_dummy_agent(position: np.ndarray = None, velocity=None, health: int = No
     strength = 1.0
     perception_radius = 10.0
     # max_number_perceived_things = 2
-    max_number_perceived_things = 8  # in order to use dummies as monkey training,
+    max_number_perceived_things = 8  # in order to use dummies data for monkey training,
     # they need to perceive the same number of things
 
     if position is None:
