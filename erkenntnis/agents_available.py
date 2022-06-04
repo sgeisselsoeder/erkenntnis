@@ -107,7 +107,7 @@ def new_monkey(position: np.ndarray = None, velocity=None, health: float = None,
 
 
 def new_ape(position: np.ndarray = None, velocity=None, health: float = None, log: bool = False):
-    # here, apes are monkies with better brains
+    # here, apes are monkeys with better brains
     agent = new_monkey(position=position, velocity=velocity, health=health, log=log)
     agent.brain = Brain_ape_ml(action_distance=agent.max_speed)
     agent.type_properties = "ape"
