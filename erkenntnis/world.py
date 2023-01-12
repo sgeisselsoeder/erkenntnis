@@ -99,8 +99,11 @@ class World:
                     self.things.remove(thing)
                 except ValueError:
                     raise "Unable to find " + str(thing) + " with health " + str(thing.health) + " in world."
+        
+        return things_to_remove
 
     def _spawn_kids(self):
+        things_to_add = list()
         for agent in self.agents:
             if agent.health >= 2.0 * agent.default_health:
                 agent.health = 0.5 * agent.health
@@ -111,6 +114,9 @@ class World:
                 if agent.brain.logfile is not None:
                     new_agent.brain.logfile = agent.brain.logfile + "_" + str(new_agent.unique_properties) + ".npy"
                 self.agents.append(new_agent)
+                things_to_add.append(new_agent)
+                
+        return things_to_add
 
     def _malus_effect(self):
         for current_agent in self.agents:
@@ -134,10 +140,12 @@ class World:
             current_thing.move(dt=time_delta)
 
         self._malus_effect()
-        self._remove_dead()
-        self._spawn_kids()
+        things_to_remove = self._remove_dead()
+        things_to_append = self._spawn_kids()
 
         self.time = self.time + time_delta
+        
+        return (things_to_remove, things_to_append)
 
     def print(self):
         print("Time is ", self.time)
